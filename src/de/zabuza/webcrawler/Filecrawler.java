@@ -347,6 +347,8 @@ public final class Filecrawler {
 					case ABSENT:
 						playerLine.append(SLOT_STATUS_ABSENT);
 						break;
+				default:
+					break;
 				}
 				
 				dateIndex++;

@@ -21,9 +21,8 @@ import de.zabuza.webcrawler.struct.Slotlist;
 import de.zabuza.webcrawler.util.CrawlerUtil;
 
 /**
- * Utility class.
- * Provides a web crawler that searches some event
- * information of the GruppeW forum.
+ * Utility class. Provides a web crawler that searches some event information of
+ * the GruppeW forum.
  * 
  * @author Zabuza
  */
@@ -31,7 +30,7 @@ public final class Webcrawler {
 	/**
 	 * Path to the server.
 	 */
-	private static final String SERVERPATH = "http://www.gruppe-w.de/forum/";
+	private static final String SERVERPATH = "https://www.gruppe-w.de/forum/";
 	/**
 	 * Path to the event sub-forum.
 	 */
@@ -40,7 +39,7 @@ public final class Webcrawler {
 	 * Get variable for next event pages.
 	 */
 	private static final String EVENTS_PATH_SUFFIX = "&rowstart=";
-	
+
 	/**
 	 * Mask where a new event starts in the forum.
 	 */
@@ -61,7 +60,7 @@ public final class Webcrawler {
 	 * Tag that surrounds an events url.
 	 */
 	private static final String EVENTS_URL_TAG = "'";
-	
+
 	/**
 	 * Mask where events title begins.
 	 */
@@ -74,7 +73,7 @@ public final class Webcrawler {
 	 * Mask that is directly after a title.
 	 */
 	private static final String THREAD_TITLE_END = "</strong>";
-	
+
 	/**
 	 * Mask where events creator begins.
 	 */
@@ -91,12 +90,12 @@ public final class Webcrawler {
 	 * Mask where events postId ends.
 	 */
 	private static final String THREAD_POSTID_END = "'>#1</a>";
-	
+
 	/**
 	 * Mask where events content ends.
 	 */
 	private static final String THREAD_CONTENT_END = "<!--sub_forum_post_message-->";
-	
+
 	/**
 	 * Constant for an unknown map.
 	 */
@@ -149,24 +148,27 @@ public final class Webcrawler {
 	 * Constant for a non-valid event thread id.
 	 */
 	private static final int NO_ID = -1;
-	
+
 	/**
 	 * Utility class. No implementation.
 	 */
 	private Webcrawler() {
-		
+
 	}
-	
+
 	/**
 	 * Crawls the web and catches information about all events of GruppeW.
-	 * @param extEventData Event data from external files
-	 * @param logging If logging information should be printed on the console
-	 * @throws IOException If an I/O-Exception occurs
+	 * 
+	 * @param extEventData
+	 *            Event data from external files
+	 * @param logging
+	 *            If logging information should be printed on the console
+	 * @throws IOException
+	 *             If an I/O-Exception occurs
 	 */
-	public static EventList crawlWeb(Map<Calendar, ExtEventData> extEventData,
-			boolean logging) throws IOException {
+	public static EventList crawlWeb(Map<Calendar, ExtEventData> extEventData, boolean logging) throws IOException {
 		List<String> events = getEventUrls(EVENTS_PATH);
-		
+
 		EventList data = new EventList(events.size());
 		for (int i = 0; i < events.size(); i++) {
 			EventData datum = crawlEvent(events.get(i), extEventData);
@@ -177,22 +179,25 @@ public final class Webcrawler {
 				System.out.println((i + 1) + " of " + events.size() + " events");
 			}
 		}
-		
+
 		return data;
 	}
-	
+
 	/**
 	 * Crawls an event given by its path and returns an information container.
-	 * @param path Path to the event thread as url
-	 * @param extEventData Event data from external files
+	 * 
+	 * @param path
+	 *            Path to the event thread as url
+	 * @param extEventData
+	 *            Event data from external files
 	 * @return Information container that stores all event data
-	 * @throws IOException If an I/O-Exception occurs
+	 * @throws IOException
+	 *             If an I/O-Exception occurs
 	 */
-	private static EventData crawlEvent(String path,
-			Map<Calendar, ExtEventData> extEventData) throws IOException {
+	private static EventData crawlEvent(String path, Map<Calendar, ExtEventData> extEventData) throws IOException {
 		List<String> content = CrawlerUtil.getWebContent(path);
 
-		//Get event title
+		// Get event title
 		int i = -1;
 		String line = "";
 		do {
@@ -202,31 +207,32 @@ public final class Webcrawler {
 		int titleBegin = line.indexOf(THREAD_TITLE_START) + THREAD_TITLE_START.length();
 		int titleEnd = line.indexOf(THREAD_TITLE_END);
 		String title = line.substring(titleBegin, titleEnd);
-		
-		//Replace problematic chars
-		title = title.replaceAll("Ã¤", "ä")
-				.replaceAll("Ã¼", "ü")
-				.replaceAll("&#39;", "'")
-				.replaceAll("Ã¶", "ö")
-				.replaceAll("&quot;", "\"")
-				.replaceAll("ÃŸ", "ß")
-				.replaceAll("Ãœ", "Ü");
-		
-		//Threads that are no events
-		if (title.trim().contains("Vorankündigung - Time is running V3")
-				|| title.trim().contains("[Alter Thread] WR2")
+
+		// Replace problematic chars
+		title = title.replaceAll("Ã¤", "ä").replaceAll("Ã¼", "ü").replaceAll("&#39;", "'").replaceAll("Ã¶", "ö")
+				.replaceAll("&quot;", "\"").replaceAll("ÃŸ", "ß").replaceAll("Ãœ", "Ü");
+
+		// Threads that are no events
+		if (title.trim().contains("Vorankündigung - Time is running V3") || title.trim().contains("[Alter Thread] WR2")
 				|| title.trim().contains("WICHTIG: Planung Samstag, Winter Rush2")
 				|| title.trim().contains("[Co30+] Die letzte Bastion Russlands - verschoben")
 				|| title.trim().contains("Vorankündigung 26.04.13 - Operation Seelandung")
 				|| title.trim().contains("20.07 Massentest Desert Storm")
-				|| title.trim().contains("[16.06.2013 | 20:00] - Show of Force- MCC")) {
+				|| title.trim().contains("[16.06.2013 | 20:00] - Show of Force- MCC")
+				|| title.trim().contains("Missionsübersicht/meldungen 2.0")
+				|| title.trim().contains("[28.05.] CO+45 Freundschaft wider Willen")
+				|| title.trim().contains("[18.05.] Training22 A1 Basistraining für neue Mitspieler")
+				|| title.trim().contains("[07.05.] CO60 Übung \"Dynamic Response\"")
+				|| title.trim().contains("[29.01.] BB49 Rettung")
+				|| title.trim().contains("[15.12.] BB37 The Raid")
+				|| title.trim().contains("[Abgesagt] BB37 The Raid")) {
 			return null;
 		}
-		
-		//Get event date
+
+		// Get event date
 		Calendar date = getEventDate(title, content, i);
-		
-		//Get event creator
+
+		// Get event creator
 		i += THREAD_TITLE_OFFSET_CREATOR;
 		line = content.get(i);
 		int creatorBegin = line.indexOf(THREAD_CREATOR_START) + THREAD_CREATOR_START.length();
@@ -235,98 +241,98 @@ public final class Webcrawler {
 		if (creator.contains(CREATOR_REJECT)) {
 			creator = CREATOR_UNKNOWN;
 		}
-		
-		//Get events opening post id
+
+		// Get events opening post id
 		line = content.get(i + THREAD_POSTID_OFFSET_CREATOR);
 		int postIdBegin = line.indexOf(THREAD_POSTID_START) + THREAD_POSTID_START.length();
 		int postIdEnd = line.indexOf(THREAD_POSTID_END);
 		int postId = Integer.parseInt(line.substring(postIdBegin, postIdEnd));
-		
-		//Get event type
+
+		// Get event type
 		EventType type = getEventType(title);
-		//Get event size
+		// Get event size
 		int size = getEventSize(title);
-		//Get thread id
+		// Get thread id
 		int threadId = getThreadId(path);
-		//Get event date
+		// Get event date
 		Calendar time = getEventTime(content, i, title);
-		//Get thread map
+		// Get thread map
 		String map = getThreadMap(content, i);
-		//Get event name
+		// Get event name
 		String name = getThreadName(title);
-		
-		Slotlist slotlist = createSlotlist(size, content, i, title,
-				date, type, extEventData);
-		
+
+		Slotlist slotlist = createSlotlist(size, content, i, title, date, type, extEventData);
+
 		return new EventData(name, type, size, creator, map, date, time, threadId, postId, slotlist);
 	}
+
 	/**
-	 * Creates a slot-list of the event by
-	 * extracting it from the event thread web content.
-	 * @param size Starting capacity of the slot-list
-	 * @param content Content of the event threads web site
-	 * @param curContentIndex Current index in the content which
-	 * should be placed near starting of the true content
-	 * @param title Title of the event
-	 * @param date Date of the event
-	 * @param type Type of the event
-	 * @param extEventData Event data from external files
-	 * @return Slot-list of the event or null or an empty list if failure occurred
+	 * Creates a slot-list of the event by extracting it from the event thread
+	 * web content.
+	 * 
+	 * @param size
+	 *            Starting capacity of the slot-list
+	 * @param content
+	 *            Content of the event threads web site
+	 * @param curContentIndex
+	 *            Current index in the content which should be placed near
+	 *            starting of the true content
+	 * @param title
+	 *            Title of the event
+	 * @param date
+	 *            Date of the event
+	 * @param type
+	 *            Type of the event
+	 * @param extEventData
+	 *            Event data from external files
+	 * @return Slot-list of the event or null or an empty list if failure
+	 *         occurred
 	 */
-	private static Slotlist createSlotlist(int size, List<String> content,
-			int curContentIndex, String title, Calendar date, EventType type,
-			Map<Calendar, ExtEventData> extEventData) {
+	private static Slotlist createSlotlist(int size, List<String> content, int curContentIndex, String title,
+			Calendar date, EventType type, Map<Calendar, ExtEventData> extEventData) {
 		Slotlist slotlist = null;
 		int i = curContentIndex;
-		
+
 		String line = "";
 		Pattern pattern;
 		Matcher matcher;
 		boolean listStartFound = false;
 		boolean slotFound = false;
-		
+
 		ExtEventData extEventDate = extEventData.get(date);
 		Set<String> extEventPlayers = null;
 		if (extEventDate != null) {
 			extEventPlayers = extEventDate.getPlayers();
 		}
-		
+
 		final String slot_pattern = "[A-Za-züäöÜÄÖ\\s\\+ß\\-\\(\\)/\\.0-9\\?,\\*]+";
 		final String player_pattern = "[A-Za-züäöÜÄÖ\\sß\\-_0-9\\?\\.:]+";
-		
+
 		do {
 			i++;
 			slotFound = false;
 			line = content.get(i);
-			
-			//Replace problematic chars
-			line = line.replaceAll("Ã¤", "ä")
-					.replaceAll("Ã¼", "ü")
-					.replaceAll("&#39;", "'")
-					.replaceAll("Ã¶", "ö")
-					.replaceAll("&quot;", "\"")
-					.replaceAll("ÃŸ", "ß")
-					.replaceAll("Ãœ", "Ü")
-					.replaceAll("â€“", "-")
-					.replaceAll("Ã„", "Ä")
-					.replaceAll("Ã§", "c")
-					.replaceAll("Ã¢", "a");
-			
-			//If list start was found search for slots
+
+			// Replace problematic chars
+			line = line.replaceAll("Ã¤", "ä").replaceAll("Ã¼", "ü").replaceAll("&#39;", "'").replaceAll("Ã¶", "ö")
+					.replaceAll("&quot;", "\"").replaceAll("ÃŸ", "ß").replaceAll("Ãœ", "Ü").replaceAll("â€“", "-")
+					.replaceAll("Ã„", "Ä").replaceAll("Ã§", "c").replaceAll("Ã¢", "a");
+
+			// If list start was found search for slots
 			if (listStartFound) {
 				if (slotlist == null) {
 					slotlist = new Slotlist(size);
 				}
-				
+
 				String keyText = "";
 				String slotText = "";
 				String player = "";
-				
-				pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-						+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
+
+				pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+						+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
 						+ "[\\s]{0,3}<strong><span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
-						+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-						Pattern.CASE_INSENSITIVE);
+						+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern
+						+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					slotFound = true;
@@ -335,10 +341,10 @@ public final class Webcrawler {
 					player = matcher.group(8);
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
-							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
+							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern
+							+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -348,11 +354,11 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
 							+ "[\\s]{0,3}<strong><span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
-							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern
+							+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -362,10 +368,10 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
-							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}-"
+							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern
+							+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -375,11 +381,11 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
 							+ "[\\s]{0,3}<strong>[\\s]?<span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
-							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern
+							+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -389,10 +395,10 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
-							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern + ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern
+							+ ")</strong>[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -402,10 +408,10 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
-							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern + ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern
+							+ ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -415,11 +421,11 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
 							+ "[\\s]{0,3}<strong>[\\s]?[\\[]?<span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?</span>[\\]]?"
-							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern + ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+							+ "[\\s]?(</strong>[\\s]?<strong>)?(" + player_pattern
+							+ ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -429,10 +435,10 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
-							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern + ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("#([\\d]+)[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+							+ "[\\s]{0,3}<strong>[\\s]?(" + player_pattern
+							+ ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -442,11 +448,11 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("#([\\d]+)[\\s]{0,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+					pattern = Pattern.compile("#([\\d]+)[\\s]{0,3}-[\\s]{1,3}(<span style='color:#[a-fA-F0-9]{6}'>)?("
+							+ slot_pattern + ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
 							+ "[\\s]{0,3}<span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
-							+ "[\\s]?(</strong>[\\s]?<strong>)?(<strong>)?(" + player_pattern + ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
-							Pattern.CASE_INSENSITIVE);
+							+ "[\\s]?(</strong>[\\s]?<strong>)?(<strong>)?(" + player_pattern
+							+ ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
 						slotFound = true;
@@ -456,10 +462,12 @@ public final class Webcrawler {
 					}
 				}
 				if (!slotFound) {
-					pattern = Pattern.compile("(<span style='color:#[a-fA-F0-9]{6}'>)?#([\\d]+)[\\s]{0,3}[\\-]?[\\s]{1,3}(" + slot_pattern
-							+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
-							+ "[\\s]{0,3}<span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
-							+ "[\\s]?(</strong>[\\s]?<strong>)?(<strong>)?(" + player_pattern + ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
+					pattern = Pattern.compile(
+							"(<span style='color:#[a-fA-F0-9]{6}'>)?#([\\d]+)[\\s]{0,3}[\\-]?[\\s]{1,3}(" + slot_pattern
+									+ ")(</span>)?[\\s]?(</strong></span>|</span></strong>)?[\\s]{0,3}[\\-]?"
+									+ "[\\s]{0,3}<span style='color:#[a-fA-F0-9]{6}'>(<strong>)?[\\[]?W[\\]]?[\\s]?</span>"
+									+ "[\\s]?(</strong>[\\s]?<strong>)?(<strong>)?(" + player_pattern
+									+ ")(</strong>)?[\\s]*( - nicht bestätigt)?<br[\\s]?/>",
 							Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(line);
 					if (matcher.find()) {
@@ -469,8 +477,8 @@ public final class Webcrawler {
 						player = matcher.group(9);
 					}
 				}
-				
-				//Parse slot results
+
+				// Parse slot results
 				if (slotFound) {
 					keyText = keyText.trim();
 					slotText = slotText.trim();
@@ -489,10 +497,10 @@ public final class Webcrawler {
 						}
 						player = player.trim();
 					}
-					
+
 					SlotType slot = parseSlotType(slotText);
-					
-					//Handle player exceptions
+
+					// Handle player exceptions
 					if (player.equals("RaXus")) {
 						player = "RaXuS";
 					} else if (player.equals("Raxus")) {
@@ -712,10 +720,10 @@ public final class Webcrawler {
 					} else if (player.equals("Caldin")) {
 						player = "caldin";
 					}
-					
+
 					int key = Integer.parseInt(keyText);
-					
-					//Extract slot status from external data
+
+					// Extract slot status from external data
 					SlotStatus status = SlotStatus.UNKNOWN;
 					if (extEventDate != null) {
 						EventType extType = extEventDate.getType();
@@ -723,530 +731,279 @@ public final class Webcrawler {
 							SlotStatus extStatus = extEventDate.getPlayerStatus(player);
 							if (extStatus != null) {
 								status = extStatus;
-							//Handle banned players
-							} else if (!player.equals("element_WSC")
-									&& !player.equals("GNRLJONSEN")
-									&& !player.equals("GNRL.JONSON")
-									&& !player.equals("GNRL.JONSEN")
-									&& !player.equals("Kyrko")
-									&& !player.equals("Gecko")
-									&& !player.equals("Mobiusune")
-									&& !player.equals("Proof")
-									&& !player.equals("Strelok")
-									&& !player.equals("Conan")
-									&& !player.equals("Marinus")
-									&& !player.equals("PrivateYoung")
-									&& !player.equals("WickerMan")
-									&& !player.equals("Irish")
-									&& !player.equals("Ninsaburo")
-									&& !player.equals("Browser")
-									&& !player.equals("DeejayPro")
-									&& !player.equals("Schmusebaerchi")
-									&& !player.equals("ViruZ")
-									&& !player.equals("Haicon")
-									&& !player.equals("Evan")
-									&& !player.equals("BlackHawkin")
-									&& !player.equals("Daft")
-									&& !player.equals("Pokertime")
-									&& !player.equals("Tom")
-									&& !player.equals("DIRT")
-									&& !player.equals("Huddlestone")
-									&& !player.equals("FredyOne")
-									&& !player.equals("ToxiqVipeZ")
-									&& !player.equals("Gamer")
-									&& !player.equals("FredyOne")
-									&& !player.equals("AdmiralMayo")
-									&& !player.equals("KriegerBusch")
-									&& !player.equals("Dice")
-									&& !player.equals("Helljumper")
-									&& !player.equals("Ceezed")
-									&& !player.equals("Huni")
-									&& !player.equals("Ulfberth")
-									&& !player.equals("Xaro")
-									&& !player.equals("Franz")
-									&& !player.equals("Dice")
-									&& !player.equals("Tinte")
-									&& !player.equals("Valdo")
-									&& !player.equals("Recold")
-									&& !player.equals("Restless")
-									&& !player.equals("Teufel")
-									&& !player.equals("Xanthiphist")
-									&& !player.equals("raunkjar")
-									&& !player.equals("Waveback")
-									&& !player.equals("LingLing")
-									&& !player.equals("Timophy")
-									&& !player.equals("Silva")
-									&& !player.equals("Lukasio")
-									&& !player.equals("Doc")
-									&& !player.equals("Gather")
-									&& !player.equals("Dave")
-									&& !player.equals("Zyprus")
-									&& !player.equals("CeeZed")
-									&& !player.equals("Ratha")
-									&& !player.equals("Varg")
-									&& !player.equals("Vendetta")
-									&& !player.equals("BadWolf")
-									&& !player.equals("FoxXy")
-									&& !player.equals("Blubber")
-									&& !player.equals("Thyke")
-									&& !player.equals("mobiusune")
-									&& !player.equals("Steffi")
-									&& !player.equals("Hex")
-									&& !player.equals("Asystolie")
-									&& !player.equals("Amii")
-									&& !player.equals("rugerrell")
-									&& !player.equals("Huni")
-									&& !player.equals("Smudooo")
-									&& !player.equals("Staynex")
-									&& !player.equals("TheNiki")
-									&& !player.equals("Miho")
-									&& !player.equals("Badwolf")
-									&& !player.equals("Hilker")
-									&& !player.equals("Metellus")
-									&& !player.equals("Imperator333")
-									&& !player.equals("Infinity")
-									&& !player.equals("Ch3yTac")
-									&& !player.equals("Suchhund")
-									&& !player.equals("infinity")
-									&& !player.equals("zebedeus")
-									&& !player.equals("Steffie")
-									&& !player.equals("harry")
-									&& !player.equals("Mettelus")
-									&& !player.equals("Smudoo")
-									&& !player.equals("Shugard")
-									&& !player.equals("Gunni")
-									&& !player.equals("Grantelbart")
-									&& !player.equals("Gorwin")
-									&& !player.equals("Eric")
-									&& !player.equals("Jan")
-									&& !player.equals("Valin")
-									&& !player.equals("Assy")
-									&& !player.equals("Justice92")
-									&& !player.equals("superkekx")
-									&& !player.equals("Alexxd_12")
-									&& !player.equals("Fairborn")
-									&& !player.equals("Guenni")
-									&& !player.equals("Hathor")
-									&& !player.equals("Mungo")
-									&& !player.equals("Pr3volution")
-									&& !player.equals("Hendrik")
-									&& !player.equals("matze3331")
-									&& !player.equals("Currie")
-									&& !player.equals("Rice")
-									&& !player.equals("Steff")
-									&& !player.equals("Bronko40")
-									&& !player.equals("mav993")
-									&& !player.equals("Orthac")
-									&& !player.equals("Blackii93")
-									&& !player.equals("misterio234")
-									&& !player.equals("LiquidBlaze")
-									&& !player.equals("Plasma")
-									&& !player.equals("tofl")
-									&& !player.equals("Hansen")
-									&& !player.equals("K-One")
-									&& !player.equals("Steaky")
-									&& !player.equals("KwieKevin")
-									&& !player.equals("MrCrazyAndreas")
-									&& !player.equals("16kb")
-									&& !player.equals("Minimix")
-									&& !player.equals("Michi")
-									&& !player.equals("Trampeltier")
-									&& !player.equals("KwieKevin")
-									&& !player.equals("rocko")
-									&& !player.equals("Bixby")
-									&& !player.equals("KrisSnyper")
-									&& !player.equals("IGEL")
-									&& !player.equals("mav933")
-									&& !player.equals("Cypher")
-									&& !player.equals("MaxFTWi")
-									&& !player.equals("Cypher")
-									&& !player.equals("isku")
-									&& !player.equals("ZeroTwoFourty")
-									&& !player.equals("Silberwolf2k")
-									&& !player.equals("Albino")
-									&& !player.equals("Lester")
-									&& !player.equals("BlackRabbit")
-									&& !player.equals("Jenkins")
-									&& !player.equals("GNRLJONSON")
-									&& !player.equals("Berliner19")
-									&& !player.equals("Steacky")
-									&& !player.equals("Henker")
-									&& !player.equals("Mohrpheus")
-									&& !player.equals("maruk")
-									&& !player.equals("DorsalRegent")
-									&& !player.equals("Hartman")
-									&& !player.equals("Zorgan")
-									&& !player.equals("Opus Cincinnati")
-									&& !player.equals("TheNapGamer")
-									&& !player.equals("David")
-									&& !player.equals("Julius")
-									&& !player.equals("zelkin")
-									&& !player.equals("Pit")
-									&& !player.equals("Roschach")
-									&& !player.equals("allter")
-									&& !player.equals("jayjay")
-									&& !player.equals("DEman")
-									&& !player.equals("Meekman240")
-									&& !player.equals("TheNapGamer")
-									&& !player.equals("zinki")
-									&& !player.equals("Jackal")
-									&& !player.equals("Whity")
-									&& !player.equals("Slinger")
-									&& !player.equals("svenson")
-									&& !player.equals("MobilePimp")
-									&& !player.equals("Freak")
-									&& !player.equals("sion")
-									&& !player.equals("znoop")
-									&& !player.equals("Brainslush")
-									&& !player.equals("maruk")
-									&& !player.equals("Roody")
-									&& !player.equals("Midi")
-									&& !player.equals("SPUTNIK")
-									&& !player.equals("The_Kecki")
-									&& !player.equals("PsychoAce")
-									&& !player.equals("Ryuichiro")
-									&& !player.equals("BadGuy")
-									&& !player.equals("Paul G")
-									&& !player.equals("brainslush")
-									&& !player.equals("Bowman")
-									&& !player.equals("Cigar0")
-									&& !player.equals("NemesisoD")
-									&& !player.equals("Jazz")
-									&& !player.equals("Znooptokkie")
-									&& !player.equals("Sambucus")
-									&& !player.equals("Jolly Roger")
-									&& !player.equals("Celle")
-									&& !player.equals("Scharkk")
-									&& !player.equals("noviias")
-									&& !player.equals("JokerRetry")
-									&& !player.equals("Sagamir")
-									&& !player.equals("Rocksberg")
-									&& !player.equals("Offi")
-									&& !player.equals("Znooptokkie")
-									&& !player.equals("Waschbier")
-									&& !player.equals("HupDrop")
-									&& !player.equals("Lee1337")
-									&& !player.equals("CeLLe")
-									&& !player.equals("Dura_Ger")
-									&& !player.equals("Uber")
-									&& !player.equals("Chris92")
-									&& !player.equals("Jacx")
-									&& !player.equals("Mango")
-									&& !player.equals("RedHeadAdventure")
-									&& !player.equals("Blue-Ice")
-									&& !player.equals("Para")
-									&& !player.equals("Shadow")
-									&& !player.equals("NBRC_FOX")
-									&& !player.equals("Reckless")
-									&& !player.equals("Rohrkrepierer")
-									&& !player.equals("defcon")
-									&& !player.equals("MrP")
-									&& !player.equals("Psychobastard")
-									&& !player.equals("znooptokkie")
-									&& !player.equals("Hupdrop")
-									&& !player.equals("AlmHurricane")
-									&& !player.equals("Jester")
-									&& !player.equals("Fabian")
-									&& !player.equals("MrFloppy")
-									&& !player.equals("tobi28")
-									&& !player.equals("JimPanse")
-									&& !player.equals("Seras")
-									&& !player.equals("themaster")
-									&& !player.equals(".:NemesisoD:.")
-									&& !player.equals("Arne")
-									&& !player.equals("SaltatorMortis")
-									&& !player.equals("Norbert")
-									&& !player.equals("PhenomTaker")
-									&& !player.equals("GhostForce")
-									&& !player.equals("Scotty")
-									&& !player.equals("Arne")
-									&& !player.equals("Nemesis")
-									&& !player.equals("Mezilsa")
-									&& !player.equals("TorstenB")
-									&& !player.equals("Red Flag")
-									&& !player.equals("Stan242")
-									&& !player.equals("ELIT34V3R")
-									&& !player.equals("Dura")
-									&& !player.equals("Paul G.")
-									&& !player.equals("CooLVipeR")
-									&& !player.equals("Joker")
-									&& !player.equals("K4ISER")
-									&& !player.equals("Dimitri Woczniek")
-									&& !player.equals("Baker")
-									&& !player.equals("TorstenB")
-									&& !player.equals("Darkness")
-									&& !player.equals("Flippy")
-									&& !player.equals("Scope")
-									&& !player.equals("cr4zy")
-									&& !player.equals("Jan.")
-									&& !player.equals("Bierchen")
-									&& !player.equals("Ricky")
-									&& !player.equals("Neo")
-									&& !player.equals("Sacrificii")
-									&& !player.equals("Revolvermann")
-									&& !player.equals("maxxctv")
-									&& !player.equals("Iron Eddie")
-									&& !player.equals("doublewohli")
-									&& !player.equals("Steffieth")
-									&& !player.equals("Voold")
-									&& !player.equals("Wolle")
-									&& !player.equals("Snaxx")
-									&& !player.equals("elec")
-									&& !player.equals("Teax")
-									&& !player.equals("Paul")
-									&& !player.equals("Rocco")
-									&& !player.equals("Alcatraz")
-									&& !player.equals("TimSice")
-									&& !player.equals("LoCo")
-									&& !player.equals("Igel")
-									&& !player.equals("Kaiser")
-									&& !player.equals("Deman")
-									&& !player.equals("Falke")
-									&& !player.equals("Justice")
-									&& !player.equals("theNiki")
-									&& !player.equals("Hotte")
-									&& !player.equals("Jimpanse")
-									&& !player.equals("Badguy")
-									&& !player.equals("Xubix")
-									&& !player.equals("Roman")
-									&& !player.equals("Tofl")
-									&& !player.equals("Elec")
-									&& !player.equals("Shadowki")
-									&& !player.equals("TimSice")
-									&& !player.equals("Znoopdoggydogg")
-									&& !player.equals("Amech")
-									&& !player.equals("Lee")
-									&& !player.equals("Psycho")
-									&& !player.equals("CeLLE")
-									&& !player.equals("Zinki")
-									&& !player.equals("Svenson")
-									&& !player.equals("Sputnik")
-									&& !player.equals("Ragnar")
-									&& !player.equals("xDeMoNx")
-									&& !player.equals("Ketzi")
-									&& !player.equals("LederStiefel")
-									&& !player.equals("James")
-									&& !player.equals("LdW-BinarySoul")
-									&& !player.equals("Bunkerfaust")
-									&& !player.equals("kriz")
-									&& !player.equals("BaSh")
-									&& !player.equals("Odin")
-									&& !player.equals("b0untY")
-									&& !player.equals("Dalyr")
-									&& !player.equals("K4iser")
-									&& !player.equals("venox")
-									&& !player.equals("Morzzan")
-									&& !player.equals("Tango")
-									&& !player.equals("Reacher")
-									&& !player.equals("Ryu")
-									&& !player.equals("Obelix")
-									&& !player.equals("PlummBumm")
-									&& !player.equals("Jander")
-									&& !player.equals("CELLE")
-									&& !player.equals("SteelBlade")
-									&& !player.equals("CoolViper")
-									&& !player.equals("Bleipionier")
-									&& !player.equals("WinterXVX")
-									&& !player.equals("Fox")
-									&& !player.equals("Marc")
-									&& !player.equals("darul")
-									&& !player.equals("bash")
-									&& !player.equals("Hellracer")
-									&& !player.equals("Witwenmacher")
-									&& !player.equals("Raffsn")
-									&& !player.equals("Plummbumm")
-									&& !player.equals("GrimReapeR")
-									&& !player.equals("Frontpig")
-									&& !player.equals("saynn")
-									&& !player.equals("Irawulf")
-									&& !player.equals("Speed")
-									&& !player.equals("Jyon")
-									&& !player.equals("Michi302")
-									&& !player.equals("KubaLibre")
-									&& !player.equals("Bunkferfaust")
-									&& !player.equals("Freakii")
-									&& !player.equals("Huntexv2")
-									&& !player.equals("Schulz")
-									&& !player.equals("Muto")
-									&& !player.equals("Crier")
-									&& !player.equals("Tumult")
-									&& !player.equals("beamer")
-									&& !player.equals("Mr kio")
-									&& !player.equals("Fynus")
-									&& !player.equals("chuck")
-									&& !player.equals("TheDj CooLVipeR")
-									&& !player.equals("Pushklick")
-									&& !player.equals("LDW-BinarySoul")
-									&& !player.equals("HG2012_Hackl")
-									&& !player.equals("Sieb_ger")
-									&& !player.equals("HG2012_Atze")
-									&& !player.equals("Stopfen_ger")
-									&& !player.equals("CaM")
-									&& !player.equals("Ch3 Gu3vArA")
-									&& !player.equals("Rustam")
-									&& !player.equals("Walnuss")
-									&& !player.equals("Capio")
-									&& !player.equals("Defcon")
-									&& !player.equals("Berliner 19")
-									&& !player.equals("Max10")
-									&& !player.equals("KrachbummEnte")
-									&& !player.equals("Beamer")
-									&& !player.equals("Max-10")
-									&& !player.equals("BlackHaraz")
-									&& !player.equals("Leon")
-									&& !player.equals("backshift")
-									&& !player.equals("Goon")
-									&& !player.equals("KnightOne")
-									&& !player.equals("MaikRusGer")
-									&& !player.equals("Nooror")
-									&& !player.equals("OnE")
-									&& !player.equals("Paru")
-									&& !player.equals("BackShift")
-									&& !player.equals("BountyHuntA")
-									&& !player.equals("Chracka")
-									&& !player.equals("Frozen Malibu")
-									&& !player.equals("Kuno")
-									&& !player.equals("John")
-									&& !player.equals("Wex")
-									&& !player.equals("displaceD")
-									&& !player.equals("Jerry")
-									&& !player.equals("Hibbel")
-									&& !player.equals("BaumRatte")
-									&& !player.equals("Koala")
-									&& !player.equals("Beowulf")
-									&& !player.equals("Firepower")
-									&& !player.equals("Simon")
-									&& !player.equals("Cerbo")
-									&& !player.equals("Shinra")
-									&& !player.equals("Archer")
-									&& !player.equals("Kodiak")
-									&& !player.equals("Fabi")
-									&& !player.equals("Ulfberht")
-									&& !player.equals("Assystolie")
-									&& !player.equals("ANCM_Eagle")
-									&& !player.equals("Booone")
-									&& !player.equals("David_1")
-									&& !player.equals("Drone155")
-									&& !player.equals("Duke")
-									&& !player.equals("EvilSpam")
-									&& !player.equals("Felaex")
-									&& !player.equals("FF_Oneil")
-									&& !player.equals("Hanuter")
-									&& !player.equals("Harry")
-									&& !player.equals("Icaza")
-									&& !player.equals("James221")
-									&& !player.equals("Jorle")
-									&& !player.equals("JulianK")
-									&& !player.equals("Kyler")
-									&& !player.equals("Lurti")
-									&& !player.equals("McPolli")
-									&& !player.equals("Natsu")
-									&& !player.equals("Neodym")
-									&& !player.equals("Orinion")
-									&& !player.equals("Pasco")
-									&& !player.equals("Platinum")
-									&& !player.equals("PunkToast")
-									&& !player.equals("Silexius")
-									&& !player.equals("Sle3perX")
-									&& !player.equals("Soryu")
-									&& !player.equals("Stalker")
-									&& !player.equals("Stefan")
-									&& !player.equals("TobsA")
-									&& !player.equals("Wallter")
-									&& !player.equals("Wonder")
-									&& !player.equals("WrightStriker")
-									&& !player.equals("ZnY")
-									&& !player.equals("MrPink")
-									&& !player.equals("Blackburn")
-									&& !player.equals("McFly")
-									&& !player.equals("FF_Oneill")
-									&& !player.equals("Berliner19")
-									&& !player.equals("Brainwashington")
-									&& !player.equals("Guggi")
-									&& !player.equals("Arjuna")
-									&& !player.equals("Basox")
-									&& !player.equals("Bosche")
-									&& !player.equals("Cake")
-									&& !player.equals("CandyMan")
-									&& !player.equals("Gunny")
-									&& !player.equals("IpSwitsch")
-									&& !player.equals("Llama")
-									&& !player.equals("LuckyLuke")
-									&& !player.equals("Moore")
-									&& !player.equals("rasaf")
-									&& !player.equals("SkilzZ")
-									&& !player.equals("Tika Bell")
-									&& !player.equals("Maximax")
-									&& !player.equals("Baron")
-									&& !player.equals("Miller")
-									&& !player.equals("JethroGibbs")
-									&& !player.equals("Axel")
-									&& !player.equals("Twisted")
-									&& !player.equals("Wolfi")
-									&& !player.equals("Eva")
-									&& !player.equals("Daisy")
-									&& !player.equals("Chitario")
-									&& !player.equals("caldin")
-									&& !player.equals("Stefano Bontade")
-									&& !player.equals("JakobAigi")
-									&& !player.equals("Thunder")
-									&& !player.equals("Idefix")
-									&& !player.equals("Prince")
-									&& !player.equals("StefPlay")
-									&& !player.equals("Axe")
-									&& !player.equals("Chief Wiggum")
-									&& !player.equals("DarkWhisperer")
-									&& !player.equals("DrJekyll")
-									&& !player.equals("Dynamike")
-									&& !player.equals("Insane")
-									&& !player.equals("Kane Nod")
-									&& !player.equals("Legendz")
-									&& !player.equals("Luxi")
-									&& !player.equals("Marius")
-									&& !player.equals("NicNac")
-									&& !player.equals("QuanTas")
-									&& !player.equals("Ragen")
-									&& !player.equals("RoadRunner")
-									&& !player.equals("Weskott")
-									&& !player.equals("Whiskey")
-									&& !player.equals("Bak0")
-									&& !player.equals("chiccy")
-									&& !player.equals("Elirah")
-									&& !player.equals("Faital")
-									&& !player.equals("Hope")
-									&& !player.equals("ille")
-									&& !player.equals("JKbaxter")
-									&& !player.equals("Klon")
-									&& !player.equals("Kuchenkasten")
-									&& !player.equals("Lars")
-									&& !player.equals("Locke")
-									&& !player.equals("Ratte")
-									&& !player.equals("Repkow")
-									&& !player.equals("Sepp")
-									&& !player.equals("Stubus Lupus")
-									&& !player.equals("Sturm")
-									&& !player.equals("TJ_S")
-									&& !player.equals("Toko1993")
-									&& !player.equals("Tone")
-									&& !player.equals("Tummi")
-									&& !player.equals("Whitefox")
-									&& !player.equals("Wyqer")
-									&& !player.equals("ZerO")
+								// Handle banned players
+							} else if (!player.equals("element_WSC") && !player.equals("GNRLJONSEN")
+									&& !player.equals("GNRL.JONSON") && !player.equals("GNRL.JONSEN")
+									&& !player.equals("Kyrko") && !player.equals("Gecko") && !player.equals("Mobiusune")
+									&& !player.equals("Proof") && !player.equals("Strelok") && !player.equals("Conan")
+									&& !player.equals("Marinus") && !player.equals("PrivateYoung")
+									&& !player.equals("WickerMan") && !player.equals("Irish")
+									&& !player.equals("Ninsaburo") && !player.equals("Browser")
+									&& !player.equals("DeejayPro") && !player.equals("Schmusebaerchi")
+									&& !player.equals("ViruZ") && !player.equals("Haicon") && !player.equals("Evan")
+									&& !player.equals("BlackHawkin") && !player.equals("Daft")
+									&& !player.equals("Pokertime") && !player.equals("Tom") && !player.equals("DIRT")
+									&& !player.equals("Huddlestone") && !player.equals("FredyOne")
+									&& !player.equals("ToxiqVipeZ") && !player.equals("Gamer")
+									&& !player.equals("FredyOne") && !player.equals("AdmiralMayo")
+									&& !player.equals("KriegerBusch") && !player.equals("Dice")
+									&& !player.equals("Helljumper") && !player.equals("Ceezed")
+									&& !player.equals("Huni") && !player.equals("Ulfberth") && !player.equals("Xaro")
+									&& !player.equals("Franz") && !player.equals("Dice") && !player.equals("Tinte")
+									&& !player.equals("Valdo") && !player.equals("Recold") && !player.equals("Restless")
+									&& !player.equals("Teufel") && !player.equals("Xanthiphist")
+									&& !player.equals("raunkjar") && !player.equals("Waveback")
+									&& !player.equals("LingLing") && !player.equals("Timophy")
+									&& !player.equals("Silva") && !player.equals("Lukasio") && !player.equals("Doc")
+									&& !player.equals("Gather") && !player.equals("Dave") && !player.equals("Zyprus")
+									&& !player.equals("CeeZed") && !player.equals("Ratha") && !player.equals("Varg")
+									&& !player.equals("Vendetta") && !player.equals("BadWolf")
+									&& !player.equals("FoxXy") && !player.equals("Blubber") && !player.equals("Thyke")
+									&& !player.equals("mobiusune") && !player.equals("Steffi") && !player.equals("Hex")
+									&& !player.equals("Asystolie") && !player.equals("Amii")
+									&& !player.equals("rugerrell") && !player.equals("Huni")
+									&& !player.equals("Smudooo") && !player.equals("Staynex")
+									&& !player.equals("TheNiki") && !player.equals("Miho") && !player.equals("Badwolf")
+									&& !player.equals("Hilker") && !player.equals("Metellus")
+									&& !player.equals("Imperator333") && !player.equals("Infinity")
+									&& !player.equals("Ch3yTac") && !player.equals("Suchhund")
+									&& !player.equals("infinity") && !player.equals("zebedeus")
+									&& !player.equals("Steffie") && !player.equals("harry")
+									&& !player.equals("Mettelus") && !player.equals("Smudoo")
+									&& !player.equals("Shugard") && !player.equals("Gunni")
+									&& !player.equals("Grantelbart") && !player.equals("Gorwin")
+									&& !player.equals("Eric") && !player.equals("Jan") && !player.equals("Valin")
+									&& !player.equals("Assy") && !player.equals("Justice92")
+									&& !player.equals("superkekx") && !player.equals("Alexxd_12")
+									&& !player.equals("Fairborn") && !player.equals("Guenni")
+									&& !player.equals("Hathor") && !player.equals("Mungo")
+									&& !player.equals("Pr3volution") && !player.equals("Hendrik")
+									&& !player.equals("matze3331") && !player.equals("Currie") && !player.equals("Rice")
+									&& !player.equals("Steff") && !player.equals("Bronko40") && !player.equals("mav993")
+									&& !player.equals("Orthac") && !player.equals("Blackii93")
+									&& !player.equals("misterio234") && !player.equals("LiquidBlaze")
+									&& !player.equals("Plasma") && !player.equals("tofl") && !player.equals("Hansen")
+									&& !player.equals("K-One") && !player.equals("Steaky")
+									&& !player.equals("KwieKevin") && !player.equals("MrCrazyAndreas")
+									&& !player.equals("16kb") && !player.equals("Minimix") && !player.equals("Michi")
+									&& !player.equals("Trampeltier") && !player.equals("KwieKevin")
+									&& !player.equals("rocko") && !player.equals("Bixby")
+									&& !player.equals("KrisSnyper") && !player.equals("IGEL")
+									&& !player.equals("mav933") && !player.equals("Cypher") && !player.equals("MaxFTWi")
+									&& !player.equals("Cypher") && !player.equals("isku")
+									&& !player.equals("ZeroTwoFourty") && !player.equals("Silberwolf2k")
+									&& !player.equals("Albino") && !player.equals("Lester")
+									&& !player.equals("BlackRabbit") && !player.equals("Jenkins")
+									&& !player.equals("GNRLJONSON") && !player.equals("Berliner19")
+									&& !player.equals("Steacky") && !player.equals("Henker")
+									&& !player.equals("Mohrpheus") && !player.equals("maruk")
+									&& !player.equals("DorsalRegent") && !player.equals("Hartman")
+									&& !player.equals("Zorgan") && !player.equals("Opus Cincinnati")
+									&& !player.equals("TheNapGamer") && !player.equals("David")
+									&& !player.equals("Julius") && !player.equals("zelkin") && !player.equals("Pit")
+									&& !player.equals("Roschach") && !player.equals("allter")
+									&& !player.equals("jayjay") && !player.equals("DEman")
+									&& !player.equals("Meekman240") && !player.equals("TheNapGamer")
+									&& !player.equals("zinki") && !player.equals("Jackal") && !player.equals("Whity")
+									&& !player.equals("Slinger") && !player.equals("svenson")
+									&& !player.equals("MobilePimp") && !player.equals("Freak") && !player.equals("sion")
+									&& !player.equals("znoop") && !player.equals("Brainslush")
+									&& !player.equals("maruk") && !player.equals("Roody") && !player.equals("Midi")
+									&& !player.equals("SPUTNIK") && !player.equals("The_Kecki")
+									&& !player.equals("PsychoAce") && !player.equals("Ryuichiro")
+									&& !player.equals("BadGuy") && !player.equals("Paul G")
+									&& !player.equals("brainslush") && !player.equals("Bowman")
+									&& !player.equals("Cigar0") && !player.equals("NemesisoD") && !player.equals("Jazz")
+									&& !player.equals("Znooptokkie") && !player.equals("Sambucus")
+									&& !player.equals("Jolly Roger") && !player.equals("Celle")
+									&& !player.equals("Scharkk") && !player.equals("noviias")
+									&& !player.equals("JokerRetry") && !player.equals("Sagamir")
+									&& !player.equals("Rocksberg") && !player.equals("Offi")
+									&& !player.equals("Znooptokkie") && !player.equals("Waschbier")
+									&& !player.equals("HupDrop") && !player.equals("Lee1337") && !player.equals("CeLLe")
+									&& !player.equals("Dura_Ger") && !player.equals("Uber") && !player.equals("Chris92")
+									&& !player.equals("Jacx") && !player.equals("Mango")
+									&& !player.equals("RedHeadAdventure") && !player.equals("Blue-Ice")
+									&& !player.equals("Para") && !player.equals("Shadow") && !player.equals("NBRC_FOX")
+									&& !player.equals("Reckless") && !player.equals("Rohrkrepierer")
+									&& !player.equals("defcon") && !player.equals("MrP")
+									&& !player.equals("Psychobastard") && !player.equals("znooptokkie")
+									&& !player.equals("Hupdrop") && !player.equals("AlmHurricane")
+									&& !player.equals("Jester") && !player.equals("Fabian")
+									&& !player.equals("MrFloppy") && !player.equals("tobi28")
+									&& !player.equals("JimPanse") && !player.equals("Seras")
+									&& !player.equals("themaster") && !player.equals(".:NemesisoD:.")
+									&& !player.equals("Arne") && !player.equals("SaltatorMortis")
+									&& !player.equals("Norbert") && !player.equals("PhenomTaker")
+									&& !player.equals("GhostForce") && !player.equals("Scotty")
+									&& !player.equals("Arne") && !player.equals("Nemesis") && !player.equals("Mezilsa")
+									&& !player.equals("TorstenB") && !player.equals("Red Flag")
+									&& !player.equals("Stan242") && !player.equals("ELIT34V3R")
+									&& !player.equals("Dura") && !player.equals("Paul G.")
+									&& !player.equals("CooLVipeR") && !player.equals("Joker")
+									&& !player.equals("K4ISER") && !player.equals("Dimitri Woczniek")
+									&& !player.equals("Baker") && !player.equals("TorstenB")
+									&& !player.equals("Darkness") && !player.equals("Flippy") && !player.equals("Scope")
+									&& !player.equals("cr4zy") && !player.equals("Jan.") && !player.equals("Bierchen")
+									&& !player.equals("Ricky") && !player.equals("Neo") && !player.equals("Sacrificii")
+									&& !player.equals("Revolvermann") && !player.equals("maxxctv")
+									&& !player.equals("Iron Eddie") && !player.equals("doublewohli")
+									&& !player.equals("Steffieth") && !player.equals("Voold") && !player.equals("Wolle")
+									&& !player.equals("Snaxx") && !player.equals("elec") && !player.equals("Teax")
+									&& !player.equals("Paul") && !player.equals("Rocco") && !player.equals("Alcatraz")
+									&& !player.equals("TimSice") && !player.equals("LoCo") && !player.equals("Igel")
+									&& !player.equals("Kaiser") && !player.equals("Deman") && !player.equals("Falke")
+									&& !player.equals("Justice") && !player.equals("theNiki") && !player.equals("Hotte")
+									&& !player.equals("Jimpanse") && !player.equals("Badguy") && !player.equals("Xubix")
+									&& !player.equals("Roman") && !player.equals("Tofl") && !player.equals("Elec")
+									&& !player.equals("Shadowki") && !player.equals("TimSice")
+									&& !player.equals("Znoopdoggydogg") && !player.equals("Amech")
+									&& !player.equals("Lee") && !player.equals("Psycho") && !player.equals("CeLLE")
+									&& !player.equals("Zinki") && !player.equals("Svenson") && !player.equals("Sputnik")
+									&& !player.equals("Ragnar") && !player.equals("xDeMoNx") && !player.equals("Ketzi")
+									&& !player.equals("LederStiefel") && !player.equals("James")
+									&& !player.equals("LdW-BinarySoul") && !player.equals("Bunkerfaust")
+									&& !player.equals("kriz") && !player.equals("BaSh") && !player.equals("Odin")
+									&& !player.equals("b0untY") && !player.equals("Dalyr") && !player.equals("K4iser")
+									&& !player.equals("venox") && !player.equals("Morzzan") && !player.equals("Tango")
+									&& !player.equals("Reacher") && !player.equals("Ryu") && !player.equals("Obelix")
+									&& !player.equals("PlummBumm") && !player.equals("Jander")
+									&& !player.equals("CELLE") && !player.equals("SteelBlade")
+									&& !player.equals("CoolViper") && !player.equals("Bleipionier")
+									&& !player.equals("WinterXVX") && !player.equals("Fox") && !player.equals("Marc")
+									&& !player.equals("darul") && !player.equals("bash") && !player.equals("Hellracer")
+									&& !player.equals("Witwenmacher") && !player.equals("Raffsn")
+									&& !player.equals("Plummbumm") && !player.equals("GrimReapeR")
+									&& !player.equals("Frontpig") && !player.equals("saynn")
+									&& !player.equals("Irawulf") && !player.equals("Speed") && !player.equals("Jyon")
+									&& !player.equals("Michi302") && !player.equals("KubaLibre")
+									&& !player.equals("Bunkferfaust") && !player.equals("Freakii")
+									&& !player.equals("Huntexv2") && !player.equals("Schulz") && !player.equals("Muto")
+									&& !player.equals("Crier") && !player.equals("Tumult") && !player.equals("beamer")
+									&& !player.equals("Mr kio") && !player.equals("Fynus") && !player.equals("chuck")
+									&& !player.equals("TheDj CooLVipeR") && !player.equals("Pushklick")
+									&& !player.equals("LDW-BinarySoul") && !player.equals("HG2012_Hackl")
+									&& !player.equals("Sieb_ger") && !player.equals("HG2012_Atze")
+									&& !player.equals("Stopfen_ger") && !player.equals("CaM")
+									&& !player.equals("Ch3 Gu3vArA") && !player.equals("Rustam")
+									&& !player.equals("Walnuss") && !player.equals("Capio") && !player.equals("Defcon")
+									&& !player.equals("Berliner 19") && !player.equals("Max10")
+									&& !player.equals("KrachbummEnte") && !player.equals("Beamer")
+									&& !player.equals("Max-10") && !player.equals("BlackHaraz")
+									&& !player.equals("Leon") && !player.equals("backshift") && !player.equals("Goon")
+									&& !player.equals("KnightOne") && !player.equals("MaikRusGer")
+									&& !player.equals("Nooror") && !player.equals("OnE") && !player.equals("Paru")
+									&& !player.equals("BackShift") && !player.equals("BountyHuntA")
+									&& !player.equals("Chracka") && !player.equals("Frozen Malibu")
+									&& !player.equals("Kuno") && !player.equals("John") && !player.equals("Wex")
+									&& !player.equals("displaceD") && !player.equals("Jerry")
+									&& !player.equals("Hibbel") && !player.equals("BaumRatte")
+									&& !player.equals("Koala") && !player.equals("Beowulf")
+									&& !player.equals("Firepower") && !player.equals("Simon") && !player.equals("Cerbo")
+									&& !player.equals("Shinra") && !player.equals("Archer") && !player.equals("Kodiak")
+									&& !player.equals("Fabi") && !player.equals("Ulfberht")
+									&& !player.equals("Assystolie") && !player.equals("ANCM_Eagle")
+									&& !player.equals("Booone") && !player.equals("David_1")
+									&& !player.equals("Drone155") && !player.equals("Duke")
+									&& !player.equals("EvilSpam") && !player.equals("Felaex")
+									&& !player.equals("FF_Oneil") && !player.equals("Hanuter")
+									&& !player.equals("Harry") && !player.equals("Icaza") && !player.equals("James221")
+									&& !player.equals("Jorle") && !player.equals("JulianK") && !player.equals("Kyler")
+									&& !player.equals("Lurti") && !player.equals("McPolli") && !player.equals("Natsu")
+									&& !player.equals("Neodym") && !player.equals("Orinion") && !player.equals("Pasco")
+									&& !player.equals("Platinum") && !player.equals("PunkToast")
+									&& !player.equals("Silexius") && !player.equals("Sle3perX")
+									&& !player.equals("Soryu") && !player.equals("Stalker") && !player.equals("Stefan")
+									&& !player.equals("TobsA") && !player.equals("Wallter") && !player.equals("Wonder")
+									&& !player.equals("WrightStriker") && !player.equals("ZnY")
+									&& !player.equals("MrPink") && !player.equals("Blackburn")
+									&& !player.equals("McFly") && !player.equals("FF_Oneill")
+									&& !player.equals("Berliner19") && !player.equals("Brainwashington")
+									&& !player.equals("Guggi") && !player.equals("Arjuna") && !player.equals("Basox")
+									&& !player.equals("Bosche") && !player.equals("Cake") && !player.equals("CandyMan")
+									&& !player.equals("Gunny") && !player.equals("IpSwitsch") && !player.equals("Llama")
+									&& !player.equals("LuckyLuke") && !player.equals("Moore") && !player.equals("rasaf")
+									&& !player.equals("SkilzZ") && !player.equals("Tika Bell")
+									&& !player.equals("Maximax") && !player.equals("Baron") && !player.equals("Miller")
+									&& !player.equals("JethroGibbs") && !player.equals("Axel")
+									&& !player.equals("Twisted") && !player.equals("Wolfi") && !player.equals("Eva")
+									&& !player.equals("Daisy") && !player.equals("Chitario") && !player.equals("caldin")
+									&& !player.equals("Stefano Bontade") && !player.equals("JakobAigi")
+									&& !player.equals("Thunder") && !player.equals("Idefix") && !player.equals("Prince")
+									&& !player.equals("StefPlay") && !player.equals("Axe")
+									&& !player.equals("Chief Wiggum") && !player.equals("DarkWhisperer")
+									&& !player.equals("DrJekyll") && !player.equals("Dynamike")
+									&& !player.equals("Insane") && !player.equals("Kane Nod")
+									&& !player.equals("Legendz") && !player.equals("Luxi") && !player.equals("Marius")
+									&& !player.equals("NicNac") && !player.equals("QuanTas") && !player.equals("Ragen")
+									&& !player.equals("RoadRunner") && !player.equals("Weskott")
+									&& !player.equals("Whiskey") && !player.equals("Bak0") && !player.equals("chiccy")
+									&& !player.equals("Elirah") && !player.equals("Faital") && !player.equals("Hope")
+									&& !player.equals("ille") && !player.equals("JKbaxter") && !player.equals("Klon")
+									&& !player.equals("Kuchenkasten") && !player.equals("Lars")
+									&& !player.equals("Locke") && !player.equals("Ratte") && !player.equals("Repkow")
+									&& !player.equals("Sepp") && !player.equals("Stubus Lupus")
+									&& !player.equals("Sturm") && !player.equals("TJ_S") && !player.equals("Toko1993")
+									&& !player.equals("Tone") && !player.equals("Tummi") && !player.equals("Whitefox")
+									&& !player.equals("Wyqer") && !player.equals("ZerO")
 									&& !player.equals("HungryEngineer")) {
-								System.err.println("External data says player '" + player
-										+ "' has not participated on this event"
-										+ " (" + title + ")" + ":" + CrawlerUtil.convertDateToString(date));
+								// Extra exceptions
+								String dateText = CrawlerUtil.convertDateToString(date);
+								boolean found = false;
+
+								if (dateText.equals("15.01.2015")) {
+									if (player.equals("Sunny") || player.equals("Njal") || player.equals("Fett_Li")
+											|| player.equals("sagitarii") || player.equals("zandru")
+											|| player.equals("Stromberg") || player.equals("ctt3r")
+											|| player.equals("Itsche") || player.equals("FabianK3")
+											|| player.equals("Dieter Stahl") || player.equals("John Smith")
+											|| player.equals("Scraffy") || player.equals("MasterJ")
+											|| player.equals("Horus") || player.equals("yellowman")
+											|| player.equals("Etienne") || player.equals("Farantis")
+											|| player.equals("DaWOis") || player.equals("Bonedog")
+											|| player.equals("Qooper") || player.equals("cerdun")
+											|| player.equals("Antagon") || player.equals("Pyro")
+											|| player.equals("Monsterhero") || player.equals("LuetzowerJaeger")
+											|| player.equals("Redstoone") || player.equals("White")
+											|| player.equals("Snollie") || player.equals("Boga")) {
+										status = SlotStatus.APPEARED;
+										found = true;
+									}
+								}
+
+								// Not found and no extra exception
+								if (!found) {
+									System.err.println("External data says player '" + player
+											+ "' has not participated on this event" + " (" + title + ")" + ":"
+											+ CrawlerUtil.convertDateToString(date));
+								}
 							}
 						} else {
-							System.err.println("External event has different type of '"
-									+ extType + "' instead '" + type + "' ("
-									+ title + ")");
+							// Extra exceptions
+							String dateText = CrawlerUtil.convertDateToString(date);
+							boolean found = false;
+							
+							if (dateText.equals("09.01.2015")) {
+								type = EventType.COOP_PLUS;
+								found = true;
+							}
+							
+							// Not found and no extra exception
+							if (!found) {
+								System.err.println("External event has different type of '" + extType + "' instead '" + type
+										+ "' (" + title + ")");
+							}
+							
 						}
 					} else if (date.before(Calendar.getInstance())) {
-						System.err.println("Can't find external event with web events date: "
-								+ CrawlerUtil.convertDateToString(date) + " (" + title + ")");
+						// XXX Disabled due to lack of external data
+						boolean disabled = true;
+						if (!disabled) {
+							System.err.println("Can't find external event with web events date: "
+									+ CrawlerUtil.convertDateToString(date) + " (" + title + ")");
+						}
 					}
-					//Add found player
+					// Add found player
 					if (extEventPlayers != null) {
 						extEventPlayers.remove(player);
 					}
@@ -1257,20 +1014,20 @@ public final class Webcrawler {
 					}
 				}
 			}
-			
+
 			/*
-			//Search for reserve
-			if (listStartFound && !slotFound) {
-				
-			}
-			*/
-			
-			//Search list start if not found already
+			 * //Search for reserve if (listStartFound && !slotFound) {
+			 * 
+			 * }
+			 */
+
+			// Search list start if not found already
 			if (!listStartFound) {
-				pattern = Pattern.compile("((Slotliste)|(Slotdatenbank)|(Slotlist)|"
-						+ "(Teilnehmer)|(Anmeldungen)|(Wer kommt\\?)|(Interessierte)|"
-						+ "(Dabei sind)|(Lernwillige Zöglinge)|(Die Auserwählten)|"
-						+ "(lotliste)|(Zeitslots))[*:]?[\\s]?(&lt;){0,3}</",
+				pattern = Pattern.compile(
+						"((Slotliste)|(Slotdatenbank)|(Slotlist)|"
+								+ "(Teilnehmer)|(Anmeldungen)|(Wer kommt\\?)|(Interessierte)|"
+								+ "(Dabei sind)|(Lernwillige Zöglinge)|(Die Auserwählten)|"
+								+ "(lotliste)|(Zeitslots)|(Slotierliste))[*:]?[\\s]?(&lt;){0,3}</",
 						Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
@@ -1278,7 +1035,15 @@ public final class Webcrawler {
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("<strong>Teilnehmer -",
+				pattern = Pattern.compile("<strong>Teilnehmer -", Pattern.CASE_INSENSITIVE);
+				matcher = pattern.matcher(line);
+				if (matcher.find()) {
+					listStartFound = true;
+				}
+			}
+			if (!listStartFound) {
+				pattern = Pattern.compile(
+						"((Gruppe W - Die Herausforderer!)|(Slotliste - Server #1))[*:]?[\\s]?(&lt;){0,3}</",
 						Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
@@ -1286,96 +1051,77 @@ public final class Webcrawler {
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("((Gruppe W - Die Herausforderer!)|(Slotliste - Server #1))[*:]?[\\s]?(&lt;){0,3}</",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("Wo:</strong> Brigade2010<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("Wo:</strong> Brigade2010<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^SlotÂ´s<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^SlotÂ´s<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile(" zu vergeben:<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile(" zu vergeben:<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^<strong>Gruppe DELTA:<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^<strong>Gruppe DELTA:<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("wer dabei ist.<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("wer dabei ist.<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^1.0 Slotliste:<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^1.0 Slotliste:<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^<i><strong>Godfather v3</strong></i><br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^<i><strong>Godfather v3</strong></i><br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^So, hier nun die freien Slots:<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^So, hier nun die freien Slots:<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("Slotliste der Mission anzupassen...<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("Slotliste der Mission anzupassen...<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^Folgende Plätze sind verfügbar:<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
 				}
 			}
 			if (!listStartFound) {
-				pattern = Pattern.compile("^Folgende Plätze sind verfügbar:<br />$",
-						Pattern.CASE_INSENSITIVE);
-				matcher = pattern.matcher(line);
-				if (matcher.find()) {
-					listStartFound = true;
-				}
-			}
-			if (!listStartFound) {
-				pattern = Pattern.compile("^Missionsstart pünktlich 2000h<br />$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^Missionsstart pünktlich 2000h<br />$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					listStartFound = true;
@@ -1389,36 +1135,46 @@ public final class Webcrawler {
 					listStartFound = true;
 				}
 			}
+			if (!listStartFound) {
+				pattern = Pattern.compile("<img src='http://i\\.imgur\\.com/zRMqnBu\\.png'.*/>.*<br />$",
+						Pattern.CASE_INSENSITIVE);
+				matcher = pattern.matcher(line);
+				if (matcher.find()) {
+					listStartFound = true;
+				}
+			}
 		} while (!line.contains(THREAD_CONTENT_END));
-		
-		//Add players that are only listed in the external data and not in the thread
-		//to the reserve
+
+		// Add players that are only listed in the external data and not in the
+		// thread
+		// to the reserve
 		if (extEventPlayers != null && extEventPlayers.size() > 0) {
 			for (String player : extEventPlayers) {
 				SlotStatus status = extEventDate.getPlayerStatus(player);
 				slotlist.addReserve(player, status);
 			}
 		}
-		
-		
+
 		if (!listStartFound) {
 			System.err.println("Can't find threads slotlist with title: " + title);
 		} else if (slotlist == null || slotlist.slotSize() == 0) {
 			System.err.println("Can't find slots in threads slotlist with title: " + title);
 		}
-		
+
 		return slotlist;
 	}
+
 	private static SlotType parseSlotType(String slotText) {
 		SlotType slot = SlotType.NO_TYPE;
-		
-		//Parse slot types
+
+		// Parse slot types
 		boolean slotTypeFound = false;
-		Pattern pattern = Pattern.compile("^((CO|Commanding[\\s]?Officer)([\\s]?\\(.*\\))?|"
-				+ "Platoon (Leader|Commander) \\(CO\\)|Kommandierender[\\s]?Offizier[\\s]?(/CO)?|"
-				+ "Einsatzleiter|Ilaclar Anführer|Anführer|Kompanieführer \\(CO\\)|"
-				+ "Company[\\s]?Leader|Plt Leader \\(CO,.*\\)|Troop Commander \\(CO\\)|"
-				+ "CO[\\s\\-]?/[\\s\\-]?TC|Talibananführer([\\s]?\\(C.*\\))?.*|FBI Agent Teamleader|Lehrgangsleiter)$",
+		Pattern pattern = Pattern.compile(
+				"^((CO|Commanding[\\s]?Officer)([\\s]?\\(.*\\))?|"
+						+ "Platoon (Leader|Commander) \\(CO\\)|Kommandierender[\\s]?Offizier[\\s]?(/CO)?|"
+						+ "Einsatzleiter|Ilaclar Anführer|Anführer|Kompanieführer \\(CO\\)|"
+						+ "Company[\\s]?Leader|Plt Leader \\(CO,.*\\)|Troop Commander \\(CO\\)|"
+						+ "CO[\\s\\-]?/[\\s\\-]?TC|Talibananführer([\\s]?\\(C.*\\))?.*|FBI Agent Teamleader|Lehrgangsleiter)$",
 				Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(slotText);
 		if (matcher.find()) {
@@ -1432,8 +1188,7 @@ public final class Webcrawler {
 					+ "Ausführender Offizier/XO|Panzerzugführer \\(XO/PL\\)|"
 					+ "Squad Leader[\\s]?\\(XO,.*\\)|Panzerzugführer[\\s]?\\(XO.*\\)|"
 					+ "Troop Sergeant \\(XO\\)|XO[\\s\\-]?/[\\s\\-]?TC|Panzerzugführer[\\s]?\\(XO.*\\)([\\s]?-)?|"
-					+ "FBI Agent)$",
-					Pattern.CASE_INSENSITIVE);
+					+ "FBI Agent)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1441,8 +1196,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(CoL|Chief[\\s]?of[\\s]?Logisti[ck]s?)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^(CoL|Chief[\\s]?of[\\s]?Logisti[ck]s?)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1450,9 +1204,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(JTAC|ATC|Joint[\\s]?Tactical[\\s]?Air[\\s]?Controller|Air[\\s]?Traffic[\\s]?Controller|"
-					+ "Air Intelligence Officer)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern
+					.compile("^(JTAC|ATC|Joint[\\s]?Tactical[\\s]?Air[\\s]?Controller|Air[\\s]?Traffic[\\s]?Controller|"
+							+ "Air Intelligence Officer)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1460,8 +1214,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(MIO|Military[\\s]?Intelligence[\\s]?Officer)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^(MIO|Military[\\s]?Intelligence[\\s]?Officer)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1469,8 +1222,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(FO|Forward[\\s]?Observer)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^(FO|Forward[\\s]?Observer)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1478,9 +1230,11 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Tank[\\s\\-]?)?Platoon[\\s-]?(Infantry[\\s\\-]?)?Lead(er)?|Platoon Command(er)?|"
-					+ "Panzerzugführer \\(PL\\)|Platoonleader[\\s]?\\([^XC].*\\))$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern
+					.compile(
+							"^((Tank[\\s\\-]?)?Platoon[\\s-]?(Infantry[\\s\\-]?)?Lead(er)?|Platoon Command(er)?|"
+									+ "Panzerzugführer \\(PL\\)|Platoonleader[\\s]?\\([^XC].*\\))$",
+							Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1497,8 +1251,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(((Tank|BMP)[\\s\\-]?)?(Kommandant|Commander)([\\s]?\\(.*\\))?|RIOT-Fahrzeug Kommandant|"
-					+ "Squad Leader[\\s]?\\(BMP Commander\\)|Tank[\\s\\-]?(Platoonleader|Commander))$",
+			pattern = Pattern.compile(
+					"^(((Tank|BMP)[\\s\\-]?)?(Kommandant|Commander)([\\s]?\\(.*\\))?|RIOT-Fahrzeug Kommandant|"
+							+ "Squad Leader[\\s]?\\(BMP Commander\\)|Tank[\\s\\-]?(Platoonleader|Commander))$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1508,8 +1263,7 @@ public final class Webcrawler {
 		}
 		if (!slotTypeFound) {
 			pattern = Pattern.compile("^(GNR|(Richt|Panzer)?Schütze([\\s]?\\(.*\\))?|RIOT-Fahrzeug Schütze|"
-					+ "BMP[\\s]{0,2}Gunner|Gunner)$",
-					Pattern.CASE_INSENSITIVE);
+					+ "BMP[\\s]{0,2}Gunner|Gunner)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1518,8 +1272,7 @@ public final class Webcrawler {
 		}
 		if (!slotTypeFound) {
 			pattern = Pattern.compile("^(DRV|(Panzer)?Fahrer([\\s]?\\(.*\\))?|RIOT-Fahrzeug Fahrer|"
-					+ "BMP Driver|Driver|Panzerhaubitzen[\\s\\-]?Fahrer)$",
-					Pattern.CASE_INSENSITIVE);
+					+ "BMP Driver|Driver|Panzerhaubitzen[\\s\\-]?Fahrer)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1527,11 +1280,12 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Logisti[ck][\\s\\-]?)?Team[\\s]?(leader|leiter)([\\s\\-\\(SD\\)]?)?\\*?|Batterieführer|Mörserkommandant|"
-					+ "(Ärzte|Medic)[\\s\\-]?Teamleader|Rebellenführer|Gruppenleiter|Offizier|SWAT-Teamleader|"
-					+ "Team Leader/Gunner|EOD[\\s\\-]?Teamlead(er)?|Mörser[\\s\\-]?Kommandant|"
-					+ "Logistik[\\s\\-]?Teamleader|Panzerhaubitzen[\\s\\-]?Kommandant|"
-					+ "Senior[\\s\\-]Rifleman/[\\s]?Team[\\s-]?leader|Teamleader \\(AK.*\\))$",
+			pattern = Pattern.compile(
+					"^((Logisti[ck][\\s\\-]?)?Team[\\s]?(leader|leiter)([\\s\\-\\(SD\\)]?)?\\*?|Batterieführer|Mörserkommandant|"
+							+ "(Ärzte|Medic)[\\s\\-]?Teamleader|Rebellenführer|Gruppenleiter|Offizier|SWAT-Teamleader|"
+							+ "Team Leader/Gunner|EOD[\\s\\-]?Teamlead(er)?|Mörser[\\s\\-]?Kommandant|"
+							+ "Logistik[\\s\\-]?Teamleader|Panzerhaubitzen[\\s\\-]?Kommandant|"
+							+ "Senior[\\s\\-]Rifleman/[\\s]?Team[\\s-]?leader|Teamleader \\(AK.*\\))$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1541,8 +1295,7 @@ public final class Webcrawler {
 		}
 		if (!slotTypeFound) {
 			pattern = Pattern.compile("^(Squad[\\s]?lead(er)?[\\s]?(\\([^XC].*\\)|Alpha|Bravo|Charlie|"
-					+ "Delta|Echo|Romeo)?|Zellenführer)$",
-					Pattern.CASE_INSENSITIVE);
+					+ "Delta|Echo|Romeo)?|Zellenführer)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1551,8 +1304,7 @@ public final class Webcrawler {
 		}
 		if (!slotTypeFound) {
 			pattern = Pattern.compile("^(FTL|Fire[\\s]?team[\\s\\-]?lead(er)?|Truppführer|"
-					+ "Scout[\\s\\-]Teamleader?|Zellenführer[\\s]+\\(FTL\\).*)$",
-					Pattern.CASE_INSENSITIVE);
+					+ "Scout[\\s\\-]Teamleader?|Zellenführer[\\s]+\\(FTL\\).*)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1560,10 +1312,10 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(LMG|(Scout[\\s\\-]?)?Automati[ck][\\s]?Rifleman|Autorifleman|Auto\\. Rifleman|"
-					+ "Leibwache \\(AR\\)|Automatikschütze|LMG[\\s\\-]?(Schütze)?|"
-					+ "Operator \\(Weapon Specialist\\)|Maschinengewehr[\\s\\-]?Schütze|"
-					+ ".*\\(RPK\\).*)$",
+			pattern = Pattern.compile(
+					"^(LMG|(Scout[\\s\\-]?)?Automati[ck][\\s]?Rifleman|Autorifleman|Auto\\. Rifleman|"
+							+ "Leibwache \\(AR\\)|Automatikschütze|LMG[\\s\\-]?(Schütze)?|"
+							+ "Operator \\(Weapon Specialist\\)|Maschinengewehr[\\s\\-]?Schütze|" + ".*\\(RPK\\).*)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1572,9 +1324,10 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Ass(ist)?\\.|Assistant)[\\s]?Automati[ck][\\s]?Rifleman|Rifleman([\\s\\-\\(SD\\)]?)?|Operator|Kämpfer|"
-					+ "Polizei-Beamter|SWAT-Beamter|Krimineller|Nahsicherer|Assistant[\\s]?Grenadier|Assistent|"
-					+ "Mörser Nahsicherer|(Filmproduzent|Kameramann)([\\s]?\\((AK|PKM).*\\))?|(Assist[ea]nt[\\s\\-]?Scout)?)$",
+			pattern = Pattern.compile(
+					"^((Ass(ist)?\\.|Assistant)[\\s]?Automati[ck][\\s]?Rifleman|Rifleman([\\s\\-\\(SD\\)]?)?|Operator|Kämpfer|"
+							+ "Polizei-Beamter|SWAT-Beamter|Krimineller|Nahsicherer|Assistant[\\s]?Grenadier|Assistent|"
+							+ "Mörser Nahsicherer|(Filmproduzent|Kameramann)([\\s]?\\((AK|PKM).*\\))?|(Assist[ea]nt[\\s\\-]?Scout)?)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1583,8 +1336,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Grenadier([\\s]\\(.*\\))?$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Grenadier([\\s]\\(.*\\))?$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1592,9 +1344,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(DM|Designated[\\s]?Marksman|Marksman \\(SVDM\\)|Marksman|"
-					+ "Gruppenscharfschütze|Leibwache \\(DM\\)|SVD Rifleman|"
-					+ "Rifleman[\\s]?\\(SVD\\))$",
+			pattern = Pattern.compile(
+					"^(DM|Designated[\\s]?Marksman|Marksman \\(SVDM\\)|Marksman|"
+							+ "Gruppenscharfschütze|Leibwache \\(DM\\)|SVD Rifleman|" + "Rifleman[\\s]?\\(SVD\\))$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1603,9 +1355,10 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Scout[\\s\\-]?|Rifleman/)?Combat[\\s]?Medic|Notfallsanitäter|Leibwache \\(MED\\)|"
-					+ "Para[\\s\\-]?medic|Corpsman|Rifleman[\\s]?\\(Medic\\)|"
-					+ "Operator \\(Medic([\\s]?Specialist)?\\)|Rifleman/Medic|Flight[\\s\\-]Medic)$",
+			pattern = Pattern.compile(
+					"^((Scout[\\s\\-]?|Rifleman/)?Combat[\\s]?Medic|Notfallsanitäter|Leibwache \\(MED\\)|"
+							+ "Para[\\s\\-]?medic|Corpsman|Rifleman[\\s]?\\(Medic\\)|"
+							+ "Operator \\(Medic([\\s]?Specialist)?\\)|Rifleman/Medic|Flight[\\s\\-]Medic)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1614,8 +1367,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Rifleman[\\s\\-]?\\(?AT\\)?$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Rifleman[\\s\\-]?\\(?AT\\)?$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1623,8 +1375,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Rifleman[\\s]?AA$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Rifleman[\\s]?AA$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1632,8 +1383,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(MG|(Heavy)?[\\s]?Machine[\\s]?gunner([\\s\\-]?\\(PKM\\))?|Heavy[\\s]?Automati[ck][\\s]?Rifleman|"
-					+ "MMG Rifleman|MG[0-9][\\s\\-]?Schütze)$",
+			pattern = Pattern.compile(
+					"^(MG|(Heavy)?[\\s]?Machine[\\s]?gunner([\\s\\-]?\\(PKM\\))?|Heavy[\\s]?Automati[ck][\\s]?Rifleman|"
+							+ "MMG Rifleman|MG[0-9][\\s\\-]?Schütze)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1642,8 +1394,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(AMG|Ass(ist)?\\.[\\s]?Machinegunner|Assistent[\\s]?Automati[ck][\\s]?Rifleman|"
-					+ "PKP-Ass(ist)?(\\.)?|Assistant MMG Rifleman|Munitionsträger([\\s\\-\\(SD\\)]?)?)$",
+			pattern = Pattern.compile(
+					"^(AMG|Ass(ist)?\\.[\\s]?Machinegunner|Assistent[\\s]?Automati[ck][\\s]?Rifleman|"
+							+ "PKP-Ass(ist)?(\\.)?|Assistant MMG Rifleman|Munitionsträger([\\s\\-\\(SD\\)]?)?)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1652,7 +1405,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(AT[\\s\\-]?(Specialist|Soldat)?|Missile[\\s]?Specialist[\\s]?\\(Javelin\\)|Heavy[\\s]?(Anti-Tank|AT)[\\s]?Rifleman)$",
+			pattern = Pattern.compile(
+					"^(AT[\\s\\-]?(Specialist|Soldat)?|Missile[\\s]?Specialist[\\s]?\\(Javelin\\)|Heavy[\\s]?(Anti-Tank|AT)[\\s]?Rifleman)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1661,8 +1415,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(Ass(ist)?\\.[\\s]?AT|Missile[\\s]?Specialist[\\s]?\\((Asst.|Assistent|Ass(ist)?.)\\)"
-					+ "|Assistent[\\s]?(Anti-Tank|AT)[\\s]?Rifleman|(Assistant|Ass(ist)?\\.)[\\s]?AT[\\s\\-]?Specialist)$",
+			pattern = Pattern.compile(
+					"^(Ass(ist)?\\.[\\s]?AT|Missile[\\s]?Specialist[\\s]?\\((Asst.|Assistent|Ass(ist)?.)\\)"
+							+ "|Assistent[\\s]?(Anti-Tank|AT)[\\s]?Rifleman|(Assistant|Ass(ist)?\\.)[\\s]?AT[\\s\\-]?Specialist)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1673,8 +1428,7 @@ public final class Webcrawler {
 		if (!slotTypeFound) {
 			pattern = Pattern.compile("^(EOD|Explosiv[e]?[\\s]?Ordnance[\\s]?Disposel|Explosiv[e]?[\\s]?Expert|"
 					+ "Explosiv[e]?[\\s-]?Specialist|Sprengstoff Spezialist|Pionier|EOD[\\s\\-]?Specialist|"
-					+ "Operator \\(Explosi(on|ve) Specialist\\))$",
-					Pattern.CASE_INSENSITIVE);
+					+ "Operator \\(Explosi(on|ve) Specialist\\))$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1691,8 +1445,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Scout[\\s\\-]?)?Spotter|SWAT-Spotter)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^((Scout[\\s\\-]?)?Spotter|SWAT-Spotter)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1700,8 +1453,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Logistik(er)?([\\s]\\(.*\\))?$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Logistik(er)?([\\s]\\(.*\\))?$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1718,8 +1470,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Co[\\.-]Pilot([\\s]\\(.*\\))?$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Co[\\.-]Pilot([\\s]\\(.*\\))?$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1727,8 +1478,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Fixed-wing Pilot [12] \\(.*\\)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Fixed-wing Pilot [12] \\(.*\\)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1736,8 +1486,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^Gunner \\(UH-80\\)$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^Gunner \\(UH-80\\)$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1745,8 +1494,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^((Platoon|Company)?[\\s]?Medic([\\s]\\(.*\\)?)?|Internist|Chirurg|Senior Corpsman|"
-					+ "Platoon Corpsman|Notarzt|Notfall[\\s\\-]?Sanitäter|Sanitäter|(Field[\\s\\-]?)?Surgeon)$",
+			pattern = Pattern.compile(
+					"^((Platoon|Company)?[\\s]?Medic([\\s]\\(.*\\)?)?|Internist|Chirurg|Senior Corpsman|"
+							+ "Platoon Corpsman|Notarzt|Notfall[\\s\\-]?Sanitäter|Sanitäter|(Field[\\s\\-]?)?Surgeon)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1755,8 +1505,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(Mörser|Panzerhaubitzen?)[\\s\\-]?schütze$",
-					Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile("^(Mörser|Panzerhaubitzen?)[\\s\\-]?schütze$", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
 				slotTypeFound = true;
@@ -1773,9 +1522,9 @@ public final class Webcrawler {
 			}
 		}
 		if (!slotTypeFound) {
-			pattern = Pattern.compile("^(Door[\\s-]?Gunner|BB(-)?Spieler[\\s]?(\\(.*\\))?|"
-					+ "Air Support Control Officer|Assistant Gunner|\\?\\?\\?|"
-					+ "Seiten[\\s\\-]?schütze)$",
+			pattern = Pattern.compile(
+					"^(Door[\\s-]?Gunner|BB(-)?Spieler[\\s]?(\\(.*\\))?|"
+							+ "Air Support Control Officer|Assistant Gunner|\\?\\?\\?|" + "Seiten[\\s\\-]?schütze)$",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(slotText);
 			if (matcher.find()) {
@@ -1783,20 +1532,18 @@ public final class Webcrawler {
 				slot = SlotType.OTHER;
 			}
 		}
-		
-		//Match type exact names
+
+		// Match type exact names
 		if (!slotTypeFound) {
 			for (SlotType type : SlotType.values()) {
-				pattern = Pattern.compile("^.*\\(" + type + "\\).*$",
-						Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile("^.*\\(" + type + "\\).*$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(slotText);
 				if (matcher.find()) {
 					slotTypeFound = true;
 					slot = type;
 				}
 				if (!slotTypeFound) {
-					pattern = Pattern.compile("^" + type + "$",
-							Pattern.CASE_INSENSITIVE);
+					pattern = Pattern.compile("^" + type + "$", Pattern.CASE_INSENSITIVE);
 					matcher = pattern.matcher(slotText);
 					if (matcher.find()) {
 						slotTypeFound = true;
@@ -1805,11 +1552,11 @@ public final class Webcrawler {
 				}
 			}
 		}
-		
-		//Hard-match resulting types using generator SlotParseTool
+
+		// Hard-match resulting types using generator SlotParseTool
 		if (!slotTypeFound) {
 			Map<String, SlotType> generatedMap = new HashMap<String, SlotType>();
-			//Generated by SlotParseTool : 00to10.csv
+			// Generated by SlotParseTool : 00to10.csv
 			generatedMap.put("Platoon Leader (Befehligt auch FIA)", SlotType.PL);
 			generatedMap.put("UAV Operator (UGV)", SlotType.UGSO);
 			generatedMap.put("Marksman (MAR-10)", SlotType.DM);
@@ -1840,7 +1587,7 @@ public final class Webcrawler {
 			generatedMap.put("Aufklärer (Leihgabe vom US-Marine Corps)", SlotType.SPT);
 			generatedMap.put("Flanker (Leihgabe vom US-Marine Corps)", SlotType.RFL);
 			generatedMap.put("Combat UGV", SlotType.UGSO);
-			
+
 			generatedMap.put("Stellvertretender Offizier", SlotType.XO);
 			generatedMap.put("MG-Schütze (PKP)", SlotType.AR);
 			generatedMap.put("RPG-Schütze (RPG-7)", SlotType.AT);
@@ -1893,7 +1640,7 @@ public final class Webcrawler {
 			generatedMap.put("Talibanboss      (SQL)", SlotType.SL);
 			generatedMap.put("Talibanboss    (SQL)", SlotType.SL);
 			generatedMap.put("Mediziner       (MED)", SlotType.MDC);
-			//Generated by SlotParseTool : 30to40.csv
+			// Generated by SlotParseTool : 30to40.csv
 			generatedMap.put("Reporter (RPG-7V)", SlotType.ATR);
 			generatedMap.put("Team Leader (SD)", SlotType.TL);
 			generatedMap.put("Rifleman (SD)", SlotType.RFL);
@@ -1914,7 +1661,7 @@ public final class Webcrawler {
 			generatedMap.put("CAS-Pilot (Jet)", SlotType.WCO);
 			generatedMap.put("CAS-Pilot Ausbilder (Helikopter)", SlotType.PIL);
 			generatedMap.put("CAS-Pilot Anwärter (Helikopter)", SlotType.PIL);
-			//Generated by SlotParseTool : 40to50.csv
+			// Generated by SlotParseTool : 40to50.csv
 			generatedMap.put("Senior Elite Chief of Logistics", SlotType.COL);
 			generatedMap.put("Logistik-Ausbildungshelfer", SlotType.LOG);
 			generatedMap.put("CO/Platoonleader", SlotType.CO);
@@ -1957,7 +1704,7 @@ public final class Webcrawler {
 			generatedMap.put("CIA Spotter", SlotType.SPT);
 			generatedMap.put("CIA UAV-Operator", SlotType.RFL);
 			generatedMap.put("CIA Combat Medic", SlotType.CMDC);
-			//Generated by SlotParseTool : 50to60.csv
+			// Generated by SlotParseTool : 50to60.csv
 			generatedMap.put("MIO (Military Intelligence Officer)", SlotType.MIO);
 			generatedMap.put("CoL (Chief of Logistics)", SlotType.COL);
 			generatedMap.put("Gehilfe vom Übungsleiter", SlotType.XO);
@@ -1996,7 +1743,7 @@ public final class Webcrawler {
 			generatedMap.put("Rekrut (kann keine Entfernungen einschätzen)", SlotType.RFL);
 			generatedMap.put("Rekrut (schoss aus Versehen Flares auf die Gegner)", SlotType.RFL);
 			generatedMap.put("Rekrut (vermisst den M32)", SlotType.RFL);
-			//Generated by SlotParseTool : 60to70.csv
+			// Generated by SlotParseTool : 60to70.csv
 			generatedMap.put("Gastredner", SlotType.CO);
 			generatedMap.put("Azubi", SlotType.RFL);
 			generatedMap.put("RTO/ Intelligence Officer in der Basis", SlotType.XO);
@@ -2072,7 +1819,7 @@ public final class Webcrawler {
 			generatedMap.put("Senior Rifleman/Asst. Team Leader", SlotType.RFL);
 			generatedMap.put("Sniper (VSS Vintorez)", SlotType.SNP);
 			generatedMap.put("Senior Logistiker (Leader)", SlotType.LOG);
-			//Generated by SlotParseTool : 70to80.csv
+			// Generated by SlotParseTool : 70to80.csv
 			generatedMap.put("Platoon Leader -", SlotType.PL);
 			generatedMap.put("Rifleman (AT-Assist)", SlotType.AAT);
 			generatedMap.put("UAV Operator", SlotType.MIO);
@@ -2121,7 +1868,7 @@ public final class Webcrawler {
 			generatedMap.put("Assistant Sergeant", SlotType.PSG);
 			generatedMap.put("Gunner (Titan AA)", SlotType.GNR);
 			generatedMap.put("Assistant Teamleader", SlotType.RFL);
-			//Generated by SlotParseTool : 80to90.csv
+			// Generated by SlotParseTool : 80to90.csv
 			generatedMap.put("Logistics Teamleader", SlotType.TL);
 			generatedMap.put("Team Leader Dagger Actual", SlotType.TL);
 			generatedMap.put("Demo Specialist", SlotType.CE);
@@ -2149,7 +1896,7 @@ public final class Webcrawler {
 			generatedMap.put("Tank Section Leader (Commander)", SlotType.PL);
 			generatedMap.put("Führung", SlotType.TL);
 			generatedMap.put("Slot", SlotType.RFL);
-			//Generated by SlotParseTool : 90to100.csv
+			// Generated by SlotParseTool : 90to100.csv
 			generatedMap.put("Autmatic Rifleman", SlotType.AR);
 			generatedMap.put("TPz Kommandant", SlotType.TC);
 			generatedMap.put("TPz Schütze", SlotType.GNR);
@@ -2190,7 +1937,7 @@ public final class Webcrawler {
 			generatedMap.put("WSO 2", SlotType.WSO);
 			generatedMap.put("WSO 3", SlotType.WSO);
 			generatedMap.put("WSO 4", SlotType.WSO);
-			//Generated by SlotParseTool : 100to110.csv
+			// Generated by SlotParseTool : 100to110.csv
 			generatedMap.put("Radio Operator", SlotType.XO);
 			generatedMap.put("AT-Schütze", SlotType.AT);
 			generatedMap.put("Apache Pilot -", SlotType.PIL);
@@ -2250,7 +1997,7 @@ public final class Webcrawler {
 			generatedMap.put("Demolitions", SlotType.CE);
 			generatedMap.put("OrdnanceMaintenance", SlotType.CE);
 			generatedMap.put("Infantry Logistics", SlotType.LOG);
-			//Generated by SlotParseTool : 110to120.csv
+			// Generated by SlotParseTool : 110to120.csv
 			generatedMap.put("Copilot", SlotType.CPIL);
 			generatedMap.put("Produzent", SlotType.ZC_PLUS);
 			generatedMap.put("Zivilist", SlotType.ZC_PLUS);
@@ -2289,7 +2036,7 @@ public final class Webcrawler {
 			generatedMap.put("PzF3-Schütze", SlotType.ATR);
 			generatedMap.put("MG4-Schützen Assi.", SlotType.AMG);
 			generatedMap.put("Funker", SlotType.PSG);
-			//Generated by SlotParseTool : 120to130.csv
+			// Generated by SlotParseTool : 120to130.csv
 			generatedMap.put("Rifleman M136", SlotType.RFL);
 			generatedMap.put("AT-Specialist (SMAW)", SlotType.AT);
 			generatedMap.put("Assistant SMAW", SlotType.AAT);
@@ -2342,7 +2089,7 @@ public final class Webcrawler {
 			generatedMap.put("Spetznas Operator", SlotType.RFL);
 			generatedMap.put("Haupttruppenführer", SlotType.TL);
 			generatedMap.put("Saboteur", SlotType.CE);
-			//Generated by SlotParseTool : 130to140.csv
+			// Generated by SlotParseTool : 130to140.csv
 			generatedMap.put("Platoonleader / OP-Leader", SlotType.PL);
 			generatedMap.put("MG-Schütze", SlotType.MG);
 			generatedMap.put("Crew Chief (Blackhawk)", SlotType.OTHER);
@@ -2408,7 +2155,7 @@ public final class Webcrawler {
 			generatedMap.put("LKW-Fahrer 1", SlotType.DRV);
 			generatedMap.put("LKW-Fahrer 2", SlotType.DRV);
 			generatedMap.put("Gasthörer", SlotType.ZC_PLUS);
-			//Generated by SlotParseTool : 140to150.csv
+			// Generated by SlotParseTool : 140to150.csv
 			generatedMap.put("Hilfsausbilder", SlotType.PSG);
 			generatedMap.put("USMC Radio Operator", SlotType.PSG);
 			generatedMap.put("USMC Platoonmedic", SlotType.MDC);
@@ -2445,7 +2192,7 @@ public final class Webcrawler {
 			generatedMap.put("USMC Designted Markman", SlotType.DM);
 			generatedMap.put("USMC Crew Chief", SlotType.RFL);
 			generatedMap.put("USMC Doorgunner", SlotType.OTHER);
-			//Generated by SlotParseTool : 150to160.csv
+			// Generated by SlotParseTool : 150to160.csv
 			generatedMap.put("USMC Team-Leader", SlotType.TL);
 			generatedMap.put("USMC Designted Marksman", SlotType.DM);
 			generatedMap.put("Profikommandant", SlotType.TC);
@@ -2464,7 +2211,7 @@ public final class Webcrawler {
 			generatedMap.put("Boss Gecko", SlotType.FTL);
 			generatedMap.put("PKM Schütze", SlotType.AR);
 			generatedMap.put("RPK Schütze", SlotType.AR);
-			//Generated by SlotParseTool : 160to170.csv
+			// Generated by SlotParseTool : 160to170.csv
 			generatedMap.put("Avenger Fahrer", SlotType.DRV);
 			generatedMap.put("Avenger Schütze", SlotType.GNR);
 			generatedMap.put("Reparatur LKW Fahrer", SlotType.LOG);
@@ -2526,7 +2273,7 @@ public final class Webcrawler {
 			generatedMap.put("Rottenführer-Pionier", SlotType.CE);
 			generatedMap.put("Sturmpionier", SlotType.CE);
 			generatedMap.put("Kriegsberichterstatter", SlotType.ZC_PLUS);
-			//Generated by SlotParseTool : 170to180.csv
+			// Generated by SlotParseTool : 170to180.csv
 			generatedMap.put("AA-Specialist", SlotType.AA);
 			generatedMap.put("Crewman", SlotType.RFL);
 			generatedMap.put("HMG-Lead", SlotType.MG);
@@ -2550,7 +2297,7 @@ public final class Webcrawler {
 			generatedMap.put("Pioneer", SlotType.CE);
 			generatedMap.put("Artillery Commander", SlotType.TL);
 			generatedMap.put("Koordinator (Basis)", SlotType.TL);
-			//Generated by SlotParseTool : 180to190.csv
+			// Generated by SlotParseTool : 180to190.csv
 			generatedMap.put("Platoon RTO", SlotType.XO);
 			generatedMap.put("Platoon FO", SlotType.FO);
 			generatedMap.put("Vehicle Commander", SlotType.TC);
@@ -2587,7 +2334,7 @@ public final class Webcrawler {
 			generatedMap.put("Fieldmedic", SlotType.CMDC);
 			generatedMap.put("Operator (SD)", SlotType.RFL);
 			generatedMap.put("FAC", SlotType.JTAC);
-			//Generated by SlotParseTool : 190to200.csv
+			// Generated by SlotParseTool : 190to200.csv
 			generatedMap.put("QRF-Anführer", SlotType.FTL);
 			generatedMap.put("Kommandant Marder", SlotType.TC);
 			generatedMap.put("Fahrer Marder", SlotType.DRV);
@@ -2617,7 +2364,7 @@ public final class Webcrawler {
 			generatedMap.put("Gangster (M1014)", SlotType.RFL);
 			generatedMap.put("Geisel (Arzt, dient den Gangstern als Sani)", SlotType.ZC_PLUS);
 			generatedMap.put("Geisel (Pilot)", SlotType.PIL);
-			//Generated by SlotParseTool : 200to210.csv
+			// Generated by SlotParseTool : 200to210.csv
 			generatedMap.put("Söldner", SlotType.RFL);
 			generatedMap.put("Beobachter", SlotType.SPT);
 			generatedMap.put("Attentäter", SlotType.SNP);
@@ -2654,7 +2401,7 @@ public final class Webcrawler {
 			generatedMap.put("Anti-Tank Specialist (MAWS)", SlotType.AT);
 			generatedMap.put("2nd AT Specialist", SlotType.AT);
 			generatedMap.put("Anti-Tank Specialist (MAAWS)", SlotType.AT);
-			//Generated by SlotParseTool : 210to220.csv
+			// Generated by SlotParseTool : 210to220.csv
 			generatedMap.put("Batallionskammandeur", SlotType.TL);
 			generatedMap.put("Fahrzeugkommandant", SlotType.TC);
 			generatedMap.put("MG-Hilfsschütze", SlotType.AMG);
@@ -2690,7 +2437,7 @@ public final class Webcrawler {
 			generatedMap.put("AT4 Gunner", SlotType.AT);
 			generatedMap.put("Assistant AT4 Gunner", SlotType.AAT);
 			generatedMap.put("Tower", SlotType.LOG);
-			//Generated by SlotParseTool : 220to230.csv
+			// Generated by SlotParseTool : 220to230.csv
 			generatedMap.put("Pilot Apache", SlotType.PIL);
 			generatedMap.put("Gunner Apache", SlotType.WSO);
 			generatedMap.put("Commander KPz1", SlotType.TC);
@@ -2723,7 +2470,7 @@ public final class Webcrawler {
 			generatedMap.put("LKW Fahrer / Rifleman", SlotType.DRV);
 			generatedMap.put("Little-Bird (Bewaffnet) Co-Pilot", SlotType.WSO);
 			generatedMap.put("El Präsidente", SlotType.ZC_PLUS);
-			//Generated by SlotParseTool : 230to240.csv
+			// Generated by SlotParseTool : 230to240.csv
 			generatedMap.put("Automatic Rifleman (LMG)", SlotType.AR);
 			generatedMap.put("Anti-Tank Soldier (SMAW)", SlotType.AT);
 			generatedMap.put("Anti-Tank Soldier (Javelin)", SlotType.AT);
@@ -2749,7 +2496,7 @@ public final class Webcrawler {
 			generatedMap.put("Fire Team Leader Alpha 3", SlotType.FTL);
 			generatedMap.put("Javelin Schütze", SlotType.AA);
 			generatedMap.put("Javelin Schlepper", SlotType.AAA);
-			//Generated by SlotParseTool : 240to250.csv
+			// Generated by SlotParseTool : 240to250.csv
 			generatedMap.put("Squad-Leader", SlotType.SL);
 			generatedMap.put("Geisel (Polizist)", SlotType.ZC_PLUS);
 			generatedMap.put("Trupp-Anführer", SlotType.TL);
@@ -2769,7 +2516,7 @@ public final class Webcrawler {
 			generatedMap.put("Spotter Charlie", SlotType.SPT);
 			generatedMap.put("Sniper Charlie", SlotType.SNP);
 			generatedMap.put("EOD-Truppführer", SlotType.TL);
-			//Generated by SlotParseTool : 250to255.csv
+			// Generated by SlotParseTool : 250to255.csv
 			generatedMap.put("Commander MBT", SlotType.TC);
 			generatedMap.put("Javelin Support", SlotType.AA);
 			generatedMap.put("Commander KPz", SlotType.TC);
@@ -2786,7 +2533,206 @@ public final class Webcrawler {
 			generatedMap.put("Medevac - Pilot", SlotType.PIL);
 			generatedMap.put("Logistikpilot", SlotType.PIL);
 			generatedMap.put("Logistikhilfe", SlotType.LOG);
-			
+			// Generated by SlotParseTool : 255to285.csv
+			generatedMap.put("Combat Engineer", SlotType.CE);
+			generatedMap.put("RPG 7-Schütze", SlotType.AT);
+			generatedMap.put("RPG 32-Schütze", SlotType.AT);
+			generatedMap.put("Special Forces", SlotType.SPEC);
+			generatedMap.put("Adjutant", SlotType.ZC_PLUS);
+			generatedMap.put("Anti-Air Rifleman", SlotType.AAR);
+			generatedMap.put("Mörserassistent", SlotType.ACSO);
+			generatedMap.put("Kompanieführung", SlotType.CO);
+			generatedMap.put("Stellv. Kompanieführung", SlotType.XO);
+			generatedMap.put("ZgFhr", SlotType.SL);
+			generatedMap.put("StlvZgFhr/ZgFnk", SlotType.SL);
+			generatedMap.put("Zug Sanitäter", SlotType.MDC);
+			generatedMap.put("GrpFhr", SlotType.SL);
+			generatedMap.put("StlGrpFhr", SlotType.SL);
+			generatedMap.put("MG3", SlotType.MG);
+			generatedMap.put("PZF1", SlotType.AT);
+			generatedMap.put("MG-Hilf", SlotType.AMG);
+			generatedMap.put("PZF2", SlotType.AT);
+			generatedMap.put("StlvGrpFhr", SlotType.SL);
+			generatedMap.put("Recon TL", SlotType.TL);
+			generatedMap.put("CAS-Pilot", SlotType.PIL);
+			generatedMap.put("Panzerbüchsenschütze", SlotType.AT);
+			generatedMap.put("Assi. Panzerbüchsenschütze", SlotType.AAT);
+			generatedMap.put("MG-Schütze (PKM)", SlotType.MG);
+			generatedMap.put("stellvertretender Gruppenführer", SlotType.SL);
+			generatedMap.put("Scharfschütze (SWD)", SlotType.SNP);
+			generatedMap.put("Scharfschütze (WSS)", SlotType.SNP);
+			generatedMap.put("Sprengstoffexperte (PP-19)", SlotType.CE);
+			generatedMap.put("Lew Alexandrowitsch", SlotType.ZC_PLUS);
+			generatedMap.put("JTAC-Senior", SlotType.JTAC);
+			// Generated by SlotParseTool : 10to441.csv
+			generatedMap.put("Operations Commander", SlotType.CO);
+			generatedMap.put("Operations 2nd Commander", SlotType.XO);
+			generatedMap.put("SAS Teamlead", SlotType.TL);
+			generatedMap.put("SAS Recon", SlotType.SPEC);
+			generatedMap.put("Crew", SlotType.RFL);
+			generatedMap.put("Plt. Commander", SlotType.PL);
+			generatedMap.put("Plt. Seargent", SlotType.PSG);
+			generatedMap.put("Plt. Medic", SlotType.MDC);
+			generatedMap.put("Rechte Hand/Arzt", SlotType.MDC);
+			generatedMap.put("Blauhelm-Soldat", SlotType.RFL);
+			generatedMap.put("Blauhelm-Soldat Teamleader", SlotType.TL);
+			generatedMap.put("Teammanager", SlotType.OTHER);
+			generatedMap.put("Security Helicopter Pilot", SlotType.PIL);
+			generatedMap.put("Human Reconaissance", SlotType.OTHER);
+			generatedMap.put("Light Strike Operator", SlotType.WSO);
+			generatedMap.put("Counter-Insurgency Operator", SlotType.TL);
+			generatedMap.put("Mobile Escort Operator", SlotType.TL);
+			generatedMap.put("Remy Galopin", SlotType.RFL);
+			generatedMap.put("Porthos Bissonnette", SlotType.RFL);
+			generatedMap.put("Estienne Beaulne", SlotType.RFL);
+			generatedMap.put("Killian Brosseau", SlotType.RFL);
+			generatedMap.put("Maxime Daucourt", SlotType.RFL);
+			generatedMap.put("Gaspard Cartier", SlotType.RFL);
+			generatedMap.put("Augustin Montgomery", SlotType.RFL);
+			generatedMap.put("Ethan Carter", SlotType.RFL);
+			generatedMap.put("Thibaut Allard", SlotType.RFL);
+			generatedMap.put("Alex Gainsbourg", SlotType.RFL);
+			generatedMap.put("Dominic Shelton", SlotType.RFL);
+			generatedMap.put("Anna Beaugendre", SlotType.RFL);
+			generatedMap.put("Christian Lagarde", SlotType.RFL);
+			generatedMap.put("Sascha Steinhäusser", SlotType.RFL);
+			generatedMap.put("Igor Bethune", SlotType.RFL);
+			generatedMap.put("Frederick Walsh", SlotType.RFL);
+			generatedMap.put("Cyrille Lahaye", SlotType.RFL);
+			generatedMap.put("Nicolas Jeannin", SlotType.RFL);
+			generatedMap.put("Guy Delcroix", SlotType.RFL);
+			generatedMap.put("Henry Lemoine", SlotType.RFL);
+			generatedMap.put("Alphonse Vaillancourt", SlotType.RFL);
+			generatedMap.put("Marcus Sommerfeld", SlotType.RFL);
+			generatedMap.put("Albert Brosseau", SlotType.RFL);
+			generatedMap.put("Victor Hennequin", SlotType.RFL);
+			generatedMap.put("Emmanuelle Boutin", SlotType.RFL);
+			generatedMap.put("Dr. Norbert Gicquel", SlotType.RFL);
+			generatedMap.put("Ladislas Devillers", SlotType.RFL);
+			generatedMap.put("Porthos Trintignant", SlotType.RFL);
+			generatedMap.put("Prof. Dr. Francois Chapuis", SlotType.RFL);
+			generatedMap.put("Tim-Stanislas Reverdin", SlotType.RFL);
+			generatedMap.put("Dany Chaney", SlotType.RFL);
+			generatedMap.put("Armand Deschanel", SlotType.RFL);
+			generatedMap.put("Abelin Bourseiller", SlotType.RFL);
+			generatedMap.put("Matthieu Abadie", SlotType.RFL);
+			generatedMap.put("Dimitri Subercaseaux", SlotType.RFL);
+			generatedMap.put("Serge Demaret", SlotType.RFL);
+			generatedMap.put("Jean-Baptiste Vernier", SlotType.RFL);
+			generatedMap.put("Logistician (UGV)", SlotType.LOG);
+			generatedMap.put("Kinderarzt", SlotType.RFL);
+			generatedMap.put("Rifleman mit Medizinkenntnissen", SlotType.MDC);
+			generatedMap.put("Fernschütze", SlotType.RFL);
+			generatedMap.put("Blackbox-Spieler", SlotType.OTHER);
+			generatedMap.put("Javelin Raketenträger", SlotType.AAA);
+			generatedMap.put("Javelin Operator", SlotType.AAR);
+			generatedMap.put("Bei Bedarf Pilot", SlotType.PIL);
+			generatedMap.put("Bei Bedarf Co-Pilot", SlotType.CPIL);
+			generatedMap.put("Sicherungsschütze", SlotType.RFL);
+			// Generated by SlotParseTool : 20to441.csv
+			generatedMap.put("Dusty", SlotType.RFL);
+			generatedMap.put("Deuce", SlotType.RFL);
+			generatedMap.put("Pilot*", SlotType.PIL);
+			generatedMap.put("Co-Pilot*", SlotType.CPIL);
+			generatedMap.put("Blackbox-Spieler", SlotType.OTHER);
+			generatedMap.put("Trainer", SlotType.OTHER);
+			// Generated by SlotParseTool : 30to50.csv
+			generatedMap.put("Kompaniefeldwebel", SlotType.PL);
+			generatedMap.put("Versorgungsdienstfeldwebel", SlotType.PSG);
+			generatedMap.put("stv. Gruppenführer", SlotType.SL);
+			generatedMap.put("MG5 Hilfsschütze", SlotType.MG);
+			generatedMap.put("Luftabwehrschütze", SlotType.AA);
+			generatedMap.put("Drohnenoperator", SlotType.UASO);
+			generatedMap.put("Reperaturspezialist", SlotType.OTHER);
+			generatedMap.put("Logistikzugführer", SlotType.TL);
+			generatedMap.put("Kopilot", SlotType.CPIL);
+			generatedMap.put("Helikopterpilot", SlotType.PIL);
+			generatedMap.put("Jetpilot", SlotType.PIL);
+			generatedMap.put("Ausbildungsleiter", SlotType.CO);
+			generatedMap.put("Radiooperator", SlotType.OTHER);
+			generatedMap.put("Leitender Offizier", SlotType.CO);
+			generatedMap.put("stellv. Offizier", SlotType.XO);
+			generatedMap.put("Maschinengewehr Schütze (PKP)", SlotType.MG);
+			generatedMap.put("Assistent Maschinengewehr SchÃ¼tze", SlotType.AMG);
+			generatedMap.put("Fliegerspezialist (IGLA-3)", SlotType.AA);
+			generatedMap.put("Assistent Fliegerspezialist", SlotType.AAA);
+			generatedMap.put("Panzerspezialist (METIS-M)", SlotType.AT);
+			generatedMap.put("Assistent Panzerspezialist", SlotType.AAT);
+			generatedMap.put("PMC Teamleader", SlotType.TL);
+			generatedMap.put("PMC Autorifleman", SlotType.AR);
+			generatedMap.put("PMC Marksman", SlotType.SNP);
+			generatedMap.put("PMC Rifleman", SlotType.RFL);
+			generatedMap.put("PMC ExplosivSpecialist", SlotType.SPEC);
+			generatedMap.put("Rifleman LAT", SlotType.ATR);
+			generatedMap.put("Squadmedic", SlotType.MDC);
+			generatedMap.put("Mk6 Gunner", SlotType.MG);
+			generatedMap.put("Mk6 Assistant", SlotType.AMG);
+			generatedMap.put("Rifleman Specialist (C4)", SlotType.SPEC);
+			generatedMap.put("Soldat", SlotType.RFL);
+			generatedMap.put("Leitender Mediziner", SlotType.MDC);
+			generatedMap.put("Team Leader (Arzt)", SlotType.MDC);
+			// Generated by SlotParseTool : 50to70.csv
+			generatedMap.put("Mörserassistant", SlotType.WSO);
+			generatedMap.put("Logistik Pilot", SlotType.PIL);
+			generatedMap.put("Logistik Co-Pilot", SlotType.CPIL);
+			generatedMap.put("Assistant Anti-Air Specialist", SlotType.AAA);
+			generatedMap.put("Flieger-Hauptmann", SlotType.TL);
+			generatedMap.put("Flieger-Schütze", SlotType.RFL);
+			generatedMap.put("MG-Schütze (RPK-74)", SlotType.MG);
+			generatedMap.put("Fliegerleitoffizier", SlotType.TL);
+			generatedMap.put("Flugabwehrschütze (Igla-3)", SlotType.AA);
+			generatedMap.put("Flieger-Leutnant", SlotType.TL);
+			generatedMap.put("Stellvertreter des Zugführers", SlotType.TL);
+			generatedMap.put("Richtlenkschütze", SlotType.RFL);
+			generatedMap.put("SVD-Schütze", SlotType.SNP);
+			generatedMap.put("Lehrgangsteilnehmer", SlotType.OTHER);
+			generatedMap.put("Ausbildungsoffizier", SlotType.CO);
+			generatedMap.put("Auszubildener", SlotType.OTHER);
+			generatedMap.put("Leiter des Lehrstuhls", SlotType.CO);
+			generatedMap.put("Hilfsdozent", SlotType.XO);
+			generatedMap.put("General (Co+)", SlotType.ZC_PLUS);
+			generatedMap.put("Berater (Co+)", SlotType.ZC_PLUS);
+			generatedMap.put("Gejagter", SlotType.OTHER);
+			generatedMap.put("CO - rufix", SlotType.CO);
+			generatedMap.put("XO - Farantis", SlotType.XO);
+			generatedMap.put("Platoon Lead - Simonius", SlotType.PL);
+			generatedMap.put("Ammo Carrier", SlotType.RFL);
+			generatedMap.put("Copilot - Qooper", SlotType.CPIL);
+			generatedMap.put("Assistent Maschinengewehr Schütze", SlotType.AMG);
+			generatedMap.put("Unmanned Aircraft Systems Operator", SlotType.UASO);
+			generatedMap.put("Veranstalter -", SlotType.CO);
+			generatedMap.put("Helfer und Catering -", SlotType.XO);
+			generatedMap.put("Panzerkommandant", SlotType.TC);
+			generatedMap.put("Squad Medic", SlotType.MDC);
+			generatedMap.put("Sonderspieler", SlotType.OTHER);
+			generatedMap.put("Truppenführer", SlotType.TL);
+			generatedMap.put("Panzerbüchsenschütze (RPG-7)", SlotType.AT);
+			generatedMap.put("Sprengspezialist", SlotType.CE);
+			generatedMap.put("Scharfschütze (SVD)", SlotType.SNP);
+			generatedMap.put("Medical Assistant", SlotType.MDC);
+			generatedMap.put("Platoon Grenadier (M32)", SlotType.GRE);
+			generatedMap.put("Rifleman OPR", SlotType.RFL);
+			generatedMap.put("Assistent AR", SlotType.AR);
+			generatedMap.put("Rifleman APERS", SlotType.RFL);
+			generatedMap.put("Rifleman Medium Anti Tank", SlotType.ATR);
+			generatedMap.put("Assistent Rifleman Anti Tank", SlotType.AAT);
+			generatedMap.put("Mortar Assistent", SlotType.WSO);
+			generatedMap.put("MedEvac Co-Pilot", SlotType.CPIL);
+			generatedMap.put("Gruppenfüherer", SlotType.SL);
+			generatedMap.put("Kompanieführer", SlotType.CO);
+			generatedMap.put("stellv. Kompanieführer", SlotType.XO);
+			generatedMap.put("Kompaniearzt", SlotType.MDC);
+			generatedMap.put("UGV - Operator", SlotType.UGSO);
+			generatedMap.put("UAV - Operator", SlotType.UASO);
+			generatedMap.put("Mechaniker", SlotType.OTHER);
+			generatedMap.put("Unmanned Ground Systems Operator", SlotType.UGSO);
+			generatedMap.put("Batteriekommandant", SlotType.ACSO);
+			generatedMap.put("Rifleman Anti Tank", SlotType.AT);
+			generatedMap.put("Rifleman Anti Tank Assistent", SlotType.AAT);
+			generatedMap.put("Chef", SlotType.CO);
+			generatedMap.put("Co-Chef", SlotType.XO);
+			generatedMap.put("Tester", SlotType.OTHER);
+
 			for (Entry<String, SlotType> entry : generatedMap.entrySet()) {
 				if (slotText.toLowerCase().equals(entry.getKey().toLowerCase())) {
 					slotTypeFound = true;
@@ -2795,22 +2741,25 @@ public final class Webcrawler {
 				}
 			}
 		}
-		
+
 		if (slot == SlotType.NO_TYPE) {
 			System.err.println("Can not parse slot type out of: " + slotText);
 		}
-		
+
 		return slot;
 	}
+
 	/**
 	 * Gets the events name by extracting it from the thread title.
-	 * @param title Title of the thread
+	 * 
+	 * @param title
+	 *            Title of the thread
 	 * @return Name of the event or the title if failure occurred
 	 */
 	private static String getThreadName(String title) {
 		String name = "";
-		
-		//Work trough exceptions
+
+		// Work trough exceptions
 		if (title.trim().contains("[S-PvP 21] - 30.09.2012 - 19 Uhr")) {
 			name = "Der Prototyp";
 			return name;
@@ -2850,19 +2799,23 @@ public final class Webcrawler {
 		} else if (title.trim().contains("[Coop24] 26. Juli Sex, drugs and Guns")) {
 			name = "Sex, drugs and Guns";
 			return name;
+		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
+			name = "Kampfpanzer bei Gruppe W";
+			return name;
 		}
-		
-		//Extract name from title
+
+		// Extract name from title
 		boolean found = false;
-		//Extract size from title
-		Pattern pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+		// Extract size from title
+		Pattern pattern = Pattern
+				.compile("[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 		Matcher matcher = pattern.matcher(title);
 		if (matcher.find()) {
 			found = true;
 			name = matcher.group(1).trim();
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\"']([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\"']");
+			pattern = Pattern.compile("[\"']([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\"']");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2870,7 +2823,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\\d]{0,2}[vV][\\.]?[\\d]{1,2}$");
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]{0,2}[vV][\\.]?[\\d]{1,2}$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2878,7 +2832,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\\s]?[\\[,]");
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\s]?[\\[,]");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2886,7 +2840,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\\d]\\.[\\d]$");
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]\\.[\\d]$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2894,7 +2849,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)\\(");
+			pattern = Pattern
+					.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\(");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2902,7 +2858,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2910,7 +2866,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("^([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("^([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2918,7 +2874,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+-]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)\\[");
+			pattern = Pattern
+					.compile("[A-Za-züäöÜÄÖ\\s\\+-]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2926,7 +2883,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("\\] ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("\\] ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2934,7 +2891,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+) - [\\d]");
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+) - [\\d]");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2942,7 +2899,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\s]+([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("[\\d]+[\\s]+([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2950,7 +2907,8 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\\d]+$");
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2958,7 +2916,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+ ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("[\\d]+ ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2966,7 +2924,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)\\[");
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2974,7 +2932,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+) - [\\d]");
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/'´,\\.!:ß]+) - [\\d]");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2982,7 +2940,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)[\\d]+");
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
@@ -2990,35 +2948,48 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-',\\.!:ß]+)$");
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
 				found = true;
 				name = matcher.group(1).trim();
 			}
 		}
-		
+		if (!found) {
+			pattern = Pattern.compile(".*(BB52 Was.*n da los\\?)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+
 		if (!found) {
 			System.err.println("Can't parse thread name from title (using title instead): " + title);
 			name = title;
 		}
-		
+
 		return name;
 	}
+
 	/**
-	 * Gets the map the event takes place at by
-	 * extracting it from the event thread web content.
-	 * @param content Content of the event threads web site
-	 * @param curContentIndex Current index in the content which
-	 * should be placed near starting of the true content
-	 * @return Name of the map the event takes place at or {@link MAP_UNKNOWN} if not known
+	 * Gets the map the event takes place at by extracting it from the event
+	 * thread web content.
+	 * 
+	 * @param content
+	 *            Content of the event threads web site
+	 * @param curContentIndex
+	 *            Current index in the content which should be placed near
+	 *            starting of the true content
+	 * @return Name of the map the event takes place at or {@link MAP_UNKNOWN}
+	 *         if not known
 	 */
 	private static String getThreadMap(List<String> content, int curContentIndex) {
 		String map = MAP_UNKNOWN;
 		int i = curContentIndex;
 		String line = "";
-		
-		//Search for map until content end
+
+		// Search for map until content end
 		Pattern pattern;
 		Matcher matcher;
 		do {
@@ -3026,17 +2997,16 @@ public final class Webcrawler {
 			line = content.get(i);
 			pattern = Pattern.compile("((Map)|(Karte))[\\s]?:[\\s]?(.+)<", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(line);
-			if (matcher.find()
-					&& !matcher.group(4).trim().toUpperCase().contains(MAP_REJECT.toUpperCase())) {
+			if (matcher.find() && !matcher.group(4).trim().toUpperCase().contains(MAP_REJECT.toUpperCase())) {
 				map = matcher.group(4);
 				break;
 			}
 		} while (!line.contains(THREAD_CONTENT_END));
-		
+
 		map = map.replaceAll("<strong>", "");
 		map = map.replaceAll("</strong>", "");
 		map = map.trim();
-		
+
 		if (map.equals("Imrali-Island") || map.equals("Imrali")) {
 			map = "Imrali Island";
 		} else if (map.equals("Sangin")) {
@@ -3048,7 +3018,7 @@ public final class Webcrawler {
 		} else if (map.equals("Clafgan")) {
 			map = "Clafghan";
 		} else if (map.equals("<strong>Clafghan</strong>")) {
-				map = "Clafghan";
+			map = "Clafghan";
 		} else if (map.equals("Duala")) {
 			map = "Isla Duala";
 		} else if (map.equals("Chernarus (Summer)")) {
@@ -3058,17 +3028,20 @@ public final class Webcrawler {
 		} else if (map.equals("Capraia")) {
 			map = "Isola di Capraia";
 		}
-		
+
 		return map;
 	}
+
 	/**
 	 * Gets the events thread id in the forum by extracting it from its url.
-	 * @param url Url to the event thread
+	 * 
+	 * @param url
+	 *            Url to the event thread
 	 * @return Id of events thread or {@link NO_ID} if an error occurred
 	 */
 	private static int getThreadId(String url) {
 		int id = NO_ID;
-		//Extract id from url
+		// Extract id from url
 		Pattern pattern = Pattern.compile("id=([\\d]+)");
 		Matcher matcher = pattern.matcher(url);
 		if (matcher.find()) {
@@ -3078,15 +3051,18 @@ public final class Webcrawler {
 		}
 		return id;
 	}
+
 	/**
 	 * Gets the events size by extracting it from its title.
-	 * @param title Title of the event
+	 * 
+	 * @param title
+	 *            Title of the event
 	 * @return Size of the events or {@link NO_SIZE} if failure occurred
 	 */
 	private static int getEventSize(String title) {
 		int size = NO_SIZE;
-		
-		//Work trough exceptions
+
+		// Work trough exceptions
 		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
 			size = 27;
 			return size;
@@ -3159,10 +3135,19 @@ public final class Webcrawler {
 		} else if (title.trim().contains("05.06.2012 - Sniperduell")) {
 			size = 10;
 			return size;
+		} else if (title.trim().contains("[09.07.] TVT100 Lauf, Wler, lauf!")) {
+			size = 100;
+			return size;
+		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
+			size = 26;
+			return size;
+		} else if (title.trim().contains("[13.03.] MilSim5 Watchful Eye")) {
+			size = 5;
+			return size;
 		}
-		
+
 		boolean found = false;
-		//Extract size from title
+		// Extract size from title
 		Pattern pattern = Pattern.compile("[A-Za-z]+[\\+\\s]?(\\d\\d)[\\s\\]]");
 		Matcher matcher = pattern.matcher(title);
 		if (matcher.find()) {
@@ -3233,22 +3218,26 @@ public final class Webcrawler {
 				size = Integer.parseInt(matcher.group(1));
 			}
 		}
-		
+
 		if (!found || size == NO_SIZE) {
 			System.err.println("Can't parse event size from title: " + title);
 		}
-		
+
 		return size;
 	}
+
 	/**
 	 * Gets the events type by extracting it from its title.
-	 * @param title Title of the event
-	 * @return Size of the event or {@link EventType.NO_TYPE} if failure occurred
+	 * 
+	 * @param title
+	 *            Title of the event
+	 * @return Size of the event or {@link EventType.NO_TYPE} if failure
+	 *         occurred
 	 */
 	private static EventType getEventType(String title) {
 		EventType type = EventType.NO_TYPE;
-		
-		//Work trough exceptions
+
+		// Work trough exceptions
 		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
 			type = EventType.ORGA;
 			return type;
@@ -3295,9 +3284,9 @@ public final class Webcrawler {
 			type = EventType.ORGA;
 			return type;
 		}
-		
+
 		boolean found = false;
-		//Extract type from title
+		// Extract type from title
 		Pattern pattern = Pattern.compile("((CO)|(COOP))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(title);
 		if (matcher.find()) {
@@ -3313,7 +3302,7 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			pattern = Pattern.compile("(TVT[\\s\\+]{0,2}[\\d])|(TVT-EVENT)|(TVT [A-Za-z])|(S-PVP)",
+			pattern = Pattern.compile("(TVT[\\s\\+]{0,2}[\\d])|(TVT-EVENT)|(TVT [A-Za-z])|(S-PVP)|(SKIRMISH)",
 					Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(title);
 			if (matcher.find()) {
@@ -3354,20 +3343,25 @@ public final class Webcrawler {
 				type = EventType.ORGA;
 			}
 		}
-		
+
 		if (!found) {
 			System.err.println("Can't parse event type from title: " + title);
 		}
-		
+
 		return type;
 	}
+
 	/**
-	 * Gets the time when the event has started by extracting
-	 * it from the content.
-	 * @param content Content of events thread web site
-	 * @param curContentIndex Current index of the content which
-	 * should be placed near threads title
-	 * @param title Title of the event
+	 * Gets the time when the event has started by extracting it from the
+	 * content.
+	 * 
+	 * @param content
+	 *            Content of events thread web site
+	 * @param curContentIndex
+	 *            Current index of the content which should be placed near
+	 *            threads title
+	 * @param title
+	 *            Title of the event
 	 * @return Time when the event has started or null if an error occurred
 	 */
 	private static Calendar getEventTime(List<String> content, int curContentIndex, String title) {
@@ -3375,18 +3369,26 @@ public final class Webcrawler {
 		int i = curContentIndex;
 		String line = "";
 		
-		//Search for time until content end
+		// Work trough exceptions
+		if (title.trim().contains("[06.02.] Comp58 OP Greeks Meet")) {
+			time = "19:15:00";
+			return CrawlerUtil.convertStringToTime(time);
+		}
+
+		// Search for time until content end
 		Pattern pattern;
 		Matcher matcher;
 		do {
 			i++;
 			line = content.get(i);
 			line = line.replaceAll("â€", "-");
+			line = line.replaceAll("<span style='color:#.{3,6}'>", "");
+			line = line.replaceAll("<span style='font-size:.{1,6}'>", "");
+			line = line.replaceAll("</span>", "");
 			String beforeTimePattern = "^[\\s]*(<(strong|i)>)?(Eventbeginn|Beginn|Eventstart|"
-					+ "Treffen im (Teamspeak|TS)|Start|Treffen)(<\\/(strong|i)>)?:(<\\/(strong|i)>)?";
+					+ "Treffen im (Teamspeak|TS)|Start|Treffen|Sammeln im Teamspeak|Trainingsbeginn)(<\\/(strong|i)>)?:(<\\/(strong|i)>)?";
 			String timePattern = "([0-9]{2}[\\.:]?[0-9]{2})";
-			pattern = Pattern.compile(beforeTimePattern + "(\\s|&gt;|\\-|ab)*(<strong>)?"
-					+ timePattern
+			pattern = Pattern.compile(beforeTimePattern + "(\\s|&gt;|\\-|ab)*(<strong>)?" + timePattern
 					+ "[\\s]*(Uhr|h)?(<\\/strong>)?(\\s|&lt;)*<br[\\s]?\\/>", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(line);
 			if (matcher.find()) {
@@ -3394,30 +3396,35 @@ public final class Webcrawler {
 				break;
 			}
 		} while (!line.contains(THREAD_CONTENT_END));
-		
+
 		if (time == null) {
 			System.err.println("Can not parse starting time of event: " + title);
 		} else {
 			time = time.substring(0, 2) + ":" + time.substring(2) + ":00";
 		}
-		
+
 		return CrawlerUtil.convertStringToTime(time);
 	}
+
 	/**
-	 * Gets the date when the event took place at by extracting
-	 * it from its title and by using the year of thread creation.
-	 * @param title Title of the event
-	 * @param content Content of events thread web site
-	 * @param curContentIndex Current index of the content which
-	 * should be placed near threads title
+	 * Gets the date when the event took place at by extracting it from its
+	 * title and by using the year of thread creation.
+	 * 
+	 * @param title
+	 *            Title of the event
+	 * @param content
+	 *            Content of events thread web site
+	 * @param curContentIndex
+	 *            Current index of the content which should be placed near
+	 *            threads title
 	 * @return Date when the event took place at or null if an error occurred
 	 */
 	private static Calendar getEventDate(String title, List<String> content, int curContentIndex) {
-		//Get date
+		// Get date
 		boolean found = false;
 		String date = null;
-		
-		//Work trough exceptions
+
+		// Work trough exceptions
 		if (title.trim().contains("Mini Sylvester Event")) {
 			date = "31.12.2013";
 			return CrawlerUtil.convertStringToDate(date);
@@ -3449,8 +3456,8 @@ public final class Webcrawler {
 			date = "24.10.2012";
 			return CrawlerUtil.convertStringToDate(date);
 		}
-		
-		//Replace months with correct date
+
+		// Replace months with correct date
 		title = title.replaceAll("[\\s]?(Januar)[\\.]?", "01");
 		title = title.replaceAll("[\\s]?(Februar)[\\.]?", "02");
 		title = title.replaceAll("[\\s]?(März)[\\.]?", "03");
@@ -3475,14 +3482,14 @@ public final class Webcrawler {
 		title = title.replaceAll("[\\s]?(Okt)[\\.]?", "10");
 		title = title.replaceAll("[\\s]?(Nov)[\\.]?", "11");
 		title = title.replaceAll("[\\s]?(Dez)[\\.]?", "12");
-		
-		//Extract date from title
+
+		// Extract date from title
 		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d");
 		Matcher matcher = pattern.matcher(title);
 		if (matcher.find()) {
 			found = true;
 			date = title.substring(matcher.start(), matcher.end());
-			//15.03.2014
+			// 15.03.2014
 		}
 		if (!found) {
 			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\.\\d\\d\\d\\d");
@@ -3490,9 +3497,9 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start() + 1, matcher.end());
-				//7.2.2014
+				// 7.2.2014
 				date = "0" + date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
-				//07.02.2014
+				// 07.02.2014
 			}
 		}
 		if (!found) {
@@ -3501,9 +3508,9 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//15.03.14
+				// 15.03.14
 				date = date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
-				//15.03.2014
+				// 15.03.2014
 			}
 		}
 		if (!found) {
@@ -3512,9 +3519,9 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//3.03.2014
+				// 3.03.2014
 				date = "0" + date;
-				//03.03.2014
+				// 03.03.2014
 			}
 		}
 		if (!found) {
@@ -3523,14 +3530,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start() + 1, matcher.end());
-				//3.03.
+				// 3.03.
 				date = "0" + date;
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//03.03.2014
+					// 03.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3542,14 +3549,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start() + 1, matcher.end() - 1);
-				//3.03
+				// 3.03
 				date = "0" + date;
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//03.03.2014
+					// 03.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3561,13 +3568,13 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end() - 1);
-				//15.03
+				// 15.03
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//15.03.2014
+					// 15.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3579,13 +3586,13 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start() + 1, matcher.end());
-				//15.03.
+				// 15.03.
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//15.03.2014
+					// 15.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3597,13 +3604,13 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end() - 1);
-				//15.03.
+				// 15.03.
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//15.03.2014
+					// 15.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3615,14 +3622,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end() - 1);
-				//15.3
+				// 15.3
 				date = date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//15.03.2014
+					// 15.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3634,7 +3641,7 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//15.3.2014
+				// 15.3.2014
 				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
 			}
 		}
@@ -3644,14 +3651,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//15.3.
+				// 15.3.
 				date = date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//15.03.2014
+					// 15.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3663,10 +3670,10 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//7.2.14
+				// 7.2.14
 				date = "0" + date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
 				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
-				//07.02.2014
+				// 07.02.2014
 			}
 		}
 		if (!found) {
@@ -3675,14 +3682,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end() - 1);
-				//5.3
+				// 5.3
 				date = "0" + date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//05.03.2014
+					// 05.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3694,14 +3701,14 @@ public final class Webcrawler {
 			if (matcher.find()) {
 				found = true;
 				date = title.substring(matcher.start(), matcher.end());
-				//5.3.
+				// 5.3.
 				date = "0" + date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
 					date += wroteAt.substring(matcher.start(), matcher.end());
-					//05.03.2014
+					// 05.03.2014
 				} else {
 					System.err.println("Can't read 'wroteAt' date from thread.");
 				}
@@ -3710,71 +3717,75 @@ public final class Webcrawler {
 		if (!found) {
 			System.err.println("Can't parse date from title: " + title);
 		}
-		
-		//Validate date
+
+		// Validate date
 		int day = Integer.parseInt(date.substring(0, 2));
 		int month = Integer.parseInt(date.substring(3, 5));
 		int year = Integer.parseInt(date.substring(6));
-		if (day < 1 || day > 31
-				|| month < 1 || month > 12
-				|| year < DATE_FIRST_YEAR || year > Calendar.getInstance().get(Calendar.YEAR)) {
+		if (day < 1 || day > 31 || month < 1 || month > 12 || year < DATE_FIRST_YEAR
+				|| year > Calendar.getInstance().get(Calendar.YEAR)) {
 			System.err.println("No valid date: " + date);
 		}
-		
+
 		return CrawlerUtil.convertStringToDate(date);
 	}
+
 	/**
 	 * Gets the urls to all events by using the event sub-forum.
-	 * @param path Path to the event sub-forum
+	 * 
+	 * @param path
+	 *            Path to the event sub-forum
 	 * @return List of urls to all events
-	 * @throws IOException If an I/O-Exception occurs
+	 * @throws IOException
+	 *             If an I/O-Exception occurs
 	 */
 	private static List<String> getEventUrls(String path) throws IOException {
 		List<String> events = new ArrayList<String>();
 		int curPage = 0;
-		
+
 		boolean continueCrawling = true;
 		while (continueCrawling) {
-			//Work trough the current page
+			// Work trough the current page
 			String pageUrl = EVENTS_PATH + EVENTS_PATH_SUFFIX + curPage;
 			List<String> content = CrawlerUtil.getWebContent(pageUrl);
-			
-			//Reject everything before the mask
+
+			// Reject everything before the mask
 			int i = -1;
 			String line = "";
 			do {
 				i++;
 				line = content.get(i);
 			} while (!line.contains(EVENTS_MASK_START));
-			
+
 			int urlsOnThisPage = 0;
 			do {
 				i++;
 				line = content.get(i);
 				if (line.contains(EVENTS_REJECT_STICKY)) {
 					urlsOnThisPage++;
-					//Reject lines of this thread
+					// Reject lines of this thread
 					i += EVENTS_REJECT_LINE_SIZE;
 				} else if (line.contains(EVENTS_ACCEPT_THREAD)) {
-					//Accept this thread
+					// Accept this thread
 					urlsOnThisPage++;
 					int urlStart = line.indexOf(EVENTS_URL_TAG, line.indexOf(EVENTS_ACCEPT_THREAD));
 					int urlEnd = line.indexOf(EVENTS_URL_TAG, urlStart + 1);
 					String url = line.substring(urlStart + 1, urlEnd);
 					events.add(SERVERPATH + url);
-					//Reject the last lines of this thread
+					// Reject the last lines of this thread
 					i += EVENTS_REJECT_LINE_SIZE - 1;
 				}
 			} while (!line.contains(EVENTS_MASK_END));
-			
-			//End crawl if there are no more pages left (indicated by no threads)
+
+			// End crawl if there are no more pages left (indicated by no
+			// threads)
 			if (urlsOnThisPage == 0) {
 				continueCrawling = false;
 			}
-			
+
 			curPage += EVENTS_THREAD_AMOUNT;
 		}
-		
+
 		return events;
 	}
 }

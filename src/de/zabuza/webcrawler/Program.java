@@ -20,15 +20,15 @@ public final class Program {
 	/**
 	 * Path to the file that contains external data.
 	 */
-	private static final String FILEPATH_EXT_DATA = "DatenInput.csv";
+	private static final String FILEPATH_EXT_DATA = "res/DatenInput.csv";
 	/**
 	 * Path to the file that contains the output of the program.
 	 */
-	private static final String FILEPATH_OUTPUT = "output.txt";
+	private static final String FILEPATH_OUTPUT = "res/output.txt";
 	/**
 	 * Path to the location where the event list gets serialized.
 	 */
-	private static final String FILEPATH_SERIALIZATION = "eventList.ser";
+	private static final String FILEPATH_SERIALIZATION = "res/eventList.ser";
 	
 	/**
 	 * Utility class. No implementation.
