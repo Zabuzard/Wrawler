@@ -88,7 +88,7 @@ public final class Program {
 		Metrics metrics = new Metrics(list);
 		
 		//Counting slot types
-		String playerRegex = "Zabuza";
+		String playerRegex = "Rallen";
 		Map<SlotType, Integer> slotTypeCount = metrics.countSlotTypesOf(playerRegex);
 		int eventAmount = 0;
 		for (Entry<SlotType, Integer> entry : slotTypeCount.entrySet()) {
@@ -96,7 +96,7 @@ public final class Program {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
 		if (!slotTypeCount.isEmpty()) {
-			System.out.println("EventAmount: " + eventAmount);
+			System.out.println("EventAmount: " + eventAmount + " (of " + metrics.getEventAmount() + ")");
 		}
 		//Counting lead slot types
 		int leadAmount = metrics.countLeadSlotsOf(playerRegex);
@@ -105,12 +105,30 @@ public final class Program {
 		}
 		
 		/*
+		//List events of player
+		String participatingPlayerRegex = "Zabuza";
+		List<EventData> eventsWhereParticipated = metrics.getEventsWhereParticipated(participatingPlayerRegex);
+		for (EventData datum : eventsWhereParticipated) {
+			System.out.println(datum.getName());
+		}
+		*/
+		
+		/*
 		//Get Lead ranking
 		Map<String, Integer> leadRanking = metrics.getLeadRanking();
 		for (Entry<String, Integer> entry : leadRanking.entrySet()) {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
 		*/
+		
+		/*
+		//Get Events participated ranking
+		Map<String, Integer> eventsParticipatedRanking = metrics.getEventsParticipatedRanking();
+		for (Entry<String, Integer> entry : eventsParticipatedRanking.entrySet()) {
+			System.out.println(entry.getKey() + ":" + entry.getValue());
+		}
+		*/
+		
 		/*
 		//Average event size
 		int beforeMonths = -6;
@@ -135,6 +153,7 @@ public final class Program {
 				+ " : Average absent, signed out late or signed out players since '"
 				+ beforeMonths + " months'");
 		*/
+		
 		/*
 		//Get event size ranking
 		Map<EventData, Integer> eventSizeRanking = metrics.getEventSizeRanking();
@@ -143,7 +162,9 @@ public final class Program {
 					+ " : " + entry.getKey().getType() + " : " + entry.getKey().getName();
 			System.out.println(entry.getValue() + " : " + eventText);
 		}
+		*/
 		
+		/*
 		//Get events of creator
 		String creatorRegex = "(Pfleger)";
 		List<EventData> eventsOfCreator = metrics.getEventsOf(creatorRegex);

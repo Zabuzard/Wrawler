@@ -30,131 +30,124 @@ public final class Webcrawler {
 	/**
 	 * Path to the server.
 	 */
-	private static final String SERVERPATH = "https://www.gruppe-w.de/forum/";
-	/**
-	 * Path to the event sub-forum.
-	 */
-	private static final String EVENTS_PATH = SERVERPATH + "viewforum.php?forum_id=4";
-	/**
-	 * Get variable for next event pages.
-	 */
-	private static final String EVENTS_PATH_SUFFIX = "&rowstart=";
-
-	/**
-	 * Mask where a new event starts in the forum.
-	 */
-	private static final String EVENTS_MASK_START = "<!--pre_forum-->";
-	/**
-	 * Mask where a new event ends in the forum.
-	 */
-	private static final String EVENTS_MASK_END = "<!--sub_forum_table-->";
-	/**
-	 * Mask which threads get rejected as event.
-	 */
-	private static final String EVENTS_REJECT_STICKY = "Thema gepinnt";
-	/**
-	 * Mask for a line that gets accepted as event.
-	 */
-	private static final String EVENTS_ACCEPT_THREAD = "<a href='viewthread.php?thread_id=";
-	/**
-	 * Tag that surrounds an events url.
-	 */
-	private static final String EVENTS_URL_TAG = "'";
-
-	/**
-	 * Mask where events title begins.
-	 */
-	private static final String THREAD_MASK_TITLE = "class='forum_thread_title'>";
-	/**
-	 * Mask that is directly before a title.
-	 */
-	private static final String THREAD_TITLE_START = "<strong>";
-	/**
-	 * Mask that is directly after a title.
-	 */
-	private static final String THREAD_TITLE_END = "</strong>";
-
-	/**
-	 * Mask where events creator begins.
-	 */
-	private static final String THREAD_CREATOR_START = "<!--forum_thread_user_name-->";
-	/**
-	 * Mask where events creator ends.
-	 */
-	private static final String THREAD_CREATOR_END = "</td>";
-	/**
-	 * Mask where events postId begins.
-	 */
-	private static final String THREAD_POSTID_START = "id='post_";
-	/**
-	 * Mask where events postId ends.
-	 */
-	private static final String THREAD_POSTID_END = "'>#1</a>";
-
-	/**
-	 * Mask where events content ends.
-	 */
-	private static final String THREAD_CONTENT_END = "<!--sub_forum_post_message-->";
-
-	/**
-	 * Constant for an unknown map.
-	 */
-	private static final String MAP_UNKNOWN = "Unknown";
-	/**
-	 * Constant for a map that gets rejected.
-	 */
-	private static final String MAP_REJECT = "JA";
-	/**
-	 * Constant for an unknown creator.
-	 */
-	private static final String CREATOR_UNKNOWN = "UNKNOWN";
+	private static final String _SERVERPATH = "https://www.gruppe-w.de/forum/";
 	/**
 	 * Constant for a creator that gets rejected.
 	 */
 	private static final String CREATOR_REJECT = "Anonymer Benutzer";
 	/**
-	 * Amount of lines that gets rejected after an event was found.
+	 * Constant for an unknown creator.
 	 */
-	private static final int EVENTS_REJECT_LINE_SIZE = 7;
-	/**
-	 * Amount of threads per page.
-	 */
-	private static final int EVENTS_THREAD_AMOUNT = 20;
-	/**
-	 * Line offset between threads title and creation date.
-	 */
-	private static final int THREAD_TITLE_OFFSET_DATE = 9;
-	/**
-	 * Line offset between threads title and the creator information.
-	 */
-	private static final int THREAD_TITLE_OFFSET_CREATOR = 5;
-	/**
-	 * Line offset between threads creator and post id information.
-	 */
-	private static final int THREAD_POSTID_OFFSET_CREATOR = 3;
-	/**
-	 * Prequel of the current year.
-	 */
-	private static final int DATE_YEAR_PRE = 20;
+	private static final String CREATOR_UNKNOWN = "UNKNOWN";
+
 	/**
 	 * First year of GruppeW.
 	 */
 	private static final int DATE_FIRST_YEAR = 2012;
 	/**
-	 * Constant for a non-valid event size.
+	 * Prequel of the current year.
 	 */
-	private static final int NO_SIZE = -1;
+	private static final int DATE_YEAR_PRE = 20;
+	/**
+	 * Mask for a line that gets accepted as event.
+	 */
+	private static final String EVENTS_ACCEPT_THREAD = "<a href='viewthread.php?thread_id=";
+	/**
+	 * Mask where a new event ends in the forum.
+	 */
+	private static final String EVENTS_MASK_END = "<!--sub_forum_table-->";
+	/**
+	 * Mask where a new event starts in the forum.
+	 */
+	private static final String EVENTS_MASK_START = "<!--pre_forum-->";
+
+	/**
+	 * Path to the event sub-forum.
+	 */
+	private static final String EVENTS_PATH = _SERVERPATH + "viewforum.php?forum_id=4";
+	/**
+	 * Get variable for next event pages.
+	 */
+	private static final String EVENTS_PATH_SUFFIX = "&rowstart=";
+	/**
+	 * Amount of lines that gets rejected after an event was found.
+	 */
+	private static final int EVENTS_REJECT_LINE_SIZE = 7;
+
+	/**
+	 * Mask which threads get rejected as event.
+	 */
+	private static final String EVENTS_REJECT_STICKY = "Thema gepinnt";
+	/**
+	 * Amount of threads per page.
+	 */
+	private static final int EVENTS_THREAD_AMOUNT = 20;
+	/**
+	 * Tag that surrounds an events url.
+	 */
+	private static final String EVENTS_URL_TAG = "'";
+	/**
+	 * Constant for a map that gets rejected.
+	 */
+	private static final String MAP_REJECT = "JA";
+
+	/**
+	 * Constant for an unknown map.
+	 */
+	private static final String MAP_UNKNOWN = "Unknown";
+
 	/**
 	 * Constant for a non-valid event thread id.
 	 */
 	private static final int NO_ID = -1;
-
 	/**
-	 * Utility class. No implementation.
+	 * Constant for a non-valid event size.
 	 */
-	private Webcrawler() {
-
-	}
+	private static final int NO_SIZE = -1;
+	/**
+	 * Mask where events content ends.
+	 */
+	private static final String THREAD_CONTENT_END = "<!--sub_forum_post_message-->";
+	/**
+	 * Mask where events creator ends.
+	 */
+	private static final String THREAD_CREATOR_END = "</td>";
+	/**
+	 * Mask where events creator begins.
+	 */
+	private static final String THREAD_CREATOR_START = "<!--forum_thread_user_name-->";
+	/**
+	 * Mask where events title begins.
+	 */
+	private static final String THREAD_MASK_TITLE = "class='forum_thread_title'>";
+	/**
+	 * Mask where events postId ends.
+	 */
+	private static final String THREAD_POSTID_END = "'>#1</a>";
+	/**
+	 * Line offset between threads creator and post id information.
+	 */
+	private static final int THREAD_POSTID_OFFSET_CREATOR = 3;
+	/**
+	 * Mask where events postId begins.
+	 */
+	private static final String THREAD_POSTID_START = "id='post_";
+	/**
+	 * Mask that is directly after a title.
+	 */
+	private static final String THREAD_TITLE_END = "</strong>";
+	/**
+	 * Line offset between threads title and the creator information.
+	 */
+	private static final int THREAD_TITLE_OFFSET_CREATOR = 5;
+	/**
+	 * Line offset between threads title and creation date.
+	 */
+	private static final int THREAD_TITLE_OFFSET_DATE = 9;
+	/**
+	 * Mask that is directly before a title.
+	 */
+	private static final String THREAD_TITLE_START = "<strong>";
 
 	/**
 	 * Crawls the web and catches information about all events of GruppeW.
@@ -223,9 +216,10 @@ public final class Webcrawler {
 				|| title.trim().contains("[28.05.] CO+45 Freundschaft wider Willen")
 				|| title.trim().contains("[18.05.] Training22 A1 Basistraining für neue Mitspieler")
 				|| title.trim().contains("[07.05.] CO60 Übung \"Dynamic Response\"")
-				|| title.trim().contains("[29.01.] BB49 Rettung")
-				|| title.trim().contains("[15.12.] BB37 The Raid")
-				|| title.trim().contains("[Abgesagt] BB37 The Raid")) {
+				|| title.trim().contains("[29.01.] BB49 Rettung") || title.trim().contains("[15.12.] BB37 The Raid")
+				|| title.trim().contains("[Abgesagt] BB37 The Raid")
+				|| title.trim().contains("[29.10.] CO10 Notfallprotokoll")
+				|| title.trim().contains("17.10.2015 - Jag den W!")) {
 			return null;
 		}
 
@@ -946,7 +940,7 @@ public final class Webcrawler {
 									&& !player.equals("Sturm") && !player.equals("TJ_S") && !player.equals("Toko1993")
 									&& !player.equals("Tone") && !player.equals("Tummi") && !player.equals("Whitefox")
 									&& !player.equals("Wyqer") && !player.equals("ZerO")
-									&& !player.equals("HungryEngineer")) {
+									&& !player.equals("HungryEngineer") && !player.equals("AloaAh")) {
 								// Extra exceptions
 								String dateText = CrawlerUtil.convertDateToString(date);
 								boolean found = false;
@@ -965,7 +959,18 @@ public final class Webcrawler {
 											|| player.equals("Antagon") || player.equals("Pyro")
 											|| player.equals("Monsterhero") || player.equals("LuetzowerJaeger")
 											|| player.equals("Redstoone") || player.equals("White")
-											|| player.equals("Snollie") || player.equals("Boga")) {
+											|| player.equals("Snollie") || player.equals("Boga")
+											|| player.equals("RaXuS") || player.equals("Rallen")
+											|| player.equals("Rush") || player.equals("Felix")
+											|| player.equals("Soldia") || player.equals("OmniMan")
+											|| player.equals("Ironbrizz")) {
+										status = SlotStatus.APPEARED;
+										found = true;
+									}
+								} else if (dateText.equals("09.01.2015")) {
+									if (player.equals("Herchie") || player.equals("Rallen") || player.equals("RaXuS")
+											|| player.equals("cerbatron") || player.equals("Alexus")
+											|| player.equals("Hawk") || player.equals("X-Maker")) {
 										status = SlotStatus.APPEARED;
 										found = true;
 									}
@@ -982,18 +987,18 @@ public final class Webcrawler {
 							// Extra exceptions
 							String dateText = CrawlerUtil.convertDateToString(date);
 							boolean found = false;
-							
+
 							if (dateText.equals("09.01.2015")) {
 								type = EventType.COOP_PLUS;
 								found = true;
 							}
-							
+
 							// Not found and no extra exception
 							if (!found) {
-								System.err.println("External event has different type of '" + extType + "' instead '" + type
-										+ "' (" + title + ")");
+								System.err.println("External event has different type of '" + extType + "' instead '"
+										+ type + "' (" + title + ")");
 							}
-							
+
 						}
 					} else if (date.before(Calendar.getInstance())) {
 						// XXX Disabled due to lack of external data
@@ -1162,6 +1167,1055 @@ public final class Webcrawler {
 		}
 
 		return slotlist;
+	}
+
+	/**
+	 * Gets the date when the event took place at by extracting it from its
+	 * title and by using the year of thread creation.
+	 * 
+	 * @param title
+	 *            Title of the event
+	 * @param content
+	 *            Content of events thread web site
+	 * @param curContentIndex
+	 *            Current index of the content which should be placed near
+	 *            threads title
+	 * @return Date when the event took place at or null if an error occurred
+	 */
+	private static Calendar getEventDate(String title, List<String> content, int curContentIndex) {
+		// Get date
+		boolean found = false;
+		String date = null;
+
+		// Work trough exceptions
+		if (title.trim().contains("Mini Sylvester Event")) {
+			date = "31.12.2013";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
+			date = "23.03.2013";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("Brig2010 Event")) {
+			date = "22.12.2012";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[Coop] CO22 BAF EOD Patrol")) {
+			date = "01.07.2012";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
+			date = "26.06.2012";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[Coop] CO24 Sex, Drugs and Guns")) {
+			date = "24.06.2012";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[09.01] Co29 Restrepo")) {
+			date = "09.01.2015";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[10.01] TvT 40 Riot")) {
+			date = "10.01.2015";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[12.01.] Co33 - Der Nachschub")) {
+			date = "12.01.2013";
+			return CrawlerUtil.convertStringToDate(date);
+		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
+			date = "24.10.2012";
+			return CrawlerUtil.convertStringToDate(date);
+		}
+
+		// Replace months with correct date
+		title = title.replaceAll("[\\s]?(Januar)[\\.]?", "01");
+		title = title.replaceAll("[\\s]?(Februar)[\\.]?", "02");
+		title = title.replaceAll("[\\s]?(März)[\\.]?", "03");
+		title = title.replaceAll("[\\s]?(April)[\\.]?", "04");
+		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
+		title = title.replaceAll("[\\s]?(Juni)[\\.]?", "06");
+		title = title.replaceAll("[\\s]?(Juli)[\\.]?", "07");
+		title = title.replaceAll("[\\s]?(August)[\\.]?", "08");
+		title = title.replaceAll("[\\s]?(September)[\\.]?", "09");
+		title = title.replaceAll("[\\s]?(Oktober)[\\.]?", "10");
+		title = title.replaceAll("[\\s]?(November)[\\.]?", "11");
+		title = title.replaceAll("[\\s]?(Dezember)[\\.]?", "12");
+		title = title.replaceAll("[\\s]?(Jan)[\\.]?", "01");
+		title = title.replaceAll("[\\s]?(Feb)[\\.]?", "02");
+		title = title.replaceAll("[\\s]?(Mär)[\\.]?", "03");
+		title = title.replaceAll("[\\s]?(Apr)[\\.]?", "04");
+		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
+		title = title.replaceAll("[\\s]?(Jun)[\\.]?", "06");
+		title = title.replaceAll("[\\s]?(Jul)[\\.]?", "07");
+		title = title.replaceAll("[\\s]?(Aug)[\\.]?", "08");
+		title = title.replaceAll("[\\s]?(Sep)[\\.]?", "09");
+		title = title.replaceAll("[\\s]?(Okt)[\\.]?", "10");
+		title = title.replaceAll("[\\s]?(Nov)[\\.]?", "11");
+		title = title.replaceAll("[\\s]?(Dez)[\\.]?", "12");
+
+		// Extract date from title
+		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d");
+		Matcher matcher = pattern.matcher(title);
+		if (matcher.find()) {
+			found = true;
+			date = title.substring(matcher.start(), matcher.end());
+			// 15.03.2014
+		}
+		if (!found) {
+			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\.\\d\\d\\d\\d");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start() + 1, matcher.end());
+				// 7.2.2014
+				date = "0" + date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
+				// 07.02.2014
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 15.03.14
+				date = date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
+				// 15.03.2014
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\.\\d\\d\\.\\d\\d\\d\\d");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 3.03.2014
+				date = "0" + date;
+				// 03.03.2014
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\d\\.");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start() + 1, matcher.end());
+				// 3.03.
+				date = "0" + date;
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 03.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[^\\d\\.]\\d\\.\\d\\d[^\\d]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start() + 1, matcher.end() - 1);
+				// 3.03
+				date = "0" + date;
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 03.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d\\d[^\\.]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end() - 1);
+				// 15.03
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 15.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[^\\.]\\d\\d\\.\\d\\d\\.");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start() + 1, matcher.end());
+				// 15.03.
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 15.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.[^\\d]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end() - 1);
+				// 15.03.
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 15.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d[^\\d\\.]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end() - 1);
+				// 15.3
+				date = date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 15.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d\\.\\d\\d\\d\\d");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 15.3.2014
+				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\d\\.\\d\\.");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 15.3.
+				date = date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 15.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\.\\d\\.\\d\\d");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 7.2.14
+				date = "0" + date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
+				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
+				// 07.02.2014
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\.\\d[^\\d\\.]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end() - 1);
+				// 5.3
+				date = "0" + date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 05.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\d\\.\\d\\.");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				date = title.substring(matcher.start(), matcher.end());
+				// 5.3.
+				date = "0" + date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
+				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				pattern = Pattern.compile("\\d\\d\\d\\d");
+				matcher = pattern.matcher(wroteAt);
+				if (matcher.find()) {
+					date += wroteAt.substring(matcher.start(), matcher.end());
+					// 05.03.2014
+				} else {
+					System.err.println("Can't read 'wroteAt' date from thread.");
+				}
+			}
+		}
+		if (!found) {
+			System.err.println("Can't parse date from title: " + title);
+		}
+
+		// Validate date
+		int day = Integer.parseInt(date.substring(0, 2));
+		int month = Integer.parseInt(date.substring(3, 5));
+		int year = Integer.parseInt(date.substring(6));
+		if (day < 1 || day > 31 || month < 1 || month > 12 || year < DATE_FIRST_YEAR
+				|| year > Calendar.getInstance().get(Calendar.YEAR)) {
+			System.err.println("No valid date: " + date);
+		}
+
+		return CrawlerUtil.convertStringToDate(date);
+	}
+
+	/**
+	 * Gets the events size by extracting it from its title.
+	 * 
+	 * @param title
+	 *            Title of the event
+	 * @return Size of the events or {@link NO_SIZE} if failure occurred
+	 */
+	private static int getEventSize(String title) {
+		int size = NO_SIZE;
+
+		// Work trough exceptions
+		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
+			size = 27;
+			return size;
+		} else if (title.trim().contains("[16.04.] Close Air Support")) {
+			size = 11;
+			return size;
+		} else if (title.trim().contains("[15.04.] Close Air Support")) {
+			size = 11;
+			return size;
+		} else if (title.trim().contains("Mini Sylvester Event")) {
+			size = 20;
+			return size;
+		} else if (title.trim().contains("[03.10.] 19:00 - Mörsertraining")) {
+			size = 21;
+			return size;
+		} else if (title.trim().contains("[30.09] 20:00   Häuserkampf Theorie und Praxis")) {
+			size = 22;
+			return size;
+		} else if (title.trim().contains("[23.09.] - 1900 - JTAC-Training")) {
+			size = 13;
+			return size;
+		} else if (title.trim().contains("[19.09.] 1900 - Panzertraining")) {
+			size = 24;
+			return size;
+		} else if (title.trim().contains("[15.09.] - 1900 - Vortrag über Sprengstoffe")) {
+			size = 21;
+			return size;
+		} else if (title.trim().contains("[09.09] ORGA X - Das Squad und Führung im Allgemeinen")) {
+			size = 27;
+			return size;
+		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
+			size = 40;
+			return size;
+		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
+			size = 9;
+			return size;
+		} else if (title.trim().contains("[16.02.] Grantiger Löwe")) {
+			size = 9;
+			return size;
+		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
+			size = 6;
+			return size;
+		} else if (title.trim().contains("[28.12.12] - 20:00 - Operation Godfather XII")) {
+			size = 39;
+			return size;
+		} else if (title.trim().contains("Brig2010 Event")) {
+			size = 10;
+			return size;
+		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
+			size = 18;
+			return size;
+		} else if (title.trim().contains("13.10.12 Time is Running")) {
+			size = 33;
+			return size;
+		} else if (title.trim().contains("[29. Aug] TvCoop - Die Attentäter")) {
+			size = 27;
+			return size;
+		} else if (title.trim().contains("[TvT-event] 27.07. Dark Business [15vs13+2]")) {
+			size = 30;
+			return size;
+		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
+			size = 8;
+			return size;
+		} else if (title.trim().contains("12.06. Ein Tag auf Patrouille")) {
+			size = 17;
+			return size;
+		} else if (title.trim().contains("Spontanevent!!! 8.6.2012 - TvT Bridgefight")) {
+			size = 20;
+			return size;
+		} else if (title.trim().contains("05.06.2012 - Sniperduell")) {
+			size = 10;
+			return size;
+		} else if (title.trim().contains("[09.07.] TVT100 Lauf, Wler, lauf!")) {
+			size = 100;
+			return size;
+		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
+			size = 26;
+			return size;
+		} else if (title.trim().contains("[13.03.] MilSim5 Watchful Eye")) {
+			size = 5;
+			return size;
+		} else if (title.trim().contains("17.10.2015 - Jag den W!")) {
+			size = 60;
+			return size;
+		}
+
+		boolean found = false;
+		// Extract size from title
+		Pattern pattern = Pattern.compile("[A-Za-z]+[\\+\\s]?(\\d\\d)[\\s\\]]");
+		Matcher matcher = pattern.matcher(title);
+		if (matcher.find()) {
+			found = true;
+			size = Integer.parseInt(matcher.group(1));
+		}
+		if (!found) {
+			pattern = Pattern.compile("[A-Za-z]{2}\\+ (\\d\\d)\\s");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{2}(\\d\\d)");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{4}[\\s]?-[\\s]?(\\d\\d)");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{2}(\\d)\\s");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{4}(\\d)\\s");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{2}\\s(\\d)\\s");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{4}\\s(\\d\\d)");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\s[A-Za-z]{3}(\\d\\d)\\+");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				size = Integer.parseInt(matcher.group(1));
+			}
+		}
+
+		if (!found || size == NO_SIZE) {
+			System.err.println("Can't parse event size from title: " + title);
+		}
+
+		return size;
+	}
+
+	/**
+	 * Gets the time when the event has started by extracting it from the
+	 * content.
+	 * 
+	 * @param content
+	 *            Content of events thread web site
+	 * @param curContentIndex
+	 *            Current index of the content which should be placed near
+	 *            threads title
+	 * @param title
+	 *            Title of the event
+	 * @return Time when the event has started or null if an error occurred
+	 */
+	private static Calendar getEventTime(List<String> content, int curContentIndex, String title) {
+		String time = null;
+		int i = curContentIndex;
+		String line = "";
+
+		// Work trough exceptions
+		if (title.trim().contains("[06.02.] Comp58 OP Greeks Meet")) {
+			time = "19:15:00";
+			return CrawlerUtil.convertStringToTime(time);
+		}
+
+		// Search for time until content end
+		Pattern pattern;
+		Matcher matcher;
+		do {
+			i++;
+			line = content.get(i);
+			line = line.replaceAll("â€", "-");
+			line = line.replaceAll("<span style='color:#.{3,6}'>", "");
+			line = line.replaceAll("<span style='font-size:.{1,6}'>", "");
+			line = line.replaceAll("</span>", "");
+			String beforeTimePattern = "^[\\s]*(<(strong|i)>)?(Eventbeginn|Beginn|Eventstart|"
+					+ "Treffen im (Teamspeak|TS)|Start|Treffen|Sammeln im Teamspeak|Trainingsbeginn)(<\\/(strong|i)>)?:(<\\/(strong|i)>)?";
+			String timePattern = "([0-9]{2}[\\.:]?[0-9]{2})";
+			pattern = Pattern.compile(beforeTimePattern + "(\\s|&gt;|\\-|ab)*(<strong>)?" + timePattern
+					+ "[\\s]*(Uhr|h)?(<\\/strong>)?(\\s|&lt;)*<br[\\s]?\\/>", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(line);
+			if (matcher.find()) {
+				time = matcher.group(11).replaceAll("[\\.:]", "");
+				break;
+			}
+		} while (!line.contains(THREAD_CONTENT_END));
+
+		if (time == null) {
+			System.err.println("Can not parse starting time of event: " + title);
+		} else {
+			time = time.substring(0, 2) + ":" + time.substring(2) + ":00";
+		}
+
+		return CrawlerUtil.convertStringToTime(time);
+	}
+
+	/**
+	 * Gets the events type by extracting it from its title.
+	 * 
+	 * @param title
+	 *            Title of the event
+	 * @return Size of the event or {@link EventType.NO_TYPE} if failure
+	 *         occurred
+	 */
+	private static EventType getEventType(String title) {
+		EventType type = EventType.NO_TYPE;
+
+		// Work trough exceptions
+		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
+			type = EventType.ORGA;
+			return type;
+		} else if (title.trim().contains("[16.04.] Close Air Support")) {
+			type = EventType.ORGA;
+			return type;
+		} else if (title.trim().contains("[15.04.] Close Air Support")) {
+			type = EventType.ORGA;
+			return type;
+		} else if (title.trim().contains("Mini Sylvester Event")) {
+			type = EventType.BLACKBOX;
+			return type;
+		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("[16.02.] Grantiger Löwe")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("[28.12.12] - 20:00 - Operation Godfather XII")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("Brig2010 Event")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("13.10.12 Time is Running")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("[29. Aug] TvCoop - Die Attentäter")) {
+			type = EventType.COOP_PLUS;
+			return type;
+		} else if (title.trim().contains("12.06. Ein Tag auf Patrouille")) {
+			type = EventType.COOP;
+			return type;
+		} else if (title.trim().contains("05.06.2012 - Sniperduell")) {
+			type = EventType.TVT;
+			return type;
+		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
+			type = EventType.ORGA;
+			return type;
+		} else if (title.trim().contains("17.10.2015 - Jag den W!")) {
+			type = EventType.BLACKBOX;
+			return type;
+		}
+
+		boolean found = false;
+		// Extract type from title
+		Pattern pattern = Pattern.compile("((CO)|(COOP))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(title);
+		if (matcher.find()) {
+			found = true;
+			type = EventType.COOP;
+		}
+		if (!found) {
+			pattern = Pattern.compile("((CO)|(COOP))\\+[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.COOP_PLUS;
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("(TVT[\\s\\+]{0,2}[\\d])|(TVT-EVENT)|(TVT [A-Za-z])|(S-PVP)|(SKIRMISH)",
+					Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.TVT;
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("((BB)|(BLACKBOX))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.BLACKBOX;
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("COMP[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.COMPETITION;
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("((MILSIM)|(MIL)|(MILSIM\\+))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.MILSIM;
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("(ORG[A\\s-]{0,4}[\\dX])|(TRAINING)|(ÜBUNG)|(THEORIE)|(VORTRAG)",
+					Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				type = EventType.ORGA;
+			}
+		}
+
+		if (!found) {
+			System.err.println("Can't parse event type from title: " + title);
+		}
+
+		return type;
+	}
+
+	/**
+	 * Gets the urls to all events by using the event sub-forum.
+	 * 
+	 * @param path
+	 *            Path to the event sub-forum
+	 * @return List of urls to all events
+	 * @throws IOException
+	 *             If an I/O-Exception occurs
+	 */
+	private static List<String> getEventUrls(String path) throws IOException {
+		List<String> events = new ArrayList<String>();
+		int curPage = 0;
+
+		boolean continueCrawling = true;
+		while (continueCrawling) {
+			// Work trough the current page
+			String pageUrl = EVENTS_PATH + EVENTS_PATH_SUFFIX + curPage;
+			List<String> content = CrawlerUtil.getWebContent(pageUrl);
+
+			// Reject everything before the mask
+			int i = -1;
+			String line = "";
+			do {
+				i++;
+				line = content.get(i);
+			} while (!line.contains(EVENTS_MASK_START));
+
+			int urlsOnThisPage = 0;
+			do {
+				i++;
+				line = content.get(i);
+				if (line.contains(EVENTS_REJECT_STICKY)) {
+					urlsOnThisPage++;
+					// Reject lines of this thread
+					i += EVENTS_REJECT_LINE_SIZE;
+				} else if (line.contains(EVENTS_ACCEPT_THREAD)) {
+					// Accept this thread
+					urlsOnThisPage++;
+					int urlStart = line.indexOf(EVENTS_URL_TAG, line.indexOf(EVENTS_ACCEPT_THREAD));
+					int urlEnd = line.indexOf(EVENTS_URL_TAG, urlStart + 1);
+					String url = line.substring(urlStart + 1, urlEnd);
+					events.add(_SERVERPATH + url);
+					// Reject the last lines of this thread
+					i += EVENTS_REJECT_LINE_SIZE - 1;
+				}
+			} while (!line.contains(EVENTS_MASK_END));
+
+			// End crawl if there are no more pages left (indicated by no
+			// threads)
+			if (urlsOnThisPage == 0) {
+				continueCrawling = false;
+			}
+
+			curPage += EVENTS_THREAD_AMOUNT;
+		}
+
+		return events;
+	}
+
+	/**
+	 * Gets the events thread id in the forum by extracting it from its url.
+	 * 
+	 * @param url
+	 *            Url to the event thread
+	 * @return Id of events thread or {@link NO_ID} if an error occurred
+	 */
+	private static int getThreadId(String url) {
+		int id = NO_ID;
+		// Extract id from url
+		Pattern pattern = Pattern.compile("id=([\\d]+)");
+		Matcher matcher = pattern.matcher(url);
+		if (matcher.find()) {
+			id = Integer.parseInt(matcher.group(1));
+		} else {
+			System.err.println("Can't parse thread id from url: " + url);
+		}
+		return id;
+	}
+
+	/**
+	 * Gets the map the event takes place at by extracting it from the event
+	 * thread web content.
+	 * 
+	 * @param content
+	 *            Content of the event threads web site
+	 * @param curContentIndex
+	 *            Current index in the content which should be placed near
+	 *            starting of the true content
+	 * @return Name of the map the event takes place at or {@link MAP_UNKNOWN}
+	 *         if not known
+	 */
+	private static String getThreadMap(List<String> content, int curContentIndex) {
+		String map = MAP_UNKNOWN;
+		int i = curContentIndex;
+		String line = "";
+
+		// Search for map until content end
+		Pattern pattern;
+		Matcher matcher;
+		do {
+			i++;
+			line = content.get(i);
+			pattern = Pattern.compile("((Map)|(Karte))[\\s]?:[\\s]?(.+)<", Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(line);
+			if (matcher.find() && !matcher.group(4).trim().toUpperCase().contains(MAP_REJECT.toUpperCase())) {
+				map = matcher.group(4);
+				break;
+			}
+		} while (!line.contains(THREAD_CONTENT_END));
+
+		map = map.replaceAll("<strong>", "");
+		map = map.replaceAll("</strong>", "");
+		map = map.trim();
+
+		if (map.equals("Imrali-Island") || map.equals("Imrali")) {
+			map = "Imrali Island";
+		} else if (map.equals("Sangin")) {
+			map = "Summer Sangin";
+		} else if (map.equals("Panthera")) {
+			map = "Island Panthera";
+		} else if (map.equals("Aliabad Region") || map.equals("Aliabat Region")) {
+			map = "Aliabad";
+		} else if (map.equals("Clafgan")) {
+			map = "Clafghan";
+		} else if (map.equals("<strong>Clafghan</strong>")) {
+			map = "Clafghan";
+		} else if (map.equals("Duala")) {
+			map = "Isla Duala";
+		} else if (map.equals("Chernarus (Summer)")) {
+			map = "Chernarus Summer";
+		} else if (map.equals("Podagorsk")) {
+			map = "FDF Podagorsk";
+		} else if (map.equals("Capraia")) {
+			map = "Isola di Capraia";
+		}
+
+		return map;
+	}
+
+	/**
+	 * Gets the events name by extracting it from the thread title.
+	 * 
+	 * @param title
+	 *            Title of the thread
+	 * @return Name of the event or the title if failure occurred
+	 */
+	private static String getThreadName(String title) {
+		String name = "";
+
+		// Work trough exceptions
+		if (title.trim().contains("[S-PvP 21] - 30.09.2012 - 19 Uhr")) {
+			name = "Der Prototyp";
+			return name;
+		} else if (title.trim().contains("[20.04] Co37 - (OP) Red Tsunami")) {
+			name = "Red Tsunami";
+			return name;
+		} else if (title.trim().contains("Co54 Desert Storm - 21.07.2012 1900h - Spezial Slots")) {
+			name = "Desert Storm";
+			return name;
+		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
+			name = "Sniper und Spotter";
+			return name;
+		} else if (title.trim().contains("Spontanevent!!! 8.6.2012 - TvT Bridgefight")) {
+			name = "Bridgefight";
+			return name;
+		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
+			name = "Operation Seelandung - Tag 1";
+			return name;
+		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
+			name = "Eventeinladung: Brigade 2010";
+			return name;
+		} else if (title.trim().contains("[02. März] Dessert Op Part 1 COOP 45")) {
+			name = "Dessert Op Part 1";
+			return name;
+		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
+			name = "Operation Frozen Thunder";
+			return name;
+		} else if (title.trim().contains("Brig2010 Event")) {
+			name = "Brig2010 Event";
+			return name;
+		} else if (title.trim().contains("[23. August] CO36 Operation Red Overload - Tag 1")) {
+			name = "Operation Red Overload - Tag 1";
+			return name;
+		} else if (title.trim().contains("1.6. Event: Coop 15 - Baker Post EP1")) {
+			name = "Baker Post EP1";
+			return name;
+		} else if (title.trim().contains("[Coop24] 26. Juli Sex, drugs and Guns")) {
+			name = "Sex, drugs and Guns";
+			return name;
+		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
+			name = "Kampfpanzer bei Gruppe W";
+			return name;
+		} else if (title.trim().contains("[06.12.] Orga14 Test_of_Doom")) {
+			name = "Test_of_Doom";
+			return name;
+		}
+
+		// Extract name from title
+		boolean found = false;
+		// Extract size from title
+		Pattern pattern = Pattern
+				.compile("[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+		Matcher matcher = pattern.matcher(title);
+		if (matcher.find()) {
+			found = true;
+			name = matcher.group(1).trim();
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\"']([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\"']");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]{0,2}[vV][\\.]?[\\d]{1,2}$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\s]?[\\[,]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]\\.[\\d]$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern
+					.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\(");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("^([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern
+					.compile("[A-Za-züäöÜÄÖ\\s\\+-]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("\\] ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+) - [\\d]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+[\\s]+([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile(
+					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+ ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/'´,\\.!:ß]+) - [\\d]");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+		if (!found) {
+			pattern = Pattern.compile(".*(BB52 Was.*n da los\\?)$");
+			matcher = pattern.matcher(title);
+			if (matcher.find()) {
+				found = true;
+				name = matcher.group(1).trim();
+			}
+		}
+
+		if (!found) {
+			System.err.println("Can't parse thread name from title (using title instead): " + title);
+			name = title;
+		}
+
+		return name;
 	}
 
 	private static SlotType parseSlotType(String slotText) {
@@ -2732,6 +3786,69 @@ public final class Webcrawler {
 			generatedMap.put("Chef", SlotType.CO);
 			generatedMap.put("Co-Chef", SlotType.XO);
 			generatedMap.put("Tester", SlotType.OTHER);
+			// Generated by SlotParseTool : 1to62.csv
+			generatedMap.put("Flight Deck Coordinator", SlotType.TL);
+			generatedMap.put("Maksym Saizew", SlotType.RFL);
+			generatedMap.put("Illya Sokolow", SlotType.RFL);
+			generatedMap.put("Informant", SlotType.OTHER);
+			generatedMap.put("Stellv- Einsatzleitung", SlotType.XO);
+			generatedMap.put("Nachschub Offizier", SlotType.TL);
+			generatedMap.put("Leichtes Maschinengewehr Schütze", SlotType.MG);
+			generatedMap.put("Panzerabwehr Schütze", SlotType.AT);
+			generatedMap.put("Gruppenschafschütze", SlotType.DM);
+			generatedMap.put("Stellv. Gruppenführer", SlotType.PSG);
+			generatedMap.put("Rettungsassistent", SlotType.MDC);
+			generatedMap.put("US-Teamleader", SlotType.CO);
+			generatedMap.put("US-Pilot C-130", SlotType.PIL);
+			generatedMap.put("SNA-Logistiker", SlotType.LOG);
+			generatedMap.put("Logistik-Chef", SlotType.TL);
+			generatedMap.put("Gruppenführer (Zugführer)", SlotType.PL);
+			generatedMap.put("Gruppenführer (Stellvertreter des Zugführers)", SlotType.PSG);
+			generatedMap.put("Gegnerspezialist (Igla)", SlotType.AA);
+			generatedMap.put("Senior Logistiker", SlotType.LOG);
+			generatedMap.put("Kompaniesanitäter", SlotType.MDC);
+			generatedMap.put("SanUffz", SlotType.MDC);
+			generatedMap.put("Oberarzt", SlotType.MDC);
+			generatedMap.put("Computer-Spezialist", SlotType.OTHER);
+			generatedMap.put("ANA Fireteam", SlotType.FTL);
+			generatedMap.put("ANA Einheit", SlotType.RFL);
+			generatedMap.put("Recon Designated Marksman", SlotType.DM);
+			generatedMap.put("V.I.P.", SlotType.ZC_PLUS);
+			generatedMap.put("Boddyguard", SlotType.RFL);
+			generatedMap.put("VIP", SlotType.ZC_PLUS);
+			generatedMap.put("Bodyguard", SlotType.RFL);
+			generatedMap.put("Groundcontrol", SlotType.TL);
+			generatedMap.put("Aircontrol", SlotType.TL);
+			generatedMap.put("Cheftechniker", SlotType.OTHER);
+			generatedMap.put("Mechatroniker", SlotType.OTHER);
+			generatedMap.put("Artillery Command Systems Operator", SlotType.ACSO);
+			generatedMap.put("ZU-23 Assistant", SlotType.AA);
+			generatedMap.put("Igla Schütze", SlotType.AA);
+			generatedMap.put("M240", SlotType.MG);
+			generatedMap.put("MG. Ass.", SlotType.AMG);
+			generatedMap.put("Gruppenführer/Platoon Leader", SlotType.PL);
+			generatedMap.put("Senior Schütze Teamleiter", SlotType.TL);
+			generatedMap.put("Assistent RPG Schütze", SlotType.AAT);
+			generatedMap.put("Gruppenführer/Assist. Platoon Leader", SlotType.PL);
+			generatedMap.put("Assistent Schütze (Metis)", SlotType.AAT);
+			generatedMap.put("Schütze AA (Igla)", SlotType.AA);
+			generatedMap.put("Senior Mediziner", SlotType.MDC);
+			generatedMap.put("Combat First Responder", SlotType.RFL);
+			generatedMap.put("MG (Navid)", SlotType.MG);
+			generatedMap.put("Ass. MG", SlotType.AMG);
+			generatedMap.put("AR (Mk200)", SlotType.AR);
+			generatedMap.put("DM (Cyrus)", SlotType.DM);
+			generatedMap.put("(Pilot)", SlotType.PIL);
+			generatedMap.put("(Co-Pilot", SlotType.CPIL);
+			generatedMap.put("Führungskraft", SlotType.TL);
+			generatedMap.put("Zafir-Schütze", SlotType.AR);
+			generatedMap.put("Nahsicherer und Fahrer", SlotType.DRV);
+			generatedMap.put("Batterie-Kommandant", SlotType.ACSO);
+			generatedMap.put("Fliegerleitoffiziere", SlotType.TL);
+			generatedMap.put("Schütze/Sanitäter", SlotType.MDC);
+			generatedMap.put("Gruppenführer/ Platoon Sergeant", SlotType.PSG);
+			generatedMap.put("Senior Techniker", SlotType.TL);
+			generatedMap.put("Chef Techniker", SlotType.TL);
 
 			for (Entry<String, SlotType> entry : generatedMap.entrySet()) {
 				if (slotText.toLowerCase().equals(entry.getKey().toLowerCase())) {
@@ -2750,1042 +3867,9 @@ public final class Webcrawler {
 	}
 
 	/**
-	 * Gets the events name by extracting it from the thread title.
-	 * 
-	 * @param title
-	 *            Title of the thread
-	 * @return Name of the event or the title if failure occurred
+	 * Utility class. No implementation.
 	 */
-	private static String getThreadName(String title) {
-		String name = "";
+	private Webcrawler() {
 
-		// Work trough exceptions
-		if (title.trim().contains("[S-PvP 21] - 30.09.2012 - 19 Uhr")) {
-			name = "Der Prototyp";
-			return name;
-		} else if (title.trim().contains("[20.04] Co37 - (OP) Red Tsunami")) {
-			name = "Red Tsunami";
-			return name;
-		} else if (title.trim().contains("Co54 Desert Storm - 21.07.2012 1900h - Spezial Slots")) {
-			name = "Desert Storm";
-			return name;
-		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
-			name = "Sniper und Spotter";
-			return name;
-		} else if (title.trim().contains("Spontanevent!!! 8.6.2012 - TvT Bridgefight")) {
-			name = "Bridgefight";
-			return name;
-		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
-			name = "Operation Seelandung - Tag 1";
-			return name;
-		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
-			name = "Eventeinladung: Brigade 2010";
-			return name;
-		} else if (title.trim().contains("[02. März] Dessert Op Part 1 COOP 45")) {
-			name = "Dessert Op Part 1";
-			return name;
-		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
-			name = "Operation Frozen Thunder";
-			return name;
-		} else if (title.trim().contains("Brig2010 Event")) {
-			name = "Brig2010 Event";
-			return name;
-		} else if (title.trim().contains("[23. August] CO36 Operation Red Overload - Tag 1")) {
-			name = "Operation Red Overload - Tag 1";
-			return name;
-		} else if (title.trim().contains("1.6. Event: Coop 15 - Baker Post EP1")) {
-			name = "Baker Post EP1";
-			return name;
-		} else if (title.trim().contains("[Coop24] 26. Juli Sex, drugs and Guns")) {
-			name = "Sex, drugs and Guns";
-			return name;
-		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
-			name = "Kampfpanzer bei Gruppe W";
-			return name;
-		}
-
-		// Extract name from title
-		boolean found = false;
-		// Extract size from title
-		Pattern pattern = Pattern
-				.compile("[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-		Matcher matcher = pattern.matcher(title);
-		if (matcher.find()) {
-			found = true;
-			name = matcher.group(1).trim();
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\"']([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\"']");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile(
-					"[A-Za-züäöÜÄÖ\\s\\+ß]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]{0,2}[vV][\\.]?[\\d]{1,2}$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\s]?[\\[,]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile(
-					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]\\.[\\d]$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern
-					.compile("[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\(");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("^([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern
-					.compile("[A-Za-züäöÜÄÖ\\s\\+-]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\] ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("- ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+) - [\\d]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\s]+([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile(
-					"[A-Za-züäöÜÄÖ\\s\\+]+[\\d]{1,2}[\\s]+[-]?[\\s]{0,2}([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+ ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)\\[");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/'´,\\.!:ß]+) - [\\d]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)[\\d]+");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[\\d]+[\\.]? ([A-Za-züäöÜÄÖ\\s-/´',\\.!:ß]+)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile(".*(BB52 Was.*n da los\\?)$");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				name = matcher.group(1).trim();
-			}
-		}
-
-		if (!found) {
-			System.err.println("Can't parse thread name from title (using title instead): " + title);
-			name = title;
-		}
-
-		return name;
-	}
-
-	/**
-	 * Gets the map the event takes place at by extracting it from the event
-	 * thread web content.
-	 * 
-	 * @param content
-	 *            Content of the event threads web site
-	 * @param curContentIndex
-	 *            Current index in the content which should be placed near
-	 *            starting of the true content
-	 * @return Name of the map the event takes place at or {@link MAP_UNKNOWN}
-	 *         if not known
-	 */
-	private static String getThreadMap(List<String> content, int curContentIndex) {
-		String map = MAP_UNKNOWN;
-		int i = curContentIndex;
-		String line = "";
-
-		// Search for map until content end
-		Pattern pattern;
-		Matcher matcher;
-		do {
-			i++;
-			line = content.get(i);
-			pattern = Pattern.compile("((Map)|(Karte))[\\s]?:[\\s]?(.+)<", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(line);
-			if (matcher.find() && !matcher.group(4).trim().toUpperCase().contains(MAP_REJECT.toUpperCase())) {
-				map = matcher.group(4);
-				break;
-			}
-		} while (!line.contains(THREAD_CONTENT_END));
-
-		map = map.replaceAll("<strong>", "");
-		map = map.replaceAll("</strong>", "");
-		map = map.trim();
-
-		if (map.equals("Imrali-Island") || map.equals("Imrali")) {
-			map = "Imrali Island";
-		} else if (map.equals("Sangin")) {
-			map = "Summer Sangin";
-		} else if (map.equals("Panthera")) {
-			map = "Island Panthera";
-		} else if (map.equals("Aliabad Region") || map.equals("Aliabat Region")) {
-			map = "Aliabad";
-		} else if (map.equals("Clafgan")) {
-			map = "Clafghan";
-		} else if (map.equals("<strong>Clafghan</strong>")) {
-			map = "Clafghan";
-		} else if (map.equals("Duala")) {
-			map = "Isla Duala";
-		} else if (map.equals("Chernarus (Summer)")) {
-			map = "Chernarus Summer";
-		} else if (map.equals("Podagorsk")) {
-			map = "FDF Podagorsk";
-		} else if (map.equals("Capraia")) {
-			map = "Isola di Capraia";
-		}
-
-		return map;
-	}
-
-	/**
-	 * Gets the events thread id in the forum by extracting it from its url.
-	 * 
-	 * @param url
-	 *            Url to the event thread
-	 * @return Id of events thread or {@link NO_ID} if an error occurred
-	 */
-	private static int getThreadId(String url) {
-		int id = NO_ID;
-		// Extract id from url
-		Pattern pattern = Pattern.compile("id=([\\d]+)");
-		Matcher matcher = pattern.matcher(url);
-		if (matcher.find()) {
-			id = Integer.parseInt(matcher.group(1));
-		} else {
-			System.err.println("Can't parse thread id from url: " + url);
-		}
-		return id;
-	}
-
-	/**
-	 * Gets the events size by extracting it from its title.
-	 * 
-	 * @param title
-	 *            Title of the event
-	 * @return Size of the events or {@link NO_SIZE} if failure occurred
-	 */
-	private static int getEventSize(String title) {
-		int size = NO_SIZE;
-
-		// Work trough exceptions
-		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
-			size = 27;
-			return size;
-		} else if (title.trim().contains("[16.04.] Close Air Support")) {
-			size = 11;
-			return size;
-		} else if (title.trim().contains("[15.04.] Close Air Support")) {
-			size = 11;
-			return size;
-		} else if (title.trim().contains("Mini Sylvester Event")) {
-			size = 20;
-			return size;
-		} else if (title.trim().contains("[03.10.] 19:00 - Mörsertraining")) {
-			size = 21;
-			return size;
-		} else if (title.trim().contains("[30.09] 20:00   Häuserkampf Theorie und Praxis")) {
-			size = 22;
-			return size;
-		} else if (title.trim().contains("[23.09.] - 1900 - JTAC-Training")) {
-			size = 13;
-			return size;
-		} else if (title.trim().contains("[19.09.] 1900 - Panzertraining")) {
-			size = 24;
-			return size;
-		} else if (title.trim().contains("[15.09.] - 1900 - Vortrag über Sprengstoffe")) {
-			size = 21;
-			return size;
-		} else if (title.trim().contains("[09.09] ORGA X - Das Squad und Führung im Allgemeinen")) {
-			size = 27;
-			return size;
-		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
-			size = 40;
-			return size;
-		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
-			size = 9;
-			return size;
-		} else if (title.trim().contains("[16.02.] Grantiger Löwe")) {
-			size = 9;
-			return size;
-		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
-			size = 6;
-			return size;
-		} else if (title.trim().contains("[28.12.12] - 20:00 - Operation Godfather XII")) {
-			size = 39;
-			return size;
-		} else if (title.trim().contains("Brig2010 Event")) {
-			size = 10;
-			return size;
-		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
-			size = 18;
-			return size;
-		} else if (title.trim().contains("13.10.12 Time is Running")) {
-			size = 33;
-			return size;
-		} else if (title.trim().contains("[29. Aug] TvCoop - Die Attentäter")) {
-			size = 27;
-			return size;
-		} else if (title.trim().contains("[TvT-event] 27.07. Dark Business [15vs13+2]")) {
-			size = 30;
-			return size;
-		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
-			size = 8;
-			return size;
-		} else if (title.trim().contains("12.06. Ein Tag auf Patrouille")) {
-			size = 17;
-			return size;
-		} else if (title.trim().contains("Spontanevent!!! 8.6.2012 - TvT Bridgefight")) {
-			size = 20;
-			return size;
-		} else if (title.trim().contains("05.06.2012 - Sniperduell")) {
-			size = 10;
-			return size;
-		} else if (title.trim().contains("[09.07.] TVT100 Lauf, Wler, lauf!")) {
-			size = 100;
-			return size;
-		} else if (title.trim().contains("[20.03.16] - Training: Kampfpanzer bei Gruppe W (24)")) {
-			size = 26;
-			return size;
-		} else if (title.trim().contains("[13.03.] MilSim5 Watchful Eye")) {
-			size = 5;
-			return size;
-		}
-
-		boolean found = false;
-		// Extract size from title
-		Pattern pattern = Pattern.compile("[A-Za-z]+[\\+\\s]?(\\d\\d)[\\s\\]]");
-		Matcher matcher = pattern.matcher(title);
-		if (matcher.find()) {
-			found = true;
-			size = Integer.parseInt(matcher.group(1));
-		}
-		if (!found) {
-			pattern = Pattern.compile("[A-Za-z]{2}\\+ (\\d\\d)\\s");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{2}(\\d\\d)");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{4}[\\s]?-[\\s]?(\\d\\d)");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{2}(\\d)\\s");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{4}(\\d)\\s");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{2}\\s(\\d)\\s");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{4}\\s(\\d\\d)");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\s[A-Za-z]{3}(\\d\\d)\\+");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				size = Integer.parseInt(matcher.group(1));
-			}
-		}
-
-		if (!found || size == NO_SIZE) {
-			System.err.println("Can't parse event size from title: " + title);
-		}
-
-		return size;
-	}
-
-	/**
-	 * Gets the events type by extracting it from its title.
-	 * 
-	 * @param title
-	 *            Title of the event
-	 * @return Size of the event or {@link EventType.NO_TYPE} if failure
-	 *         occurred
-	 */
-	private static EventType getEventType(String title) {
-		EventType type = EventType.NO_TYPE;
-
-		// Work trough exceptions
-		if (title.trim().contains("[11.05] -1730 - Häuserkampf")) {
-			type = EventType.ORGA;
-			return type;
-		} else if (title.trim().contains("[16.04.] Close Air Support")) {
-			type = EventType.ORGA;
-			return type;
-		} else if (title.trim().contains("[15.04.] Close Air Support")) {
-			type = EventType.ORGA;
-			return type;
-		} else if (title.trim().contains("Mini Sylvester Event")) {
-			type = EventType.BLACKBOX;
-			return type;
-		} else if (title.trim().contains("[26.04.2013] - Operation Seelandung - Tag 1")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("[16.02.] Grantiger Löwe")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("[29. Dez] 3.JgKp Operation Frozen Thunder")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("[28.12.12] - 20:00 - Operation Godfather XII")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("Brig2010 Event")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("13.10.12 Time is Running")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("[29. Aug] TvCoop - Die Attentäter")) {
-			type = EventType.COOP_PLUS;
-			return type;
-		} else if (title.trim().contains("12.06. Ein Tag auf Patrouille")) {
-			type = EventType.COOP;
-			return type;
-		} else if (title.trim().contains("05.06.2012 - Sniperduell")) {
-			type = EventType.TVT;
-			return type;
-		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
-			type = EventType.ORGA;
-			return type;
-		}
-
-		boolean found = false;
-		// Extract type from title
-		Pattern pattern = Pattern.compile("((CO)|(COOP))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(title);
-		if (matcher.find()) {
-			found = true;
-			type = EventType.COOP;
-		}
-		if (!found) {
-			pattern = Pattern.compile("((CO)|(COOP))\\+[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.COOP_PLUS;
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("(TVT[\\s\\+]{0,2}[\\d])|(TVT-EVENT)|(TVT [A-Za-z])|(S-PVP)|(SKIRMISH)",
-					Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.TVT;
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("((BB)|(BLACKBOX))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.BLACKBOX;
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("COMP[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.COMPETITION;
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("((MILSIM)|(MIL)|(MILSIM\\+))[\\s]?[\\d]", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.MILSIM;
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("(ORG[A\\s-]{0,4}[\\dX])|(TRAINING)|(ÜBUNG)|(THEORIE)|(VORTRAG)",
-					Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				type = EventType.ORGA;
-			}
-		}
-
-		if (!found) {
-			System.err.println("Can't parse event type from title: " + title);
-		}
-
-		return type;
-	}
-
-	/**
-	 * Gets the time when the event has started by extracting it from the
-	 * content.
-	 * 
-	 * @param content
-	 *            Content of events thread web site
-	 * @param curContentIndex
-	 *            Current index of the content which should be placed near
-	 *            threads title
-	 * @param title
-	 *            Title of the event
-	 * @return Time when the event has started or null if an error occurred
-	 */
-	private static Calendar getEventTime(List<String> content, int curContentIndex, String title) {
-		String time = null;
-		int i = curContentIndex;
-		String line = "";
-		
-		// Work trough exceptions
-		if (title.trim().contains("[06.02.] Comp58 OP Greeks Meet")) {
-			time = "19:15:00";
-			return CrawlerUtil.convertStringToTime(time);
-		}
-
-		// Search for time until content end
-		Pattern pattern;
-		Matcher matcher;
-		do {
-			i++;
-			line = content.get(i);
-			line = line.replaceAll("â€", "-");
-			line = line.replaceAll("<span style='color:#.{3,6}'>", "");
-			line = line.replaceAll("<span style='font-size:.{1,6}'>", "");
-			line = line.replaceAll("</span>", "");
-			String beforeTimePattern = "^[\\s]*(<(strong|i)>)?(Eventbeginn|Beginn|Eventstart|"
-					+ "Treffen im (Teamspeak|TS)|Start|Treffen|Sammeln im Teamspeak|Trainingsbeginn)(<\\/(strong|i)>)?:(<\\/(strong|i)>)?";
-			String timePattern = "([0-9]{2}[\\.:]?[0-9]{2})";
-			pattern = Pattern.compile(beforeTimePattern + "(\\s|&gt;|\\-|ab)*(<strong>)?" + timePattern
-					+ "[\\s]*(Uhr|h)?(<\\/strong>)?(\\s|&lt;)*<br[\\s]?\\/>", Pattern.CASE_INSENSITIVE);
-			matcher = pattern.matcher(line);
-			if (matcher.find()) {
-				time = matcher.group(11).replaceAll("[\\.:]", "");
-				break;
-			}
-		} while (!line.contains(THREAD_CONTENT_END));
-
-		if (time == null) {
-			System.err.println("Can not parse starting time of event: " + title);
-		} else {
-			time = time.substring(0, 2) + ":" + time.substring(2) + ":00";
-		}
-
-		return CrawlerUtil.convertStringToTime(time);
-	}
-
-	/**
-	 * Gets the date when the event took place at by extracting it from its
-	 * title and by using the year of thread creation.
-	 * 
-	 * @param title
-	 *            Title of the event
-	 * @param content
-	 *            Content of events thread web site
-	 * @param curContentIndex
-	 *            Current index of the content which should be placed near
-	 *            threads title
-	 * @return Date when the event took place at or null if an error occurred
-	 */
-	private static Calendar getEventDate(String title, List<String> content, int curContentIndex) {
-		// Get date
-		boolean found = false;
-		String date = null;
-
-		// Work trough exceptions
-		if (title.trim().contains("Mini Sylvester Event")) {
-			date = "31.12.2013";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
-			date = "23.03.2013";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Brig2010 Event")) {
-			date = "22.12.2012";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[Coop] CO22 BAF EOD Patrol")) {
-			date = "01.07.2012";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
-			date = "26.06.2012";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[Coop] CO24 Sex, Drugs and Guns")) {
-			date = "24.06.2012";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[09.01] Co29 Restrepo")) {
-			date = "09.01.2015";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[10.01] TvT 40 Riot")) {
-			date = "10.01.2015";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[12.01.] Co33 - Der Nachschub")) {
-			date = "12.01.2013";
-			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
-			date = "24.10.2012";
-			return CrawlerUtil.convertStringToDate(date);
-		}
-
-		// Replace months with correct date
-		title = title.replaceAll("[\\s]?(Januar)[\\.]?", "01");
-		title = title.replaceAll("[\\s]?(Februar)[\\.]?", "02");
-		title = title.replaceAll("[\\s]?(März)[\\.]?", "03");
-		title = title.replaceAll("[\\s]?(April)[\\.]?", "04");
-		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
-		title = title.replaceAll("[\\s]?(Juni)[\\.]?", "06");
-		title = title.replaceAll("[\\s]?(Juli)[\\.]?", "07");
-		title = title.replaceAll("[\\s]?(August)[\\.]?", "08");
-		title = title.replaceAll("[\\s]?(September)[\\.]?", "09");
-		title = title.replaceAll("[\\s]?(Oktober)[\\.]?", "10");
-		title = title.replaceAll("[\\s]?(November)[\\.]?", "11");
-		title = title.replaceAll("[\\s]?(Dezember)[\\.]?", "12");
-		title = title.replaceAll("[\\s]?(Jan)[\\.]?", "01");
-		title = title.replaceAll("[\\s]?(Feb)[\\.]?", "02");
-		title = title.replaceAll("[\\s]?(Mär)[\\.]?", "03");
-		title = title.replaceAll("[\\s]?(Apr)[\\.]?", "04");
-		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
-		title = title.replaceAll("[\\s]?(Jun)[\\.]?", "06");
-		title = title.replaceAll("[\\s]?(Jul)[\\.]?", "07");
-		title = title.replaceAll("[\\s]?(Aug)[\\.]?", "08");
-		title = title.replaceAll("[\\s]?(Sep)[\\.]?", "09");
-		title = title.replaceAll("[\\s]?(Okt)[\\.]?", "10");
-		title = title.replaceAll("[\\s]?(Nov)[\\.]?", "11");
-		title = title.replaceAll("[\\s]?(Dez)[\\.]?", "12");
-
-		// Extract date from title
-		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d");
-		Matcher matcher = pattern.matcher(title);
-		if (matcher.find()) {
-			found = true;
-			date = title.substring(matcher.start(), matcher.end());
-			// 15.03.2014
-		}
-		if (!found) {
-			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
-				// 7.2.2014
-				date = "0" + date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
-				// 07.02.2014
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 15.03.14
-				date = date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
-				// 15.03.2014
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\.\\d\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 3.03.2014
-				date = "0" + date;
-				// 03.03.2014
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\d\\.");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
-				// 3.03.
-				date = "0" + date;
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 03.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[^\\d\\.]\\d\\.\\d\\d[^\\d]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end() - 1);
-				// 3.03
-				date = "0" + date;
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 03.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d\\d[^\\.]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
-				// 15.03
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 15.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("[^\\.]\\d\\d\\.\\d\\d\\.");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
-				// 15.03.
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 15.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.[^\\d]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
-				// 15.03.
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 15.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d[^\\d\\.]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
-				// 15.3
-				date = date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 15.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 15.3.2014
-				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\d\\.\\d\\.");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 15.3.
-				date = date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 15.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\.\\d\\.\\d\\d");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 7.2.14
-				date = "0" + date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
-				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
-				// 07.02.2014
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\.\\d[^\\d\\.]");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
-				// 5.3
-				date = "0" + date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 05.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			pattern = Pattern.compile("\\d\\.\\d\\.");
-			matcher = pattern.matcher(title);
-			if (matcher.find()) {
-				found = true;
-				date = title.substring(matcher.start(), matcher.end());
-				// 5.3.
-				date = "0" + date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
-				pattern = Pattern.compile("\\d\\d\\d\\d");
-				matcher = pattern.matcher(wroteAt);
-				if (matcher.find()) {
-					date += wroteAt.substring(matcher.start(), matcher.end());
-					// 05.03.2014
-				} else {
-					System.err.println("Can't read 'wroteAt' date from thread.");
-				}
-			}
-		}
-		if (!found) {
-			System.err.println("Can't parse date from title: " + title);
-		}
-
-		// Validate date
-		int day = Integer.parseInt(date.substring(0, 2));
-		int month = Integer.parseInt(date.substring(3, 5));
-		int year = Integer.parseInt(date.substring(6));
-		if (day < 1 || day > 31 || month < 1 || month > 12 || year < DATE_FIRST_YEAR
-				|| year > Calendar.getInstance().get(Calendar.YEAR)) {
-			System.err.println("No valid date: " + date);
-		}
-
-		return CrawlerUtil.convertStringToDate(date);
-	}
-
-	/**
-	 * Gets the urls to all events by using the event sub-forum.
-	 * 
-	 * @param path
-	 *            Path to the event sub-forum
-	 * @return List of urls to all events
-	 * @throws IOException
-	 *             If an I/O-Exception occurs
-	 */
-	private static List<String> getEventUrls(String path) throws IOException {
-		List<String> events = new ArrayList<String>();
-		int curPage = 0;
-
-		boolean continueCrawling = true;
-		while (continueCrawling) {
-			// Work trough the current page
-			String pageUrl = EVENTS_PATH + EVENTS_PATH_SUFFIX + curPage;
-			List<String> content = CrawlerUtil.getWebContent(pageUrl);
-
-			// Reject everything before the mask
-			int i = -1;
-			String line = "";
-			do {
-				i++;
-				line = content.get(i);
-			} while (!line.contains(EVENTS_MASK_START));
-
-			int urlsOnThisPage = 0;
-			do {
-				i++;
-				line = content.get(i);
-				if (line.contains(EVENTS_REJECT_STICKY)) {
-					urlsOnThisPage++;
-					// Reject lines of this thread
-					i += EVENTS_REJECT_LINE_SIZE;
-				} else if (line.contains(EVENTS_ACCEPT_THREAD)) {
-					// Accept this thread
-					urlsOnThisPage++;
-					int urlStart = line.indexOf(EVENTS_URL_TAG, line.indexOf(EVENTS_ACCEPT_THREAD));
-					int urlEnd = line.indexOf(EVENTS_URL_TAG, urlStart + 1);
-					String url = line.substring(urlStart + 1, urlEnd);
-					events.add(SERVERPATH + url);
-					// Reject the last lines of this thread
-					i += EVENTS_REJECT_LINE_SIZE - 1;
-				}
-			} while (!line.contains(EVENTS_MASK_END));
-
-			// End crawl if there are no more pages left (indicated by no
-			// threads)
-			if (urlsOnThisPage == 0) {
-				continueCrawling = false;
-			}
-
-			curPage += EVENTS_THREAD_AMOUNT;
-		}
-
-		return events;
 	}
 }
