@@ -9,7 +9,7 @@ import de.zabuza.webcrawler.enums.SlotType;
  * Data container for a slot.
  * Stores different data like type or key.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class SlotData implements Serializable {
 	

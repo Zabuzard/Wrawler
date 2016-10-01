@@ -4,7 +4,7 @@ import de.zabuza.webcrawler.struct.Slotlist;
 
 /**
  * Container class for database slotlists.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class SlotlistContainerDb {

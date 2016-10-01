@@ -10,7 +10,7 @@ import de.zabuza.webcrawler.struct.Slotlist;
 
 /**
  * Class that links slot container with their slotlists.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class SlotTableDb {

@@ -9,7 +9,7 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
 
 /**
  * Class that represents the data of an event in the database format.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class EventDb {

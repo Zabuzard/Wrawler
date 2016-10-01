@@ -8,7 +8,7 @@ import de.zabuza.webcrawler.enums.SlotType;
 
 /**
  * Utility class that links slotTypes and their ids.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class SlotTypeTableDb {

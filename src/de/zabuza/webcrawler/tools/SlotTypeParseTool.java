@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * Utility tool for slot parsing.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class SlotTypeParseTool {

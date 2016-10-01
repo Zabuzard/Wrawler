@@ -26,7 +26,7 @@ import de.zabuza.webcrawler.struct.EventList;
 /**
  * Utility class for crawlers.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class CrawlerUtil {

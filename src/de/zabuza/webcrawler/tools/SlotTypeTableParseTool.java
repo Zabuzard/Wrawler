@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Utility tool for slot table parsing.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public class SlotTypeTableParseTool {

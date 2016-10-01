@@ -9,7 +9,7 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
 
 /**
  * Container class for database slots.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public class SlotContainerDb {

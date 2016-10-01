@@ -9,7 +9,7 @@ import de.zabuza.webcrawler.util.InsensitiveComparator;
 
 /**
  * Utility class that links user names and their ids.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class UserTableDb {

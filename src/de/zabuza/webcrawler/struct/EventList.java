@@ -27,7 +27,7 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
 /**
  * List for event data.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class EventList implements Serializable, Iterable<EventData> {

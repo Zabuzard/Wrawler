@@ -3,7 +3,7 @@ package de.zabuza.webcrawler.enums;
 /**
  * Enumeration of all slot status.
  *  
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public enum SlotStatus {
 	/**

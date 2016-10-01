@@ -6,7 +6,7 @@ import java.util.Calendar;
  * Data container for external player data.
  * Stores different data like player registration.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class ExtPlayerData {
 	/**

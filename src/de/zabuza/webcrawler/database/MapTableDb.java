@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 /**
  * Utility class that links maps and their ids.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class MapTableDb implements Iterable<Entry<Integer, String>> {

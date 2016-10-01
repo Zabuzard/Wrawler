@@ -88,7 +88,7 @@ public final class Program {
 		Metrics metrics = new Metrics(list);
 		
 		//Counting slot types
-		String playerRegex = "Rallen";
+		String playerRegex = "Zabuza";
 		Map<SlotType, Integer> slotTypeCount = metrics.countSlotTypesOf(playerRegex);
 		int eventAmount = 0;
 		for (Entry<SlotType, Integer> entry : slotTypeCount.entrySet()) {

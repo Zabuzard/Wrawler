@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Utility class for maps.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class MapUtil {
 	

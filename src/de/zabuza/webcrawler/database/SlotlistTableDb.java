@@ -8,7 +8,7 @@ import de.zabuza.webcrawler.struct.Slotlist;
 
 /**
  * Class that links slotlists with their ids.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class SlotlistTableDb {

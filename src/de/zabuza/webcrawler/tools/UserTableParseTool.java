@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Utility tool for user table parsing.
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public class UserTableParseTool {

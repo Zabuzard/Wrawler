@@ -22,7 +22,7 @@ import de.zabuza.webcrawler.util.InsensitiveComparator;
 /**
  * Utility class for file crawling.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class Filecrawler {

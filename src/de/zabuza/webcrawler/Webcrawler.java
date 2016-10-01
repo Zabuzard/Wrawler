@@ -24,7 +24,7 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
  * Utility class. Provides a web crawler that searches some event information of
  * the GruppeW forum.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class Webcrawler {
 	/**

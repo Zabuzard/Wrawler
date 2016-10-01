@@ -13,7 +13,7 @@ import de.zabuza.webcrawler.enums.SlotType;
  * Class for an events slot-list.
  * Contains information like player and their slots.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class Slotlist implements Serializable {
 	

@@ -12,7 +12,7 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
  * Data container for an event.
  * Stores different data like name or type.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class EventData implements Serializable {
 	/**

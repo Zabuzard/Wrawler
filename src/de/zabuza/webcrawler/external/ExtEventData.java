@@ -12,7 +12,7 @@ import de.zabuza.webcrawler.enums.SlotStatus;
  * Data container for external event data.
  * Stores different data like slotted player or player status.
  * 
- * @author Zabuza
+ * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class ExtEventData {
 	/**
