@@ -41,8 +41,7 @@ public final class SlotlistTableDb {
 	/**
 	 * Dictionary for id to slotlist access.
 	 */
-	private final Map<Integer, SlotlistContainerDb> idToSlotlist = new HashMap<>(
-			DEFAULT_CAPACITY);
+	private final Map<Integer, SlotlistContainerDb> idToSlotlist = new HashMap<>(DEFAULT_CAPACITY);
 
 	/**
 	 * Id for the first slotlist which increments each time a slotlist gets

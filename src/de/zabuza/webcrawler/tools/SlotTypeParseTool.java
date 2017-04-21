@@ -49,7 +49,8 @@ public final class SlotTypeParseTool {
 	 * 
 	 * @param args
 	 *            Not supported
-	 * @throws IOException If an I/O-Exception occurred
+	 * @throws IOException
+	 *             If an I/O-Exception occurred
 	 */
 	public static void main(final String[] args) throws IOException {
 		String filename = "1to62.csv";

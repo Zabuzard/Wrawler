@@ -47,7 +47,8 @@ public class UserTableParseTool {
 	 * 
 	 * @param args
 	 *            Not supported
-	 * @throws IOException If an I/O-Exception occurred
+	 * @throws IOException
+	 *             If an I/O-Exception occurred
 	 */
 	public static void main(final String[] args) throws IOException {
 		String filename = "userTable.csv";
