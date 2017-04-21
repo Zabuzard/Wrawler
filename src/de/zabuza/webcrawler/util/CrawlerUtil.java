@@ -179,24 +179,13 @@ public final class CrawlerUtil {
 	 */
 	public static EventList deserialize(String path) {
 		EventList list = null;
-		ObjectInputStream ois = null;
-		try {
-			FileInputStream fis = new FileInputStream(path);
-			ois = new ObjectInputStream(fis);
+		try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			list = (EventList) ois.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			System.err.println("Error while deserializing event list.");
 			System.err.println(e);
-		} finally {
-			try {
-				if (ois != null) {
-					ois.close();
-				}
-			} catch (IOException e) {
-				System.err.println("Error while closing deserialization stream of event list.");
-				System.err.println(e);
-			}
 		}
+
 		return list;
 	}
 
@@ -210,17 +199,17 @@ public final class CrawlerUtil {
 	 *             If an I/O-Exception occurs
 	 */
 	public static List<String> getFileContent(String path) throws IOException {
-		BufferedReader site = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
-		List<String> content = new ArrayList<String>();
+		try (final BufferedReader site = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+			List<String> content = new ArrayList<>();
 
-		String line = site.readLine();
-		while (line != null) {
-			content.add(line);
-			line = site.readLine();
+			String line = site.readLine();
+			while (line != null) {
+				content.add(line);
+				line = site.readLine();
+			}
+
+			return content;
 		}
-
-		site.close();
-		return content;
 	}
 
 	/**
@@ -234,17 +223,17 @@ public final class CrawlerUtil {
 	 */
 	public static List<String> getWebContent(String path) throws IOException {
 		URL url = new URL(path);
-		BufferedReader site = new BufferedReader(new InputStreamReader(url.openStream()));
-		List<String> content = new ArrayList<String>();
+		try (final BufferedReader site = new BufferedReader(new InputStreamReader(url.openStream()))) {
+			List<String> content = new ArrayList<>();
 
-		String line = site.readLine();
-		while (line != null) {
-			content.add(line);
-			line = site.readLine();
+			String line = site.readLine();
+			while (line != null) {
+				content.add(line);
+				line = site.readLine();
+			}
+
+			return content;
 		}
-
-		site.close();
-		return content;
 	}
 
 	/**
@@ -255,8 +244,9 @@ public final class CrawlerUtil {
 	 * @return List of values that where contained in the line
 	 */
 	public static String[] parseDatabaseFormatLine(String databaseFormatLine) {
-		databaseFormatLine = databaseFormatLine.replaceAll(",$", ",\"\"").replaceAll("^,", "\"\",");
-		String[] values = databaseFormatLine.split("\",\"");
+		String databaseFormatLineToUse = databaseFormatLine;
+		databaseFormatLineToUse = databaseFormatLineToUse.replaceAll(",$", ",\"\"").replaceAll("^,", "\"\",");
+		String[] values = databaseFormatLineToUse.split("\",\"");
 		values[0] = values[0].substring(1);
 		values[values.length - 1] = values[values.length - 1].substring(0, values[values.length - 1].length() - 1);
 		return values;
@@ -271,23 +261,11 @@ public final class CrawlerUtil {
 	 *            path where object should be saved
 	 */
 	public static void serialize(EventList list, String path) {
-		ObjectOutputStream oos = null;
-		try {
-			FileOutputStream fos = new FileOutputStream(path);
-			oos = new ObjectOutputStream(fos);
+		try (final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
 			oos.writeObject(list);
 		} catch (IOException e) {
 			System.err.println("Error while serializing event list.");
 			System.err.println(e);
-		} finally {
-			try {
-				if (oos != null) {
-					oos.close();
-				}
-			} catch (IOException e) {
-				System.err.println("Error while closing serialization stream of event list.");
-				System.err.println(e);
-			}
 		}
 	}
 

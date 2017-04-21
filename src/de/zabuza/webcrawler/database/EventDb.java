@@ -9,261 +9,40 @@ import de.zabuza.webcrawler.util.CrawlerUtil;
 
 /**
  * Class that represents the data of an event in the database format.
+ * 
  * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  *
  */
 public final class EventDb {
 	/**
-	 * Separator character for values in the text representation.
+	 * Default forum id if forum is not known.
 	 */
-	private static final String SEPARATOR = ",";
+	private static final int DEFAULT_FORUM_ID = 4;
 	/**
 	 * Enclosing character for values in the text representation.
 	 */
 	private static final String ENCLOSER = "\"";
 	/**
-	 * Default forum id if forum is not known.
+	 * Separator character for values in the text representation.
 	 */
-	private static final int DEFAULT_FORUM_ID = 4;
+	private static final String SEPARATOR = ",";
 	/**
 	 * Starting id for events.
 	 */
 	private static int starting_eventId = 1;
-	
-	/**
-	 * Id of the event.
-	 */
-	private final String event_id ;
-	/**
-	 * Id of events creator.
-	 */
-	private final String user_id;
-	/**
-	 * Id of events post.
-	 */
-	private final String post_id;
-	/**
-	 * Id of events thread.
-	 */
-	private final String thread_id;
-	/**
-	 * Id of the forum the events is in.
-	 */
-	private final String forum_id;
-	/**
-	 * Name of the event.
-	 */
-	private final String event_name;
-	/**
-	 * Number of players of this event.
-	 */
-	private final String player_number;
-	/**
-	 * Type of the event.
-	 */
-	private final String event_type;
-	/**
-	 * Date where the event is.
-	 */
-	private final String event_date;
-	/**
-	 * Time where the event starts.
-	 */
-	private final String event_time;
-	/**
-	 * Id of events map.
-	 */
-	private final String map;
-	/**
-	 * Id of events slotlist.
-	 */
-	private final String slotlist;
-	/**
-	 * Id of the event in the news.
-	 */
-	private final String news_id;
-	/**
-	 * Id of the event in the calendar.
-	 */
-	private final String calendar_id;
-	/**
-	 * State of the event.
-	 */
-	private final String state;
-	
-	/**
-	 * Creates a new EventDb object out of the given eventData object.
-	 * @param eventData EventData object to create EventDb object out of
-	 * @param slotlistId Id of events slotlist
-	 */
-	public EventDb(EventData eventData, int slotlistId) {
-		event_id = starting_eventId + "";
-		user_id = UserTableDb.getInstance().getId(eventData.getCreator()) + "";
-		post_id = eventData.getPostId() + "";
-		thread_id = eventData.getThreadId() + "";
-		forum_id = DEFAULT_FORUM_ID + "";
-		event_name = eventData.getName();
-		player_number = eventData.getSize() + "";
-		event_type = getIdByEventType(eventData.getType()) + "";
-		event_date = convertDateToDbFormat(eventData.getDate());
-		event_time = CrawlerUtil.convertTimeToString(eventData.getTime());
-		map = MapTableDb.getInstance().getId(eventData.getMap()) + "";
-		slotlist = slotlistId + "";
-		news_id = "0";
-		calendar_id = "0";
-		state = "7";
-		
-		starting_eventId++;
-	}
-	
-	/**
-	 * Creates a new EventDb object out of a database formatted text.
-	 * @param databaseFormatLine Text in the database format
-	 */
-	public EventDb(String databaseFormatLine) {
-		String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormatLine);
-		event_id = values[0];
-		user_id = values[1];
-		post_id = values[2];
-		thread_id = values[3];
-		forum_id = values[4];
-		event_name = values[5];
-		player_number = values[6];
-		event_type = values[7];
-		event_date = values[8];
-		event_time = values[9];
-		map = values[10];
-		slotlist = values[11];
-		news_id = values[12];
-		calendar_id = values[13];
-		state = values[14];
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(ENCLOSER + event_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + user_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + post_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + thread_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + forum_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + event_name + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + player_number + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + event_type + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + event_date + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + event_time + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + map + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + slotlist + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + news_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + calendar_id + ENCLOSER + SEPARATOR);
-		builder.append(ENCLOSER + state + ENCLOSER);
-		return builder.toString();
-	}
-	/**
-	 * Returns a EventData representation of this object.
-	 * @param slotlist Slotlist for this event data
-	 * @return A EventData representation of this object.
-	 */
-	public EventData toEventData(Slotlist slotlist) {
-		EventType type = getEventTypeById(Integer.parseInt(event_type));
-		String creator = UserTableDb.getInstance().getUser(Integer.parseInt(user_id));
-		String thatMap = MapTableDb.getInstance().getMap(Integer.parseInt(map));
-		Calendar thatDate = convertDateFromDbFormat(event_date);
-		Calendar thatTime = CrawlerUtil.convertStringToTime(event_time);
-		EventData eventData = new EventData(event_name, type, Integer.parseInt(player_number),
-				creator, thatMap, thatDate, thatTime, Integer.parseInt(thread_id),
-				Integer.parseInt(post_id), slotlist);
-		return eventData;
-	}
-	/**
-	 * Gets the slotlist id of this event.
-	 * @return Slotlist id of this event
-	 */
-	public int getSlotlistId() {
-		return Integer.parseInt(slotlist);
-	}
-	/**
-	 * Gets the player number of this event.
-	 * @return Player number of this event
-	 */
-	public int getPlayerNumber() {
-		return Integer.parseInt(player_number);
-	}
-	/**
-	 * Converts the given date into a database readable format.
-	 * @param date Date to convert
-	 * @return Date in a database readable format
-	 */
-	private static String convertDateToDbFormat(Calendar date) {
-		int year = date.get(Calendar.YEAR);
-		int month = date.get(Calendar.MONTH) + 1;
-		int day  = date.get(Calendar.DAY_OF_MONTH);
-		String yearText = year + "";
-		String monthText = month + "";
-		String dayText = day + "";
-		if (month < 10) {
-			monthText = "0" + month;
-		}
-		if (day < 10) {
-			dayText = "0" + day;
-		}
-		return yearText + "-" + monthText + "-" + dayText;
-	}
-	/**
-	 * Converts the given date from a database readable format into a calendar object.
-	 * @param date Date to convert
-	 * @return Date as calendar object
-	 */
-	private static Calendar convertDateFromDbFormat(String dbFormat) {
-		Calendar date = Calendar.getInstance();
-		
-		int year = Integer.parseInt(dbFormat.substring(0, 4));
-		int month = Integer.parseInt(dbFormat.substring(5, 7)) - 1;
-		int day = Integer.parseInt(dbFormat.substring(8, 10));
-		
-		date.set(Calendar.YEAR, year);
-		date.set(Calendar.MONTH, month);
-		date.set(Calendar.DAY_OF_MONTH, day);
-		return date;
-	}
-	/**
-	 * Gets the database id of an event type by the type.
-	 * @param type Type to get database id of
-	 * @return Database id of the event type
-	 */
-	public static int getIdByEventType(EventType type) {
-		switch (type) {
-			case BLACKBOX :
-				return 1;
-			case COOP : 
-				return 2;
-			case COOP_PLUS:
-				return 3;
-			case COMPETITION:
-				return 4;
-			case MILSIM:
-				return 5;
-			case ORGA:
-				return 6;
-			case TVT:
-				return 7;
-			case ZEUS:
-				return 8;
-			default :
-				System.err.println("Unknown event type while creating database event: " + type);
-				return 0;
-		}
-	}
+
 	/**
 	 * Gets the event type by its database id.
-	 * @param id Database id to get event type of
+	 * 
+	 * @param id
+	 *            Database id to get event type of
 	 * @return Event type to get
 	 */
 	public static EventType getEventTypeById(int id) {
 		switch (id) {
-		case 1 :
+		case 1:
 			return EventType.BLACKBOX;
-		case 2 : 
+		case 2:
 			return EventType.COOP;
 		case 3:
 			return EventType.COOP_PLUS;
@@ -277,9 +56,262 @@ public final class EventDb {
 			return EventType.TVT;
 		case 8:
 			return EventType.ZEUS;
-		default :
+		default:
 			System.err.println("Unknown event type id while creating database event: " + id);
 			return EventType.NO_TYPE;
+		}
 	}
+
+	/**
+	 * Gets the database id of an event type by the type.
+	 * 
+	 * @param type
+	 *            Type to get database id of
+	 * @return Database id of the event type
+	 */
+	public static int getIdByEventType(EventType type) {
+		switch (type) {
+		case BLACKBOX:
+			return 1;
+		case COOP:
+			return 2;
+		case COOP_PLUS:
+			return 3;
+		case COMPETITION:
+			return 4;
+		case MILSIM:
+			return 5;
+		case ORGA:
+			return 6;
+		case TVT:
+			return 7;
+		case ZEUS:
+			return 8;
+		case NO_TYPE:
+			System.err.println("Unknown event type while creating database event: " + type);
+			return 0;
+		default:
+			System.err.println("Unknown event type while creating database event: " + type);
+			return 0;
+		}
+	}
+
+	/**
+	 * Converts the given date from a database readable format into a calendar
+	 * object.
+	 * 
+	 * @param dbFormat
+	 *            The date to convert in the database format
+	 * @return Date as calendar object
+	 */
+	private static Calendar convertDateFromDbFormat(String dbFormat) {
+		Calendar date = Calendar.getInstance();
+
+		int year = Integer.parseInt(dbFormat.substring(0, 4));
+		int month = Integer.parseInt(dbFormat.substring(5, 7)) - 1;
+		int day = Integer.parseInt(dbFormat.substring(8, 10));
+
+		date.set(Calendar.YEAR, year);
+		date.set(Calendar.MONTH, month);
+		date.set(Calendar.DAY_OF_MONTH, day);
+		return date;
+	}
+
+	/**
+	 * Converts the given date into a database readable format.
+	 * 
+	 * @param date
+	 *            Date to convert
+	 * @return Date in a database readable format
+	 */
+	private static String convertDateToDbFormat(Calendar date) {
+		int year = date.get(Calendar.YEAR);
+		int month = date.get(Calendar.MONTH) + 1;
+		int day = date.get(Calendar.DAY_OF_MONTH);
+		String yearText = year + "";
+		String monthText = month + "";
+		String dayText = day + "";
+		if (month < 10) {
+			monthText = "0" + month;
+		}
+		if (day < 10) {
+			dayText = "0" + day;
+		}
+		return yearText + "-" + monthText + "-" + dayText;
+	}
+
+	/**
+	 * Id of the event in the calendar.
+	 */
+	private final String mCalendar_id;
+	/**
+	 * Date where the event is.
+	 */
+	private final String mEvent_date;
+	/**
+	 * Id of the event.
+	 */
+	private final String mEvent_id;
+	/**
+	 * Name of the event.
+	 */
+	private final String mEvent_name;
+	/**
+	 * Time where the event starts.
+	 */
+	private final String mEvent_time;
+	/**
+	 * Type of the event.
+	 */
+	private final String mEvent_type;
+	/**
+	 * Id of the forum the events is in.
+	 */
+	private final String mForum_id;
+	/**
+	 * Id of events map.
+	 */
+	private final String mMap;
+	/**
+	 * Id of the event in the news.
+	 */
+	private final String mNews_id;
+	/**
+	 * Number of players of this event.
+	 */
+	private final String mPlayer_number;
+	/**
+	 * Id of events post.
+	 */
+	private final String mPost_id;
+
+	/**
+	 * Id of events slotlist.
+	 */
+	private final String mSlotlist;
+
+	/**
+	 * State of the event.
+	 */
+	private final String mState;
+
+	/**
+	 * Id of events thread.
+	 */
+	private final String mThread_id;
+	/**
+	 * Id of events creator.
+	 */
+	private final String mUser_id;
+
+	/**
+	 * Creates a new EventDb object out of the given eventData object.
+	 * 
+	 * @param eventData
+	 *            EventData object to create EventDb object out of
+	 * @param slotlistId
+	 *            Id of events slotlist
+	 */
+	public EventDb(EventData eventData, int slotlistId) {
+		this.mEvent_id = starting_eventId + "";
+		this.mUser_id = UserTableDb.getInstance().getId(eventData.getCreator()) + "";
+		this.mPost_id = eventData.getPostId() + "";
+		this.mThread_id = eventData.getThreadId() + "";
+		this.mForum_id = DEFAULT_FORUM_ID + "";
+		this.mEvent_name = eventData.getName();
+		this.mPlayer_number = eventData.getSize() + "";
+		this.mEvent_type = getIdByEventType(eventData.getType()) + "";
+		this.mEvent_date = convertDateToDbFormat(eventData.getDate());
+		this.mEvent_time = CrawlerUtil.convertTimeToString(eventData.getTime());
+		this.mMap = MapTableDb.getInstance().getId(eventData.getMap()) + "";
+		this.mSlotlist = slotlistId + "";
+		this.mNews_id = "0";
+		this.mCalendar_id = "0";
+		this.mState = "7";
+
+		starting_eventId++;
+	}
+
+	/**
+	 * Creates a new EventDb object out of a database formatted text.
+	 * 
+	 * @param databaseFormatLine
+	 *            Text in the database format
+	 */
+	public EventDb(String databaseFormatLine) {
+		String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormatLine);
+		this.mEvent_id = values[0];
+		this.mUser_id = values[1];
+		this.mPost_id = values[2];
+		this.mThread_id = values[3];
+		this.mForum_id = values[4];
+		this.mEvent_name = values[5];
+		this.mPlayer_number = values[6];
+		this.mEvent_type = values[7];
+		this.mEvent_date = values[8];
+		this.mEvent_time = values[9];
+		this.mMap = values[10];
+		this.mSlotlist = values[11];
+		this.mNews_id = values[12];
+		this.mCalendar_id = values[13];
+		this.mState = values[14];
+	}
+
+	/**
+	 * Gets the player number of this event.
+	 * 
+	 * @return Player number of this event
+	 */
+	public int getPlayerNumber() {
+		return Integer.parseInt(this.mPlayer_number);
+	}
+
+	/**
+	 * Gets the slotlist id of this event.
+	 * 
+	 * @return Slotlist id of this event
+	 */
+	public int getSlotlistId() {
+		return Integer.parseInt(this.mSlotlist);
+	}
+
+	/**
+	 * Returns a EventData representation of this object.
+	 * 
+	 * @param slotlist
+	 *            Slotlist for this event data
+	 * @return A EventData representation of this object.
+	 */
+	public EventData toEventData(Slotlist slotlist) {
+		EventType type = getEventTypeById(Integer.parseInt(this.mEvent_type));
+		String creator = UserTableDb.getInstance().getUser(Integer.parseInt(this.mUser_id));
+		String thatMap = MapTableDb.getInstance().getMap(Integer.parseInt(this.mMap));
+		Calendar thatDate = convertDateFromDbFormat(this.mEvent_date);
+		Calendar thatTime = CrawlerUtil.convertStringToTime(this.mEvent_time);
+		EventData eventData = new EventData(this.mEvent_name, type, Integer.parseInt(this.mPlayer_number), creator,
+				thatMap, thatDate, thatTime, Integer.parseInt(this.mThread_id), Integer.parseInt(this.mPost_id),
+				slotlist);
+		return eventData;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(ENCLOSER + this.mEvent_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mUser_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mPost_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mThread_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mForum_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mEvent_name + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mPlayer_number + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mEvent_type + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mEvent_date + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mEvent_time + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mMap + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mSlotlist + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mNews_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mCalendar_id + ENCLOSER + SEPARATOR);
+		builder.append(ENCLOSER + this.mState + ENCLOSER);
+		return builder.toString();
 	}
 }

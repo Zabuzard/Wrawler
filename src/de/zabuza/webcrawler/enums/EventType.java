@@ -7,9 +7,13 @@ package de.zabuza.webcrawler.enums;
  */
 public enum EventType {
 	/**
-	 * No valid type for an event.
+	 * Black-box event.
 	 */
-	NO_TYPE,
+	BLACKBOX,
+	/**
+	 * Competition event.
+	 */
+	COMPETITION,
 	/**
 	 * Cooperative event.
 	 */
@@ -19,25 +23,21 @@ public enum EventType {
 	 */
 	COOP_PLUS,
 	/**
-	 * Team versus Team event.
-	 */
-	TVT,
-	/**
-	 * Black-box event.
-	 */
-	BLACKBOX,
-	/**
 	 * Military simulation event.
 	 */
 	MILSIM,
 	/**
-	 * Competition event.
+	 * No valid type for an event.
 	 */
-	COMPETITION,
+	NO_TYPE,
 	/**
 	 * Organization event.
 	 */
 	ORGA,
+	/**
+	 * Team versus Team event.
+	 */
+	TVT,
 	/**
 	 * Zeus event.
 	 */

@@ -7,98 +7,6 @@ package de.zabuza.webcrawler.enums;
  */
 public enum SlotType {
 	/**
-	 * No valid type for a slot.
-	 */
-	NO_TYPE,
-	/**
-	 * Commanding Officer.
-	 */
-	CO,
-	/**
-	 * Executive Officer.
-	 */
-	XO,
-	/**
-	 * Military Intelligence Officer.
-	 */
-	MIO,
-	/**
-	 * Chief of Logistics.
-	 */
-	COL,
-	/**
-	 * Joint Terminal Attack Controller.
-	 */
-	JTAC,
-	/**
-	 * Platoon Leader.
-	 */
-	PL,
-	/**
-	 * Platoon Sergeant.
-	 */
-	PSG,
-	/**
-	 * Forward Observer.
-	 */
-	FO,
-	/**
-	 * Squad Leader.
-	 */
-	SL,
-	/**
-	 * Team Leader.
-	 */
-	TL,
-	/**
-	 * Fireteam Leader.
-	 */
-	FTL,
-	/**
-	 * Automatic Rifleman.
-	 */
-	AR,
-	/**
-	 * Grenadier.
-	 */
-	GRE,
-	/**
-	 * Rifleman.
-	 */
-	RFL,
-	/**
-	 * Combat Medic.
-	 */
-	CMDC,
-	/**
-	 * Designated Marksman.
-	 */
-	DM,
-	/**
-	 * Anti-Tank Rifleman.
-	 */
-	ATR,
-	/**
-	 * Anti-Air Rifleman.
-	 */
-	AAR,
-	/**
-	 * Machine Gunner.
-	 */
-	MG,
-	/**
-	 * Assistant Machine Gunner.
-	 */
-	AMG,
-	/**
-	 * Anti-Tank Specialist.
-	 */
-	AT,
-	/**
-	 * Assistant Anti-Tank Specialist.
-	 */
-	AAT,
-	/**
 	 * Anti-Air Specialist.
 	 */
 	AA,
@@ -107,33 +15,81 @@ public enum SlotType {
 	 */
 	AAA,
 	/**
-	 * Sniper.
+	 * Anti-Air Rifleman.
 	 */
-	SNP,
+	AAR,
 	/**
-	 * Spotter.
+	 * Assistant Anti-Tank Specialist.
 	 */
-	SPT,
+	AAT,
 	/**
-	 * Tank Platoon Leader.
+	 * Artillery Command Systems Operator.
 	 */
-	TPL,
+	ACSO,
 	/**
-	 * Tank Platoon Sergeant.
+	 * Assistant Machine Gunner.
 	 */
-	TPS,
+	AMG,
 	/**
-	 * Tank Commander.
+	 * Automatic Rifleman.
 	 */
-	TC,
+	AR,
+	/**
+	 * Anti-Tank Specialist.
+	 */
+	AT,
+	/**
+	 * Anti-Tank Rifleman.
+	 */
+	ATR,
+	/**
+	 * Combat Engineer.
+	 */
+	CE,
+	/**
+	 * Combat Medic.
+	 */
+	CMDC,
+	/**
+	 * Commanding Officer.
+	 */
+	CO,
+	/**
+	 * Chief of Logistics.
+	 */
+	COL,
+	/**
+	 * Co-Pilot.
+	 */
+	CPIL,
+	/**
+	 * Designated Marksman.
+	 */
+	DM,
+	/**
+	 * Driver.
+	 */
+	DRV,
+	/**
+	 * Forward Observer.
+	 */
+	FO,
+	/**
+	 * Fireteam Leader.
+	 */
+	FTL,
 	/**
 	 * Gunner.
 	 */
 	GNR,
 	/**
-	 * Driver.
+	 * Grenadier.
 	 */
-	DRV,
+	GRE,
+	/**
+	 * Joint Terminal Attack Controller.
+	 */
+	JTAC,
 	/**
 	 * Logistician.
 	 */
@@ -143,37 +99,73 @@ public enum SlotType {
 	 */
 	MDC,
 	/**
+	 * Machine Gunner.
+	 */
+	MG,
+	/**
+	 * Military Intelligence Officer.
+	 */
+	MIO,
+	/**
+	 * No valid type for a slot.
+	 */
+	NO_TYPE,
+	/**
+	 * Other type than common ones.
+	 */
+	OTHER,
+	/**
 	 * Pilot.
 	 */
 	PIL,
 	/**
-	 * Co-Pilot.
+	 * Platoon Leader.
 	 */
-	CPIL,
+	PL,
 	/**
-	 * Weapon Systems Officer.
+	 * Platoon Sergeant.
 	 */
-	WSO,
+	PSG,
 	/**
-	 * Wing Commander.
+	 * Reserve.
 	 */
-	WCO,
+	RESERVE,
 	/**
-	 * Artillery Command Systems Operator.
+	 * Rifleman.
 	 */
-	ACSO,
+	RFL,
+	/**
+	 * Squad Leader.
+	 */
+	SL,
+	/**
+	 * Sniper.
+	 */
+	SNP,
 	/**
 	 * Special Forces.
 	 */
 	SPEC,
 	/**
-	 * Zeus, CO+ or similar.
+	 * Spotter.
 	 */
-	ZC_PLUS,
+	SPT,
 	/**
-	 * Combat Engineer.
+	 * Tank Commander.
 	 */
-	CE,
+	TC,
+	/**
+	 * Team Leader.
+	 */
+	TL,
+	/**
+	 * Tank Platoon Leader.
+	 */
+	TPL,
+	/**
+	 * Tank Platoon Sergeant.
+	 */
+	TPS,
 	/**
 	 * Unmanned Aircraft Systems Operator.
 	 */
@@ -183,11 +175,19 @@ public enum SlotType {
 	 */
 	UGSO,
 	/**
-	 * Other type than common ones.
+	 * Wing Commander.
 	 */
-	OTHER,
+	WCO,
 	/**
-	 * Reserve.
+	 * Weapon Systems Officer.
 	 */
-	RESERVE
+	WSO,
+	/**
+	 * Executive Officer.
+	 */
+	XO,
+	/**
+	 * Zeus, CO+ or similar.
+	 */
+	ZC_PLUS
 }

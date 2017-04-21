@@ -49,8 +49,8 @@ public final class Metrics {
 
 		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
 		symbols.setDecimalSeparator('.');
-		decFormat = new DecimalFormat("#.##");
-		decFormat.setDecimalFormatSymbols(symbols);
+		this.decFormat = new DecimalFormat("#.##");
+		this.decFormat.setDecimalFormatSymbols(symbols);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public final class Metrics {
 			if (type == SlotType.CO || type == SlotType.XO || type == SlotType.PL || type == SlotType.PSG
 					|| type == SlotType.SL || type == SlotType.TL || type == SlotType.FTL || type == SlotType.TPL
 					|| type == SlotType.TPS || type == SlotType.TC || type == SlotType.WCO) {
-				leadAmount += entry.getValue();
+				leadAmount += entry.getValue().intValue();
 			}
 		}
 		return leadAmount;
@@ -87,20 +87,20 @@ public final class Metrics {
 	 * @return Sorted map of slot types with amount
 	 */
 	public Map<SlotType, Integer> countSlotTypesOf(String playerRegex) {
-		Map<SlotType, Integer> slotMap = new HashMap<SlotType, Integer>();
+		Map<SlotType, Integer> slotMap = new HashMap<>();
 		Pattern pattern = Pattern.compile(playerRegex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher;
 
-		for (EventData datum : list) {
+		for (EventData datum : this.list) {
 			Slotlist slots = datum.getSlotlist();
 			for (SlotData slotData : slots.getAllSlots()) {
 				matcher = pattern.matcher(slotData.getPlayer());
 				if (matcher.find()) {
 					SlotType type = slotData.getSlotType();
 					if (!slotMap.containsKey(type)) {
-						slotMap.put(type, 0);
+						slotMap.put(type, Integer.valueOf(0));
 					}
-					slotMap.put(type, slotMap.get(type) + 1);
+					slotMap.put(type, Integer.valueOf(slotMap.get(type).intValue() + 1));
 				}
 			}
 			for (Entry<String, SlotStatus> slotData : slots.getAllReserve().entrySet()) {
@@ -108,9 +108,9 @@ public final class Metrics {
 				if (matcher.find()) {
 					SlotType type = SlotType.RESERVE;
 					if (!slotMap.containsKey(type)) {
-						slotMap.put(type, 0);
+						slotMap.put(type, Integer.valueOf(0));
 					}
-					slotMap.put(type, slotMap.get(type) + 1);
+					slotMap.put(type, Integer.valueOf(slotMap.get(type).intValue() + 1));
 				}
 			}
 		}
@@ -171,7 +171,7 @@ public final class Metrics {
 	public double getAvgEventSize(Calendar since) {
 		int totalSize = 0;
 		int eventAmount = 0;
-		for (EventData event : list) {
+		for (EventData event : this.list) {
 			if (since != null && event.getDate().before(since)) {
 				continue;
 			}
@@ -179,7 +179,7 @@ public final class Metrics {
 			eventAmount++;
 		}
 		double avg = ((double) totalSize) / eventAmount;
-		return Double.valueOf(decFormat.format(avg));
+		return Double.valueOf(this.decFormat.format(avg)).doubleValue();
 	}
 
 	/**
@@ -188,7 +188,7 @@ public final class Metrics {
 	 * @return amount of events in this list
 	 */
 	public int getEventAmount() {
-		return list.getSize();
+		return this.list.getSize();
 	}
 
 	/**
@@ -197,10 +197,10 @@ public final class Metrics {
 	 * @return Sorted map that represents all events
 	 */
 	public Map<EventData, Integer> getEventSizeRanking() {
-		Map<EventData, Integer> eventSizeRanking = new HashMap<EventData, Integer>();
+		Map<EventData, Integer> eventSizeRanking = new HashMap<>();
 
-		for (EventData datum : list) {
-			eventSizeRanking.put(datum, datum.getSize());
+		for (EventData datum : this.list) {
+			eventSizeRanking.put(datum, Integer.valueOf(datum.getSize()));
 		}
 		return MapUtil.sortByValue(eventSizeRanking);
 	}
@@ -213,11 +213,11 @@ public final class Metrics {
 	 * @return List of all events that the given creator designed
 	 */
 	public List<EventData> getEventsOf(String creatorRegex) {
-		List<EventData> events = new LinkedList<EventData>();
+		List<EventData> events = new LinkedList<>();
 		Pattern pattern = Pattern.compile(creatorRegex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher;
 
-		for (EventData datum : list) {
+		for (EventData datum : this.list) {
 			matcher = pattern.matcher(datum.getCreator());
 			if (matcher.find()) {
 				events.add(datum);
@@ -234,15 +234,16 @@ public final class Metrics {
 	 *         participated in
 	 */
 	public Map<String, Integer> getEventsParticipatedRanking() {
-		Map<String, Integer> eventsParticipatedRanking = new HashMap<String, Integer>();
-		Set<String> players = new HashSet<String>();
+		Map<String, Integer> eventsParticipatedRanking = new HashMap<>();
+		Set<String> players = new HashSet<>();
 
-		for (EventData datum : list) {
+		for (EventData datum : this.list) {
 			Slotlist slots = datum.getSlotlist();
 			for (SlotData slotData : slots.getAllSlots()) {
 				String player = slotData.getPlayer();
 				if (players.add(player)) {
-					eventsParticipatedRanking.put(player, getEventsWhereParticipated("(" + player + ")").size());
+					eventsParticipatedRanking.put(player,
+							Integer.valueOf(getEventsWhereParticipated("(" + player + ")").size()));
 				}
 			}
 		}
@@ -257,11 +258,11 @@ public final class Metrics {
 	 * @return List of all events where the given player participated in
 	 */
 	public List<EventData> getEventsWhereParticipated(String playerRegex) {
-		List<EventData> events = new LinkedList<EventData>();
+		List<EventData> events = new LinkedList<>();
 		Pattern pattern = Pattern.compile(playerRegex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher;
 
-		for (EventData datum : list) {
+		for (EventData datum : this.list) {
 			Slotlist slots = datum.getSlotlist();
 			for (SlotData slotData : slots.getAllSlots()) {
 				matcher = pattern.matcher(slotData.getPlayer());
@@ -294,15 +295,15 @@ public final class Metrics {
 	 *         they assigned to
 	 */
 	public Map<String, Integer> getLeadRanking() {
-		Map<String, Integer> leadRanking = new HashMap<String, Integer>();
-		Set<String> players = new HashSet<String>();
+		Map<String, Integer> leadRanking = new HashMap<>();
+		Set<String> players = new HashSet<>();
 
-		for (EventData datum : list) {
+		for (EventData datum : this.list) {
 			Slotlist slots = datum.getSlotlist();
 			for (SlotData slotData : slots.getAllSlots()) {
 				String player = slotData.getPlayer();
 				if (players.add(player)) {
-					leadRanking.put(player, countLeadSlotsOf(player));
+					leadRanking.put(player, Integer.valueOf(countLeadSlotsOf(player)));
 				}
 			}
 		}
@@ -325,7 +326,7 @@ public final class Metrics {
 	private double getAvgPlayerStatus(Calendar since, int mode) {
 		int amountOfPlayers = 0;
 		int eventAmount = 0;
-		for (EventData event : list) {
+		for (EventData event : this.list) {
 			if (since != null && event.getDate().before(since)) {
 				continue;
 			}
@@ -367,6 +368,6 @@ public final class Metrics {
 			}
 		}
 		double avg = ((double) amountOfPlayers) / eventAmount;
-		return Double.valueOf(decFormat.format(avg));
+		return Double.valueOf(this.decFormat.format(avg)).doubleValue();
 	}
 }

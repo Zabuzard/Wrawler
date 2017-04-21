@@ -3,38 +3,43 @@ package de.zabuza.webcrawler.external;
 import java.util.Calendar;
 
 /**
- * Data container for external player data.
- * Stores different data like player registration.
+ * Data container for external player data. Stores different data like player
+ * registration.
  * 
  * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public final class ExtPlayerData {
 	/**
+	 * True if player was notified of inactivity, false if not.
+	 */
+	private final boolean inactivityNotification;
+	/**
 	 * Name of the player.
 	 */
 	private final String player;
-	/**
-	 * Date of players registration.
-	 */
-	private final Calendar registrationDate;
 	/**
 	 * Date of players reactivation or null if not happened.
 	 */
 	private final Calendar reactivationDate;
 	/**
-	 * True if player was notified of inactivity, false if not.
+	 * Date of players registration.
 	 */
-	private final boolean inactivityNotification;
-	
+	private final Calendar registrationDate;
+
 	/**
 	 * Creates a new data container for external player data.
-	 * @param thatPlayer Name of the player
-	 * @param thatRegistrationDate Date of players registration
-	 * @param thatReactivationDate Date of players reactivation or null if not happened
-	 * @param thatInactivityNotification True if player was notified of inactivity, false if not
+	 * 
+	 * @param thatPlayer
+	 *            Name of the player
+	 * @param thatRegistrationDate
+	 *            Date of players registration
+	 * @param thatReactivationDate
+	 *            Date of players reactivation or null if not happened
+	 * @param thatInactivityNotification
+	 *            True if player was notified of inactivity, false if not
 	 */
-	public ExtPlayerData(String thatPlayer, Calendar thatRegistrationDate,
-			Calendar thatReactivationDate, boolean thatInactivityNotification) {
+	public ExtPlayerData(String thatPlayer, Calendar thatRegistrationDate, Calendar thatReactivationDate,
+			boolean thatInactivityNotification) {
 		this.player = thatPlayer;
 		this.registrationDate = thatRegistrationDate;
 		this.reactivationDate = thatReactivationDate;
@@ -45,27 +50,27 @@ public final class ExtPlayerData {
 	 * @return the player
 	 */
 	public String getPlayer() {
-		return player;
-	}
-
-	/**
-	 * @return the registrationDate
-	 */
-	public Calendar getRegistrationDate() {
-		return registrationDate;
+		return this.player;
 	}
 
 	/**
 	 * @return the reactivationDate
 	 */
 	public Calendar getReactivationDate() {
-		return reactivationDate;
+		return this.reactivationDate;
+	}
+
+	/**
+	 * @return the registrationDate
+	 */
+	public Calendar getRegistrationDate() {
+		return this.registrationDate;
 	}
 
 	/**
 	 * @return the inactivityNotification
 	 */
 	public boolean isInactivityNotification() {
-		return inactivityNotification;
+		return this.inactivityNotification;
 	}
 }

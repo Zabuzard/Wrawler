@@ -2,14 +2,14 @@ package de.zabuza.webcrawler.enums;
 
 /**
  * Enumeration of all slot status.
- *  
+ * 
  * @author Zabuza {@literal <zabuza.dev@gmail.com>}
  */
 public enum SlotStatus {
 	/**
-	 * Status is unknown.
+	 * Signed in and was absent at event.
 	 */
-	UNKNOWN,
+	ABSENT,
 	/**
 	 * Signed in and appeared at event.
 	 */
@@ -27,7 +27,7 @@ public enum SlotStatus {
 	 */
 	SIGNED_OUT_LATE,
 	/**
-	 * Signed in and was absent at event.
+	 * Status is unknown.
 	 */
-	ABSENT
+	UNKNOWN
 }

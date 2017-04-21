@@ -156,11 +156,12 @@ public final class Webcrawler {
 	 *            Event data from external files
 	 * @param logging
 	 *            If logging information should be printed on the console
+	 * @return The created event list
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
 	public static EventList crawlWeb(Map<Calendar, ExtEventData> extEventData, boolean logging) throws IOException {
-		List<String> events = getEventUrls(EVENTS_PATH);
+		List<String> events = getEventUrls();
 
 		EventList data = new EventList(events.size());
 		for (int i = 0; i < events.size(); i++) {
@@ -286,6 +287,7 @@ public final class Webcrawler {
 			Calendar date, EventType type, Map<Calendar, ExtEventData> extEventData) {
 		Slotlist slotlist = null;
 		int i = curContentIndex;
+		EventType typeToUse = type;
 
 		String line = "";
 		Pattern pattern;
@@ -721,7 +723,7 @@ public final class Webcrawler {
 					SlotStatus status = SlotStatus.UNKNOWN;
 					if (extEventDate != null) {
 						EventType extType = extEventDate.getType();
-						if (extType == type) {
+						if (extType == typeToUse) {
 							SlotStatus extStatus = extEventDate.getPlayerStatus(player);
 							if (extStatus != null) {
 								status = extStatus;
@@ -989,14 +991,14 @@ public final class Webcrawler {
 							boolean found = false;
 
 							if (dateText.equals("09.01.2015")) {
-								type = EventType.COOP_PLUS;
+								typeToUse = EventType.COOP_PLUS;
 								found = true;
 							}
 
 							// Not found and no extra exception
 							if (!found) {
 								System.err.println("External event has different type of '" + extType + "' instead '"
-										+ type + "' (" + title + ")");
+										+ typeToUse + "' (" + title + ")");
 							}
 
 						}
@@ -1155,6 +1157,9 @@ public final class Webcrawler {
 		// to the reserve
 		if (extEventPlayers != null && extEventPlayers.size() > 0) {
 			for (String player : extEventPlayers) {
+				if (extEventDate == null || slotlist == null) {
+					throw new AssertionError();
+				}
 				SlotStatus status = extEventDate.getPlayerStatus(player);
 				slotlist.addReserve(player, status);
 			}
@@ -1186,80 +1191,81 @@ public final class Webcrawler {
 		// Get date
 		boolean found = false;
 		String date = null;
+		String titleToUse = title;
 
 		// Work trough exceptions
-		if (title.trim().contains("Mini Sylvester Event")) {
+		if (titleToUse.trim().contains("Mini Sylvester Event")) {
 			date = "31.12.2013";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Eventeinladung: Brigade 2010")) {
+		} else if (titleToUse.trim().contains("Eventeinladung: Brigade 2010")) {
 			date = "23.03.2013";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Brig2010 Event")) {
+		} else if (titleToUse.trim().contains("Brig2010 Event")) {
 			date = "22.12.2012";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[Coop] CO22 BAF EOD Patrol")) {
+		} else if (titleToUse.trim().contains("[Coop] CO22 BAF EOD Patrol")) {
 			date = "01.07.2012";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("Übung: Sniper und Spotter")) {
+		} else if (titleToUse.trim().contains("Übung: Sniper und Spotter")) {
 			date = "26.06.2012";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[Coop] CO24 Sex, Drugs and Guns")) {
+		} else if (titleToUse.trim().contains("[Coop] CO24 Sex, Drugs and Guns")) {
 			date = "24.06.2012";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[09.01] Co29 Restrepo")) {
+		} else if (titleToUse.trim().contains("[09.01] Co29 Restrepo")) {
 			date = "09.01.2015";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[10.01] TvT 40 Riot")) {
+		} else if (titleToUse.trim().contains("[10.01] TvT 40 Riot")) {
 			date = "10.01.2015";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[12.01.] Co33 - Der Nachschub")) {
+		} else if (titleToUse.trim().contains("[12.01.] Co33 - Der Nachschub")) {
 			date = "12.01.2013";
 			return CrawlerUtil.convertStringToDate(date);
-		} else if (title.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
+		} else if (titleToUse.trim().contains("[23.10.2012] CoX - SMK Bewegungsausbildung")) {
 			date = "24.10.2012";
 			return CrawlerUtil.convertStringToDate(date);
 		}
 
 		// Replace months with correct date
-		title = title.replaceAll("[\\s]?(Januar)[\\.]?", "01");
-		title = title.replaceAll("[\\s]?(Februar)[\\.]?", "02");
-		title = title.replaceAll("[\\s]?(März)[\\.]?", "03");
-		title = title.replaceAll("[\\s]?(April)[\\.]?", "04");
-		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
-		title = title.replaceAll("[\\s]?(Juni)[\\.]?", "06");
-		title = title.replaceAll("[\\s]?(Juli)[\\.]?", "07");
-		title = title.replaceAll("[\\s]?(August)[\\.]?", "08");
-		title = title.replaceAll("[\\s]?(September)[\\.]?", "09");
-		title = title.replaceAll("[\\s]?(Oktober)[\\.]?", "10");
-		title = title.replaceAll("[\\s]?(November)[\\.]?", "11");
-		title = title.replaceAll("[\\s]?(Dezember)[\\.]?", "12");
-		title = title.replaceAll("[\\s]?(Jan)[\\.]?", "01");
-		title = title.replaceAll("[\\s]?(Feb)[\\.]?", "02");
-		title = title.replaceAll("[\\s]?(Mär)[\\.]?", "03");
-		title = title.replaceAll("[\\s]?(Apr)[\\.]?", "04");
-		title = title.replaceAll("[\\s]?(Mai)[\\.]?", "05");
-		title = title.replaceAll("[\\s]?(Jun)[\\.]?", "06");
-		title = title.replaceAll("[\\s]?(Jul)[\\.]?", "07");
-		title = title.replaceAll("[\\s]?(Aug)[\\.]?", "08");
-		title = title.replaceAll("[\\s]?(Sep)[\\.]?", "09");
-		title = title.replaceAll("[\\s]?(Okt)[\\.]?", "10");
-		title = title.replaceAll("[\\s]?(Nov)[\\.]?", "11");
-		title = title.replaceAll("[\\s]?(Dez)[\\.]?", "12");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Januar)[\\.]?", "01");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Februar)[\\.]?", "02");
+		titleToUse = titleToUse.replaceAll("[\\s]?(März)[\\.]?", "03");
+		titleToUse = titleToUse.replaceAll("[\\s]?(April)[\\.]?", "04");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Mai)[\\.]?", "05");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Juni)[\\.]?", "06");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Juli)[\\.]?", "07");
+		titleToUse = titleToUse.replaceAll("[\\s]?(August)[\\.]?", "08");
+		titleToUse = titleToUse.replaceAll("[\\s]?(September)[\\.]?", "09");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Oktober)[\\.]?", "10");
+		titleToUse = titleToUse.replaceAll("[\\s]?(November)[\\.]?", "11");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Dezember)[\\.]?", "12");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Jan)[\\.]?", "01");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Feb)[\\.]?", "02");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Mär)[\\.]?", "03");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Apr)[\\.]?", "04");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Mai)[\\.]?", "05");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Jun)[\\.]?", "06");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Jul)[\\.]?", "07");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Aug)[\\.]?", "08");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Sep)[\\.]?", "09");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Okt)[\\.]?", "10");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Nov)[\\.]?", "11");
+		titleToUse = titleToUse.replaceAll("[\\s]?(Dez)[\\.]?", "12");
 
 		// Extract date from title
 		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d");
-		Matcher matcher = pattern.matcher(title);
+		Matcher matcher = pattern.matcher(titleToUse);
 		if (matcher.find()) {
 			found = true;
-			date = title.substring(matcher.start(), matcher.end());
+			date = titleToUse.substring(matcher.start(), matcher.end());
 			// 15.03.2014
 		}
 		if (!found) {
 			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
+				date = titleToUse.substring(matcher.start() + 1, matcher.end());
 				// 7.2.2014
 				date = "0" + date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
 				// 07.02.2014
@@ -1267,10 +1273,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.\\d\\d");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 15.03.14
 				date = date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
 				// 15.03.2014
@@ -1278,10 +1284,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\.\\d\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 3.03.2014
 				date = "0" + date;
 				// 03.03.2014
@@ -1289,10 +1295,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("[^\\d]\\d\\.\\d\\d\\.");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
+				date = titleToUse.substring(matcher.start() + 1, matcher.end());
 				// 3.03.
 				date = "0" + date;
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1308,10 +1314,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("[^\\d\\.]\\d\\.\\d\\d[^\\d]");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end() - 1);
+				date = titleToUse.substring(matcher.start() + 1, matcher.end() - 1);
 				// 3.03
 				date = "0" + date;
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1327,10 +1333,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d\\d[^\\.]");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
+				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.03
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
@@ -1345,10 +1351,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("[^\\.]\\d\\d\\.\\d\\d\\.");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start() + 1, matcher.end());
+				date = titleToUse.substring(matcher.start() + 1, matcher.end());
 				// 15.03.
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
@@ -1363,10 +1369,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d\\d\\.[^\\d]");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
+				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.03.
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
@@ -1381,10 +1387,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d[^\\d\\.]");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
+				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.3
 				date = date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1400,20 +1406,20 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d\\.\\d\\d\\d\\d");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 15.3.2014
 				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
 			}
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\d\\.\\d\\.");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 15.3.
 				date = date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1429,10 +1435,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\.\\d\\.\\d\\d");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 7.2.14
 				date = "0" + date.substring(0, date.length() - 2) + DATE_YEAR_PRE + date.substring(date.length() - 2);
 				date = date.substring(0, date.length() - 6) + "0" + date.substring(date.length() - 6);
@@ -1441,10 +1447,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\.\\d[^\\d\\.]");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end() - 1);
+				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 5.3
 				date = "0" + date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1460,10 +1466,10 @@ public final class Webcrawler {
 		}
 		if (!found) {
 			pattern = Pattern.compile("\\d\\.\\d\\.");
-			matcher = pattern.matcher(title);
+			matcher = pattern.matcher(titleToUse);
 			if (matcher.find()) {
 				found = true;
-				date = title.substring(matcher.start(), matcher.end());
+				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 5.3.
 				date = "0" + date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
 				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
@@ -1478,10 +1484,13 @@ public final class Webcrawler {
 			}
 		}
 		if (!found) {
-			System.err.println("Can't parse date from title: " + title);
+			System.err.println("Can't parse date from title: " + titleToUse);
 		}
 
 		// Validate date
+		if (date == null) {
+			throw new AssertionError();
+		}
 		int day = Integer.parseInt(date.substring(0, 2));
 		int month = Integer.parseInt(date.substring(3, 5));
 		int year = Integer.parseInt(date.substring(6));
@@ -1498,7 +1507,7 @@ public final class Webcrawler {
 	 * 
 	 * @param title
 	 *            Title of the event
-	 * @return Size of the events or {@link NO_SIZE} if failure occurred
+	 * @return Size of the events or {@link #NO_SIZE} if failure occurred
 	 */
 	private static int getEventSize(String title) {
 		int size = NO_SIZE;
@@ -1730,7 +1739,7 @@ public final class Webcrawler {
 	 * 
 	 * @param title
 	 *            Title of the event
-	 * @return Size of the event or {@link EventType.NO_TYPE} if failure
+	 * @return Size of the event or {@link EventType#NO_TYPE} if failure
 	 *         occurred
 	 */
 	private static EventType getEventType(String title) {
@@ -1856,14 +1865,12 @@ public final class Webcrawler {
 	/**
 	 * Gets the urls to all events by using the event sub-forum.
 	 * 
-	 * @param path
-	 *            Path to the event sub-forum
 	 * @return List of urls to all events
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	private static List<String> getEventUrls(String path) throws IOException {
-		List<String> events = new ArrayList<String>();
+	private static List<String> getEventUrls() throws IOException {
+		List<String> events = new ArrayList<>();
 		int curPage = 0;
 
 		boolean continueCrawling = true;
@@ -1917,7 +1924,7 @@ public final class Webcrawler {
 	 * 
 	 * @param url
 	 *            Url to the event thread
-	 * @return Id of events thread or {@link NO_ID} if an error occurred
+	 * @return Id of events thread or {@link #NO_ID} if an error occurred
 	 */
 	private static int getThreadId(String url) {
 		int id = NO_ID;
@@ -1941,7 +1948,7 @@ public final class Webcrawler {
 	 * @param curContentIndex
 	 *            Current index in the content which should be placed near
 	 *            starting of the true content
-	 * @return Name of the map the event takes place at or {@link MAP_UNKNOWN}
+	 * @return Name of the map the event takes place at or {@link #MAP_UNKNOWN}
 	 *         if not known
 	 */
 	private static String getThreadMap(List<String> content, int curContentIndex) {
@@ -2218,6 +2225,13 @@ public final class Webcrawler {
 		return name;
 	}
 
+	/**
+	 * Parses the slot type from the given slot text
+	 * 
+	 * @param slotText
+	 *            The slot text to parse
+	 * @return The parsed slot type
+	 */
 	private static SlotType parseSlotType(String slotText) {
 		SlotType slot = SlotType.NO_TYPE;
 
@@ -2609,7 +2623,7 @@ public final class Webcrawler {
 
 		// Hard-match resulting types using generator SlotParseTool
 		if (!slotTypeFound) {
-			Map<String, SlotType> generatedMap = new HashMap<String, SlotType>();
+			Map<String, SlotType> generatedMap = new HashMap<>();
 			// Generated by SlotParseTool : 00to10.csv
 			generatedMap.put("Platoon Leader (Befehligt auch FIA)", SlotType.PL);
 			generatedMap.put("UAV Operator (UGV)", SlotType.UGSO);
