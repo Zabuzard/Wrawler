@@ -51,8 +51,8 @@ public final class SlotData implements Serializable {
 	 * @param thatStatus
 	 *            Status of the slot
 	 */
-	public SlotData(final int thatNumber, final SlotType thatSlotType, final String thatCustomSlotName, final String thatPlayer,
-			final SlotStatus thatStatus) {
+	public SlotData(final int thatNumber, final SlotType thatSlotType, final String thatCustomSlotName,
+			final String thatPlayer, final SlotStatus thatStatus) {
 		this.number = thatNumber;
 		this.slotType = thatSlotType;
 		this.customSlotName = thatCustomSlotName;

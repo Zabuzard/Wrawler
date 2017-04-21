@@ -129,7 +129,8 @@ public class SlotContainerDb {
 	 * @param thatSlotlistID
 	 *            id of the slotlist the slot belongs to
 	 */
-	public SlotContainerDb(final Entry<String, SlotStatus> reservePlayer, final int thatUniqueID, final int thatSlotlistID) {
+	public SlotContainerDb(final Entry<String, SlotStatus> reservePlayer, final int thatUniqueID,
+			final int thatSlotlistID) {
 		this.uniqueID = thatUniqueID;
 		this.slotlistID = thatSlotlistID;
 		this.slotNumber = RESERVE_NUMBER;

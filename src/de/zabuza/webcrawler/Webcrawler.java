@@ -160,7 +160,8 @@ public final class Webcrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static EventList crawlWeb(final Map<Calendar, ExtEventData> extEventData, final boolean logging) throws IOException {
+	public static EventList crawlWeb(final Map<Calendar, ExtEventData> extEventData, final boolean logging)
+			throws IOException {
 		final List<String> events = getEventUrls();
 
 		final EventList data = new EventList(events.size());
@@ -188,7 +189,8 @@ public final class Webcrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	private static EventData crawlEvent(final String path, final Map<Calendar, ExtEventData> extEventData) throws IOException {
+	private static EventData crawlEvent(final String path, final Map<Calendar, ExtEventData> extEventData)
+			throws IOException {
 		final List<String> content = CrawlerUtil.getWebContent(path);
 
 		// Get event title
@@ -283,8 +285,9 @@ public final class Webcrawler {
 	 * @return Slot-list of the event or null or an empty list if failure
 	 *         occurred
 	 */
-	private static Slotlist createSlotlist(final int size, final List<String> content, final int curContentIndex, final String title,
-			final Calendar date, final EventType type, final Map<Calendar, ExtEventData> extEventData) {
+	private static Slotlist createSlotlist(final int size, final List<String> content, final int curContentIndex,
+			final String title, final Calendar date, final EventType type,
+			final Map<Calendar, ExtEventData> extEventData) {
 		Slotlist slotlist = null;
 		int i = curContentIndex;
 		EventType typeToUse = type;

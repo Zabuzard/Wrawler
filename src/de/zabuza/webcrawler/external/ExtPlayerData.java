@@ -38,8 +38,8 @@ public final class ExtPlayerData {
 	 * @param thatInactivityNotification
 	 *            True if player was notified of inactivity, false if not
 	 */
-	public ExtPlayerData(final String thatPlayer, final Calendar thatRegistrationDate, final Calendar thatReactivationDate,
-			final boolean thatInactivityNotification) {
+	public ExtPlayerData(final String thatPlayer, final Calendar thatRegistrationDate,
+			final Calendar thatReactivationDate, final boolean thatInactivityNotification) {
 		this.player = thatPlayer;
 		this.registrationDate = thatRegistrationDate;
 		this.reactivationDate = thatReactivationDate;

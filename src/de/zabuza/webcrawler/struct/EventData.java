@@ -83,8 +83,9 @@ public final class EventData implements Serializable {
 	 * @param thatSlotlist
 	 *            Slot-list of the event
 	 */
-	public EventData(final String thatName, final EventType thatType, final int thatSize, final String thatCreator, final String thatMap,
-			final Calendar thatDate, final Calendar thatTime, final int thatThreadId, final int thatPostId, final Slotlist thatSlotlist) {
+	public EventData(final String thatName, final EventType thatType, final int thatSize, final String thatCreator,
+			final String thatMap, final Calendar thatDate, final Calendar thatTime, final int thatThreadId,
+			final int thatPostId, final Slotlist thatSlotlist) {
 		this.name = thatName;
 		this.type = thatType;
 		this.size = thatSize;
@@ -171,8 +172,8 @@ public final class EventData implements Serializable {
 	public String toString() {
 		final String dateText = CrawlerUtil.convertDateToString(this.date);
 
-		final String header = "#" + this.threadId + "(" + this.postId + "): [" + dateText + "] " + this.type + this.size + " "
-				+ this.name + " by " + this.creator + " at " + this.map + "\n";
+		final String header = "#" + this.threadId + "(" + this.postId + "): [" + dateText + "] " + this.type + this.size
+				+ " " + this.name + " by " + this.creator + " at " + this.map + "\n";
 
 		String slotlistText = "";
 		for (int i = 0; i < this.slotlist.slotSize(); i++) {

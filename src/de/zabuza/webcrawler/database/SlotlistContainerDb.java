@@ -52,8 +52,8 @@ public final class SlotlistContainerDb {
 	 * @param thatSlotlist
 	 *            Slotlist object itself
 	 */
-	public SlotlistContainerDb(final int thatUniqueID, final String thatSlotlistName, final int thatOwner, final String thatComment,
-			final Slotlist thatSlotlist) {
+	public SlotlistContainerDb(final int thatUniqueID, final String thatSlotlistName, final int thatOwner,
+			final String thatComment, final Slotlist thatSlotlist) {
 		this.uniqueID = thatUniqueID;
 		this.slotlistName = thatSlotlistName;
 		this.owner = thatOwner;

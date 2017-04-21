@@ -288,9 +288,9 @@ public final class EventDb {
 		final String thatMap = MapTableDb.getInstance().getMap(Integer.parseInt(this.mMap));
 		final Calendar thatDate = convertDateFromDbFormat(this.mEvent_date);
 		final Calendar thatTime = CrawlerUtil.convertStringToTime(this.mEvent_time);
-		final EventData eventData = new EventData(this.mEvent_name, type, Integer.parseInt(this.mPlayer_number), creator,
-				thatMap, thatDate, thatTime, Integer.parseInt(this.mThread_id), Integer.parseInt(this.mPost_id),
-				slotlist);
+		final EventData eventData = new EventData(this.mEvent_name, type, Integer.parseInt(this.mPlayer_number),
+				creator, thatMap, thatDate, thatTime, Integer.parseInt(this.mThread_id),
+				Integer.parseInt(this.mPost_id), slotlist);
 		return eventData;
 	}
 

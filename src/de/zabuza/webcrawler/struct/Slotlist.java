@@ -67,7 +67,8 @@ public final class Slotlist implements Serializable {
 	 * @param status
 	 *            Status of the slot
 	 */
-	public void addSlot(final int number, final SlotType slot, final String customSlotName, final String player, final SlotStatus status) {
+	public void addSlot(final int number, final SlotType slot, final String customSlotName, final String player,
+			final SlotStatus status) {
 		this.slots.add(new SlotData(number, slot, customSlotName, player, status));
 	}
 
