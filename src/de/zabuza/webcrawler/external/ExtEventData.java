@@ -40,7 +40,7 @@ public final class ExtEventData {
 	 * @param thatDate
 	 *            Date of the event
 	 */
-	public ExtEventData(EventType thatType, Calendar thatDate) {
+	public ExtEventData(final EventType thatType, final Calendar thatDate) {
 		this.type = thatType;
 		this.date = thatDate;
 		this.players = new HashMap<>(DEFAULT_SIZE);
@@ -54,7 +54,7 @@ public final class ExtEventData {
 	 * @param status
 	 *            Status of the player
 	 */
-	public void addPlayer(String player, SlotStatus status) {
+	public void addPlayer(final String player, final SlotStatus status) {
 		this.players.put(player, status);
 	}
 
@@ -82,7 +82,7 @@ public final class ExtEventData {
 	 *            Player to get status for
 	 * @return The status of the given player
 	 */
-	public SlotStatus getPlayerStatus(String player) {
+	public SlotStatus getPlayerStatus(final String player) {
 		return this.players.get(player);
 	}
 

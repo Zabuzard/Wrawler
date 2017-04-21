@@ -38,7 +38,7 @@ public final class EventDb {
 	 *            Database id to get event type of
 	 * @return Event type to get
 	 */
-	public static EventType getEventTypeById(int id) {
+	public static EventType getEventTypeById(final int id) {
 		switch (id) {
 		case 1:
 			return EventType.BLACKBOX;
@@ -69,7 +69,7 @@ public final class EventDb {
 	 *            Type to get database id of
 	 * @return Database id of the event type
 	 */
-	public static int getIdByEventType(EventType type) {
+	public static int getIdByEventType(final EventType type) {
 		switch (type) {
 		case BLACKBOX:
 			return 1;
@@ -104,12 +104,12 @@ public final class EventDb {
 	 *            The date to convert in the database format
 	 * @return Date as calendar object
 	 */
-	private static Calendar convertDateFromDbFormat(String dbFormat) {
-		Calendar date = Calendar.getInstance();
+	private static Calendar convertDateFromDbFormat(final String dbFormat) {
+		final Calendar date = Calendar.getInstance();
 
-		int year = Integer.parseInt(dbFormat.substring(0, 4));
-		int month = Integer.parseInt(dbFormat.substring(5, 7)) - 1;
-		int day = Integer.parseInt(dbFormat.substring(8, 10));
+		final int year = Integer.parseInt(dbFormat.substring(0, 4));
+		final int month = Integer.parseInt(dbFormat.substring(5, 7)) - 1;
+		final int day = Integer.parseInt(dbFormat.substring(8, 10));
 
 		date.set(Calendar.YEAR, year);
 		date.set(Calendar.MONTH, month);
@@ -124,11 +124,11 @@ public final class EventDb {
 	 *            Date to convert
 	 * @return Date in a database readable format
 	 */
-	private static String convertDateToDbFormat(Calendar date) {
-		int year = date.get(Calendar.YEAR);
-		int month = date.get(Calendar.MONTH) + 1;
-		int day = date.get(Calendar.DAY_OF_MONTH);
-		String yearText = year + "";
+	private static String convertDateToDbFormat(final Calendar date) {
+		final int year = date.get(Calendar.YEAR);
+		final int month = date.get(Calendar.MONTH) + 1;
+		final int day = date.get(Calendar.DAY_OF_MONTH);
+		final String yearText = year + "";
 		String monthText = month + "";
 		String dayText = day + "";
 		if (month < 10) {
@@ -212,7 +212,7 @@ public final class EventDb {
 	 * @param slotlistId
 	 *            Id of events slotlist
 	 */
-	public EventDb(EventData eventData, int slotlistId) {
+	public EventDb(final EventData eventData, final int slotlistId) {
 		this.mEvent_id = starting_eventId + "";
 		this.mUser_id = UserTableDb.getInstance().getId(eventData.getCreator()) + "";
 		this.mPost_id = eventData.getPostId() + "";
@@ -238,8 +238,8 @@ public final class EventDb {
 	 * @param databaseFormatLine
 	 *            Text in the database format
 	 */
-	public EventDb(String databaseFormatLine) {
-		String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormatLine);
+	public EventDb(final String databaseFormatLine) {
+		final String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormatLine);
 		this.mEvent_id = values[0];
 		this.mUser_id = values[1];
 		this.mPost_id = values[2];
@@ -282,13 +282,13 @@ public final class EventDb {
 	 *            Slotlist for this event data
 	 * @return A EventData representation of this object.
 	 */
-	public EventData toEventData(Slotlist slotlist) {
-		EventType type = getEventTypeById(Integer.parseInt(this.mEvent_type));
-		String creator = UserTableDb.getInstance().getUser(Integer.parseInt(this.mUser_id));
-		String thatMap = MapTableDb.getInstance().getMap(Integer.parseInt(this.mMap));
-		Calendar thatDate = convertDateFromDbFormat(this.mEvent_date);
-		Calendar thatTime = CrawlerUtil.convertStringToTime(this.mEvent_time);
-		EventData eventData = new EventData(this.mEvent_name, type, Integer.parseInt(this.mPlayer_number), creator,
+	public EventData toEventData(final Slotlist slotlist) {
+		final EventType type = getEventTypeById(Integer.parseInt(this.mEvent_type));
+		final String creator = UserTableDb.getInstance().getUser(Integer.parseInt(this.mUser_id));
+		final String thatMap = MapTableDb.getInstance().getMap(Integer.parseInt(this.mMap));
+		final Calendar thatDate = convertDateFromDbFormat(this.mEvent_date);
+		final Calendar thatTime = CrawlerUtil.convertStringToTime(this.mEvent_time);
+		final EventData eventData = new EventData(this.mEvent_name, type, Integer.parseInt(this.mPlayer_number), creator,
 				thatMap, thatDate, thatTime, Integer.parseInt(this.mThread_id), Integer.parseInt(this.mPost_id),
 				slotlist);
 		return eventData;
@@ -296,7 +296,7 @@ public final class EventDb {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append(ENCLOSER + this.mEvent_id + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.mUser_id + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.mPost_id + ENCLOSER + SEPARATOR);

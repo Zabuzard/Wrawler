@@ -160,12 +160,12 @@ public final class Webcrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static EventList crawlWeb(Map<Calendar, ExtEventData> extEventData, boolean logging) throws IOException {
-		List<String> events = getEventUrls();
+	public static EventList crawlWeb(final Map<Calendar, ExtEventData> extEventData, final boolean logging) throws IOException {
+		final List<String> events = getEventUrls();
 
-		EventList data = new EventList(events.size());
+		final EventList data = new EventList(events.size());
 		for (int i = 0; i < events.size(); i++) {
-			EventData datum = crawlEvent(events.get(i), extEventData);
+			final EventData datum = crawlEvent(events.get(i), extEventData);
 			if (datum != null) {
 				data.add(datum);
 			}
@@ -188,8 +188,8 @@ public final class Webcrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	private static EventData crawlEvent(String path, Map<Calendar, ExtEventData> extEventData) throws IOException {
-		List<String> content = CrawlerUtil.getWebContent(path);
+	private static EventData crawlEvent(final String path, final Map<Calendar, ExtEventData> extEventData) throws IOException {
+		final List<String> content = CrawlerUtil.getWebContent(path);
 
 		// Get event title
 		int i = -1;
@@ -198,8 +198,8 @@ public final class Webcrawler {
 			i++;
 			line = content.get(i);
 		} while (!line.contains(THREAD_MASK_TITLE));
-		int titleBegin = line.indexOf(THREAD_TITLE_START) + THREAD_TITLE_START.length();
-		int titleEnd = line.indexOf(THREAD_TITLE_END);
+		final int titleBegin = line.indexOf(THREAD_TITLE_START) + THREAD_TITLE_START.length();
+		final int titleEnd = line.indexOf(THREAD_TITLE_END);
 		String title = line.substring(titleBegin, titleEnd);
 
 		// Replace problematic chars
@@ -225,13 +225,13 @@ public final class Webcrawler {
 		}
 
 		// Get event date
-		Calendar date = getEventDate(title, content, i);
+		final Calendar date = getEventDate(title, content, i);
 
 		// Get event creator
 		i += THREAD_TITLE_OFFSET_CREATOR;
 		line = content.get(i);
-		int creatorBegin = line.indexOf(THREAD_CREATOR_START) + THREAD_CREATOR_START.length();
-		int creatorEnd = line.indexOf(THREAD_CREATOR_END);
+		final int creatorBegin = line.indexOf(THREAD_CREATOR_START) + THREAD_CREATOR_START.length();
+		final int creatorEnd = line.indexOf(THREAD_CREATOR_END);
 		String creator = line.substring(creatorBegin, creatorEnd);
 		if (creator.contains(CREATOR_REJECT)) {
 			creator = CREATOR_UNKNOWN;
@@ -239,24 +239,24 @@ public final class Webcrawler {
 
 		// Get events opening post id
 		line = content.get(i + THREAD_POSTID_OFFSET_CREATOR);
-		int postIdBegin = line.indexOf(THREAD_POSTID_START) + THREAD_POSTID_START.length();
-		int postIdEnd = line.indexOf(THREAD_POSTID_END);
-		int postId = Integer.parseInt(line.substring(postIdBegin, postIdEnd));
+		final int postIdBegin = line.indexOf(THREAD_POSTID_START) + THREAD_POSTID_START.length();
+		final int postIdEnd = line.indexOf(THREAD_POSTID_END);
+		final int postId = Integer.parseInt(line.substring(postIdBegin, postIdEnd));
 
 		// Get event type
-		EventType type = getEventType(title);
+		final EventType type = getEventType(title);
 		// Get event size
-		int size = getEventSize(title);
+		final int size = getEventSize(title);
 		// Get thread id
-		int threadId = getThreadId(path);
+		final int threadId = getThreadId(path);
 		// Get event date
-		Calendar time = getEventTime(content, i, title);
+		final Calendar time = getEventTime(content, i, title);
 		// Get thread map
-		String map = getThreadMap(content, i);
+		final String map = getThreadMap(content, i);
 		// Get event name
-		String name = getThreadName(title);
+		final String name = getThreadName(title);
 
-		Slotlist slotlist = createSlotlist(size, content, i, title, date, type, extEventData);
+		final Slotlist slotlist = createSlotlist(size, content, i, title, date, type, extEventData);
 
 		return new EventData(name, type, size, creator, map, date, time, threadId, postId, slotlist);
 	}
@@ -283,8 +283,8 @@ public final class Webcrawler {
 	 * @return Slot-list of the event or null or an empty list if failure
 	 *         occurred
 	 */
-	private static Slotlist createSlotlist(int size, List<String> content, int curContentIndex, String title,
-			Calendar date, EventType type, Map<Calendar, ExtEventData> extEventData) {
+	private static Slotlist createSlotlist(final int size, final List<String> content, final int curContentIndex, final String title,
+			final Calendar date, final EventType type, final Map<Calendar, ExtEventData> extEventData) {
 		Slotlist slotlist = null;
 		int i = curContentIndex;
 		EventType typeToUse = type;
@@ -295,7 +295,7 @@ public final class Webcrawler {
 		boolean listStartFound = false;
 		boolean slotFound = false;
 
-		ExtEventData extEventDate = extEventData.get(date);
+		final ExtEventData extEventDate = extEventData.get(date);
 		Set<String> extEventPlayers = null;
 		if (extEventDate != null) {
 			extEventPlayers = extEventDate.getPlayers();
@@ -494,7 +494,7 @@ public final class Webcrawler {
 						player = player.trim();
 					}
 
-					SlotType slot = parseSlotType(slotText);
+					final SlotType slot = parseSlotType(slotText);
 
 					// Handle player exceptions
 					if (player.equals("RaXus")) {
@@ -717,14 +717,14 @@ public final class Webcrawler {
 						player = "caldin";
 					}
 
-					int key = Integer.parseInt(keyText);
+					final int key = Integer.parseInt(keyText);
 
 					// Extract slot status from external data
 					SlotStatus status = SlotStatus.UNKNOWN;
 					if (extEventDate != null) {
-						EventType extType = extEventDate.getType();
+						final EventType extType = extEventDate.getType();
 						if (extType == typeToUse) {
-							SlotStatus extStatus = extEventDate.getPlayerStatus(player);
+							final SlotStatus extStatus = extEventDate.getPlayerStatus(player);
 							if (extStatus != null) {
 								status = extStatus;
 								// Handle banned players
@@ -944,7 +944,7 @@ public final class Webcrawler {
 									&& !player.equals("Wyqer") && !player.equals("ZerO")
 									&& !player.equals("HungryEngineer") && !player.equals("AloaAh")) {
 								// Extra exceptions
-								String dateText = CrawlerUtil.convertDateToString(date);
+								final String dateText = CrawlerUtil.convertDateToString(date);
 								boolean found = false;
 
 								if (dateText.equals("15.01.2015")) {
@@ -987,7 +987,7 @@ public final class Webcrawler {
 							}
 						} else {
 							// Extra exceptions
-							String dateText = CrawlerUtil.convertDateToString(date);
+							final String dateText = CrawlerUtil.convertDateToString(date);
 							boolean found = false;
 
 							if (dateText.equals("09.01.2015")) {
@@ -1004,7 +1004,7 @@ public final class Webcrawler {
 						}
 					} else if (date.before(Calendar.getInstance())) {
 						// XXX Disabled due to lack of external data
-						boolean disabled = true;
+						final boolean disabled = true;
 						if (!disabled) {
 							System.err.println("Can't find external event with web events date: "
 									+ CrawlerUtil.convertDateToString(date) + " (" + title + ")");
@@ -1156,11 +1156,11 @@ public final class Webcrawler {
 		// thread
 		// to the reserve
 		if (extEventPlayers != null && extEventPlayers.size() > 0) {
-			for (String player : extEventPlayers) {
+			for (final String player : extEventPlayers) {
 				if (extEventDate == null || slotlist == null) {
 					throw new AssertionError();
 				}
-				SlotStatus status = extEventDate.getPlayerStatus(player);
+				final SlotStatus status = extEventDate.getPlayerStatus(player);
 				slotlist.addReserve(player, status);
 			}
 		}
@@ -1187,7 +1187,7 @@ public final class Webcrawler {
 	 *            threads title
 	 * @return Date when the event took place at or null if an error occurred
 	 */
-	private static Calendar getEventDate(String title, List<String> content, int curContentIndex) {
+	private static Calendar getEventDate(final String title, final List<String> content, final int curContentIndex) {
 		// Get date
 		boolean found = false;
 		String date = null;
@@ -1301,7 +1301,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start() + 1, matcher.end());
 				// 3.03.
 				date = "0" + date;
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1320,7 +1320,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start() + 1, matcher.end() - 1);
 				// 3.03
 				date = "0" + date;
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1338,7 +1338,7 @@ public final class Webcrawler {
 				found = true;
 				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.03
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1356,7 +1356,7 @@ public final class Webcrawler {
 				found = true;
 				date = titleToUse.substring(matcher.start() + 1, matcher.end());
 				// 15.03.
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1374,7 +1374,7 @@ public final class Webcrawler {
 				found = true;
 				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.03.
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1393,7 +1393,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 15.3
 				date = date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1422,7 +1422,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 15.3.
 				date = date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1453,7 +1453,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start(), matcher.end() - 1);
 				// 5.3
 				date = "0" + date.substring(0, date.length() - 1) + "0" + date.substring(date.length() - 1);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\.\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1472,7 +1472,7 @@ public final class Webcrawler {
 				date = titleToUse.substring(matcher.start(), matcher.end());
 				// 5.3.
 				date = "0" + date.substring(0, date.length() - 2) + "0" + date.substring(date.length() - 2);
-				String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
+				final String wroteAt = content.get(curContentIndex + THREAD_TITLE_OFFSET_DATE);
 				pattern = Pattern.compile("\\d\\d\\d\\d");
 				matcher = pattern.matcher(wroteAt);
 				if (matcher.find()) {
@@ -1491,9 +1491,9 @@ public final class Webcrawler {
 		if (date == null) {
 			throw new AssertionError();
 		}
-		int day = Integer.parseInt(date.substring(0, 2));
-		int month = Integer.parseInt(date.substring(3, 5));
-		int year = Integer.parseInt(date.substring(6));
+		final int day = Integer.parseInt(date.substring(0, 2));
+		final int month = Integer.parseInt(date.substring(3, 5));
+		final int year = Integer.parseInt(date.substring(6));
 		if (day < 1 || day > 31 || month < 1 || month > 12 || year < DATE_FIRST_YEAR
 				|| year > Calendar.getInstance().get(Calendar.YEAR)) {
 			System.err.println("No valid date: " + date);
@@ -1509,7 +1509,7 @@ public final class Webcrawler {
 	 *            Title of the event
 	 * @return Size of the events or {@link #NO_SIZE} if failure occurred
 	 */
-	private static int getEventSize(String title) {
+	private static int getEventSize(final String title) {
 		int size = NO_SIZE;
 
 		// Work trough exceptions
@@ -1692,7 +1692,7 @@ public final class Webcrawler {
 	 *            Title of the event
 	 * @return Time when the event has started or null if an error occurred
 	 */
-	private static Calendar getEventTime(List<String> content, int curContentIndex, String title) {
+	private static Calendar getEventTime(final List<String> content, final int curContentIndex, final String title) {
 		String time = null;
 		int i = curContentIndex;
 		String line = "";
@@ -1713,9 +1713,9 @@ public final class Webcrawler {
 			line = line.replaceAll("<span style='color:#.{3,6}'>", "");
 			line = line.replaceAll("<span style='font-size:.{1,6}'>", "");
 			line = line.replaceAll("</span>", "");
-			String beforeTimePattern = "^[\\s]*(<(strong|i)>)?(Eventbeginn|Beginn|Eventstart|"
+			final String beforeTimePattern = "^[\\s]*(<(strong|i)>)?(Eventbeginn|Beginn|Eventstart|"
 					+ "Treffen im (Teamspeak|TS)|Start|Treffen|Sammeln im Teamspeak|Trainingsbeginn)(<\\/(strong|i)>)?:(<\\/(strong|i)>)?";
-			String timePattern = "([0-9]{2}[\\.:]?[0-9]{2})";
+			final String timePattern = "([0-9]{2}[\\.:]?[0-9]{2})";
 			pattern = Pattern.compile(beforeTimePattern + "(\\s|&gt;|\\-|ab)*(<strong>)?" + timePattern
 					+ "[\\s]*(Uhr|h)?(<\\/strong>)?(\\s|&lt;)*<br[\\s]?\\/>", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(line);
@@ -1742,7 +1742,7 @@ public final class Webcrawler {
 	 * @return Size of the event or {@link EventType#NO_TYPE} if failure
 	 *         occurred
 	 */
-	private static EventType getEventType(String title) {
+	private static EventType getEventType(final String title) {
 		EventType type = EventType.NO_TYPE;
 
 		// Work trough exceptions
@@ -1870,14 +1870,14 @@ public final class Webcrawler {
 	 *             If an I/O-Exception occurs
 	 */
 	private static List<String> getEventUrls() throws IOException {
-		List<String> events = new ArrayList<>();
+		final List<String> events = new ArrayList<>();
 		int curPage = 0;
 
 		boolean continueCrawling = true;
 		while (continueCrawling) {
 			// Work trough the current page
-			String pageUrl = EVENTS_PATH + EVENTS_PATH_SUFFIX + curPage;
-			List<String> content = CrawlerUtil.getWebContent(pageUrl);
+			final String pageUrl = EVENTS_PATH + EVENTS_PATH_SUFFIX + curPage;
+			final List<String> content = CrawlerUtil.getWebContent(pageUrl);
 
 			// Reject everything before the mask
 			int i = -1;
@@ -1898,9 +1898,9 @@ public final class Webcrawler {
 				} else if (line.contains(EVENTS_ACCEPT_THREAD)) {
 					// Accept this thread
 					urlsOnThisPage++;
-					int urlStart = line.indexOf(EVENTS_URL_TAG, line.indexOf(EVENTS_ACCEPT_THREAD));
-					int urlEnd = line.indexOf(EVENTS_URL_TAG, urlStart + 1);
-					String url = line.substring(urlStart + 1, urlEnd);
+					final int urlStart = line.indexOf(EVENTS_URL_TAG, line.indexOf(EVENTS_ACCEPT_THREAD));
+					final int urlEnd = line.indexOf(EVENTS_URL_TAG, urlStart + 1);
+					final String url = line.substring(urlStart + 1, urlEnd);
 					events.add(_SERVERPATH + url);
 					// Reject the last lines of this thread
 					i += EVENTS_REJECT_LINE_SIZE - 1;
@@ -1926,11 +1926,11 @@ public final class Webcrawler {
 	 *            Url to the event thread
 	 * @return Id of events thread or {@link #NO_ID} if an error occurred
 	 */
-	private static int getThreadId(String url) {
+	private static int getThreadId(final String url) {
 		int id = NO_ID;
 		// Extract id from url
-		Pattern pattern = Pattern.compile("id=([\\d]+)");
-		Matcher matcher = pattern.matcher(url);
+		final Pattern pattern = Pattern.compile("id=([\\d]+)");
+		final Matcher matcher = pattern.matcher(url);
 		if (matcher.find()) {
 			id = Integer.parseInt(matcher.group(1));
 		} else {
@@ -1951,7 +1951,7 @@ public final class Webcrawler {
 	 * @return Name of the map the event takes place at or {@link #MAP_UNKNOWN}
 	 *         if not known
 	 */
-	private static String getThreadMap(List<String> content, int curContentIndex) {
+	private static String getThreadMap(final List<String> content, final int curContentIndex) {
 		String map = MAP_UNKNOWN;
 		int i = curContentIndex;
 		String line = "";
@@ -2006,7 +2006,7 @@ public final class Webcrawler {
 	 *            Title of the thread
 	 * @return Name of the event or the title if failure occurred
 	 */
-	private static String getThreadName(String title) {
+	private static String getThreadName(final String title) {
 		String name = "";
 
 		// Work trough exceptions
@@ -2232,7 +2232,7 @@ public final class Webcrawler {
 	 *            The slot text to parse
 	 * @return The parsed slot type
 	 */
-	private static SlotType parseSlotType(String slotText) {
+	private static SlotType parseSlotType(final String slotText) {
 		SlotType slot = SlotType.NO_TYPE;
 
 		// Parse slot types
@@ -2603,7 +2603,7 @@ public final class Webcrawler {
 
 		// Match type exact names
 		if (!slotTypeFound) {
-			for (SlotType type : SlotType.values()) {
+			for (final SlotType type : SlotType.values()) {
 				pattern = Pattern.compile("^.*\\(" + type + "\\).*$", Pattern.CASE_INSENSITIVE);
 				matcher = pattern.matcher(slotText);
 				if (matcher.find()) {
@@ -2623,7 +2623,7 @@ public final class Webcrawler {
 
 		// Hard-match resulting types using generator SlotParseTool
 		if (!slotTypeFound) {
-			Map<String, SlotType> generatedMap = new HashMap<>();
+			final Map<String, SlotType> generatedMap = new HashMap<>();
 			// Generated by SlotParseTool : 00to10.csv
 			generatedMap.put("Platoon Leader (Befehligt auch FIA)", SlotType.PL);
 			generatedMap.put("UAV Operator (UGV)", SlotType.UGSO);
@@ -3864,7 +3864,7 @@ public final class Webcrawler {
 			generatedMap.put("Senior Techniker", SlotType.TL);
 			generatedMap.put("Chef Techniker", SlotType.TL);
 
-			for (Entry<String, SlotType> entry : generatedMap.entrySet()) {
+			for (final Entry<String, SlotType> entry : generatedMap.entrySet()) {
 				if (slotText.toLowerCase().equals(entry.getKey().toLowerCase())) {
 					slotTypeFound = true;
 					slot = entry.getValue();

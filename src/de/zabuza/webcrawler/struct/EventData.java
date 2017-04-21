@@ -83,8 +83,8 @@ public final class EventData implements Serializable {
 	 * @param thatSlotlist
 	 *            Slot-list of the event
 	 */
-	public EventData(String thatName, EventType thatType, int thatSize, String thatCreator, String thatMap,
-			Calendar thatDate, Calendar thatTime, int thatThreadId, int thatPostId, Slotlist thatSlotlist) {
+	public EventData(final String thatName, final EventType thatType, final int thatSize, final String thatCreator, final String thatMap,
+			final Calendar thatDate, final Calendar thatTime, final int thatThreadId, final int thatPostId, final Slotlist thatSlotlist) {
 		this.name = thatName;
 		this.type = thatType;
 		this.size = thatSize;
@@ -169,17 +169,17 @@ public final class EventData implements Serializable {
 
 	@Override
 	public String toString() {
-		String dateText = CrawlerUtil.convertDateToString(this.date);
+		final String dateText = CrawlerUtil.convertDateToString(this.date);
 
-		String header = "#" + this.threadId + "(" + this.postId + "): [" + dateText + "] " + this.type + this.size + " "
+		final String header = "#" + this.threadId + "(" + this.postId + "): [" + dateText + "] " + this.type + this.size + " "
 				+ this.name + " by " + this.creator + " at " + this.map + "\n";
 
 		String slotlistText = "";
 		for (int i = 0; i < this.slotlist.slotSize(); i++) {
-			SlotData data = this.slotlist.getSlotData(i);
+			final SlotData data = this.slotlist.getSlotData(i);
 			slotlistText += "\t#" + data + "\n";
 		}
-		for (Entry<String, SlotStatus> entry : this.slotlist.getAllReserve().entrySet()) {
+		for (final Entry<String, SlotStatus> entry : this.slotlist.getAllReserve().entrySet()) {
 			slotlistText += "\t#" + entry.getKey() + " - " + entry.getValue() + "\n";
 		}
 

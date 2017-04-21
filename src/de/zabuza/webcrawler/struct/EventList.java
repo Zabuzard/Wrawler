@@ -78,7 +78,7 @@ public final class EventList implements Serializable, Iterable<EventData> {
 		List<String> content = null;
 		try {
 			content = CrawlerUtil.getFileContent(FILEPATH_IMPORT);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.err.println("Unknown error while reading database import.");
 			e.printStackTrace();
 		}
@@ -91,10 +91,10 @@ public final class EventList implements Serializable, Iterable<EventData> {
 		int i = 1;
 		String line = "";
 		int amountOfEvents = 0;
-		Map<Integer, EventDb> idToEventDb = new HashMap<>();
+		final Map<Integer, EventDb> idToEventDb = new HashMap<>();
 		line = content.get(i);
 		while (!line.equals(IO_MAP_TABLE_HEADER)) {
-			EventDb eventDb = new EventDb(line);
+			final EventDb eventDb = new EventDb(line);
 			idToEventDb.put(Integer.valueOf(eventDb.getSlotlistId()), eventDb);
 
 			amountOfEvents++;
@@ -103,7 +103,7 @@ public final class EventList implements Serializable, Iterable<EventData> {
 		}
 
 		// Create slotlists, add slots and link all to slotlist ids
-		Map<Integer, Slotlist> idToSlotlist = new HashMap<>();
+		final Map<Integer, Slotlist> idToSlotlist = new HashMap<>();
 		// Skip everything to start of slots
 		do {
 			line = content.get(i);
@@ -113,14 +113,14 @@ public final class EventList implements Serializable, Iterable<EventData> {
 		// Parse slots
 		line = content.get(i);
 		while (!line.equals(IO_SLOTTYPE_TABLE_HEADER)) {
-			SlotContainerDb container = new SlotContainerDb(line);
-			SlotData slotData = container.toSlotData();
+			final SlotContainerDb container = new SlotContainerDb(line);
+			final SlotData slotData = container.toSlotData();
 
-			Integer slotlistId = Integer.valueOf(container.getSlotlistID());
+			final Integer slotlistId = Integer.valueOf(container.getSlotlistID());
 			if (!idToSlotlist.containsKey(slotlistId)) {
 				idToSlotlist.put(slotlistId, new Slotlist(idToEventDb.get(slotlistId).getPlayerNumber()));
 			}
-			Slotlist slotlist = idToSlotlist.get(slotlistId);
+			final Slotlist slotlist = idToSlotlist.get(slotlistId);
 			slotlist.addSlot(slotData);
 
 			i++;
@@ -128,9 +128,9 @@ public final class EventList implements Serializable, Iterable<EventData> {
 		}
 
 		// Create events, link them with slotlists and add them to the list
-		EventList eventList = new EventList(amountOfEvents);
-		for (Entry<Integer, EventDb> entry : idToEventDb.entrySet()) {
-			EventData eventData = entry.getValue().toEventData(idToSlotlist.get(entry.getKey()));
+		final EventList eventList = new EventList(amountOfEvents);
+		for (final Entry<Integer, EventDb> entry : idToEventDb.entrySet()) {
+			final EventData eventData = entry.getValue().toEventData(idToSlotlist.get(entry.getKey()));
 			eventList.add(eventData);
 		}
 
@@ -155,7 +155,7 @@ public final class EventList implements Serializable, Iterable<EventData> {
 	 * @param initialCapacity
 	 *            Initial capacity of list
 	 */
-	public EventList(int initialCapacity) {
+	public EventList(final int initialCapacity) {
 		this.list = new ArrayList<>(initialCapacity);
 	}
 
@@ -166,7 +166,7 @@ public final class EventList implements Serializable, Iterable<EventData> {
 	 *            Element to add
 	 * @return If the element could be added
 	 */
-	public boolean add(EventData data) {
+	public boolean add(final EventData data) {
 		return this.list.add(data);
 	}
 
@@ -176,51 +176,51 @@ public final class EventList implements Serializable, Iterable<EventData> {
 	 */
 	public void exportDatabaseFormat() {
 		// Initialize some tables beginning with earlier events
-		SlotlistTableDb slotlistTableDb = SlotlistTableDb.getInstance();
-		Map<EventData, Integer> slotlistIdToEventData = new HashMap<>(this.list.size());
-		SlotTableDb slotTableDb = new SlotTableDb();
+		final SlotlistTableDb slotlistTableDb = SlotlistTableDb.getInstance();
+		final Map<EventData, Integer> slotlistIdToEventData = new HashMap<>(this.list.size());
+		final SlotTableDb slotTableDb = new SlotTableDb();
 		for (int i = this.list.size() - 1; i >= 0; i--) {
-			EventData event = this.list.get(i);
-			String name = event.getName() + " - Slotlist";
-			int owner = UserTableDb.getInstance().getId(event.getCreator()).intValue();
-			String comment = "auto-generated";
-			Slotlist slotlist = event.getSlotlist();
-			int id = slotlistTableDb.add(slotlist, name, owner, comment);
+			final EventData event = this.list.get(i);
+			final String name = event.getName() + " - Slotlist";
+			final int owner = UserTableDb.getInstance().getId(event.getCreator()).intValue();
+			final String comment = "auto-generated";
+			final Slotlist slotlist = event.getSlotlist();
+			final int id = slotlistTableDb.add(slotlist, name, owner, comment);
 			slotlistIdToEventData.put(event, Integer.valueOf(id));
 			slotTableDb.add(slotlist, id);
 		}
-		List<String> result = new ArrayList<>();
+		final List<String> result = new ArrayList<>();
 
 		// Event table
 		result.add(IO_EVENT_TABLE_HEADER);
 		for (int i = this.list.size() - 1; i >= 0; i--) {
-			EventData event = this.list.get(i);
+			final EventData event = this.list.get(i);
 			result.add(new EventDb(event, slotlistIdToEventData.get(event).intValue()).toString());
 		}
 		// Map table
 		result.add(IO_MAP_TABLE_HEADER);
-		MapTableDb mapTableDb = MapTableDb.getInstance();
-		String[] mapEntries = mapTableDb.toString().split(MapTableDb.ENTRY_SEPARATOR);
-		for (String mapEntry : mapEntries) {
+		final MapTableDb mapTableDb = MapTableDb.getInstance();
+		final String[] mapEntries = mapTableDb.toString().split(MapTableDb.ENTRY_SEPARATOR);
+		for (final String mapEntry : mapEntries) {
 			result.add(mapEntry);
 		}
 		// Slotlist table
 		result.add(IO_SLOTLIST_TABLE_HEADER);
-		String[] slotlistEntries = slotlistTableDb.toString().split(SlotlistTableDb.ENTRY_SEPARATOR);
-		for (String slotlistEntry : slotlistEntries) {
+		final String[] slotlistEntries = slotlistTableDb.toString().split(SlotlistTableDb.ENTRY_SEPARATOR);
+		for (final String slotlistEntry : slotlistEntries) {
 			result.add(slotlistEntry);
 		}
 		// Slot table
 		result.add(IO_SLOT_TABLE_HEADER);
-		String[] slotEntries = slotTableDb.toString().split(SlotlistTableDb.ENTRY_SEPARATOR);
-		for (String slotEntry : slotEntries) {
+		final String[] slotEntries = slotTableDb.toString().split(SlotlistTableDb.ENTRY_SEPARATOR);
+		for (final String slotEntry : slotEntries) {
 			result.add(slotEntry);
 		}
 		// SlotType table
 		result.add(IO_SLOTTYPE_TABLE_HEADER);
-		SlotTypeTableDb slotTypeTableDb = SlotTypeTableDb.getInstance();
-		String[] slotTypeEntries = slotTypeTableDb.toString().split(SlotTypeTableDb.ENTRY_SEPARATOR);
-		for (String slotTypeEntry : slotTypeEntries) {
+		final SlotTypeTableDb slotTypeTableDb = SlotTypeTableDb.getInstance();
+		final String[] slotTypeEntries = slotTypeTableDb.toString().split(SlotTypeTableDb.ENTRY_SEPARATOR);
+		for (final String slotTypeEntry : slotTypeEntries) {
 			result.add(slotTypeEntry);
 		}
 
@@ -232,7 +232,7 @@ public final class EventList implements Serializable, Iterable<EventData> {
 					wr.write("\n");
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.err.println("Unknown error while saving database export.");
 			e.printStackTrace();
 		}
@@ -244,14 +244,14 @@ public final class EventList implements Serializable, Iterable<EventData> {
 	 * @return External event data object of this
 	 */
 	public Map<Calendar, ExtEventData> exportToExtEventDataMap() {
-		Map<Calendar, ExtEventData> map = new TreeMap<>();
-		for (EventData data : this.list) {
-			ExtEventData extEventData = new ExtEventData(data.getType(), data.getDate());
-			Slotlist slotlist = data.getSlotlist();
-			for (SlotData slotData : slotlist.getAllSlots()) {
+		final Map<Calendar, ExtEventData> map = new TreeMap<>();
+		for (final EventData data : this.list) {
+			final ExtEventData extEventData = new ExtEventData(data.getType(), data.getDate());
+			final Slotlist slotlist = data.getSlotlist();
+			for (final SlotData slotData : slotlist.getAllSlots()) {
 				extEventData.addPlayer(slotData.getPlayer(), slotData.getStatus());
 			}
-			for (Entry<String, SlotStatus> entry : slotlist.getAllReserve().entrySet()) {
+			for (final Entry<String, SlotStatus> entry : slotlist.getAllReserve().entrySet()) {
 				extEventData.addPlayer(entry.getKey(), entry.getValue());
 			}
 			map.put(data.getDate(), extEventData);
@@ -276,8 +276,8 @@ public final class EventList implements Serializable, Iterable<EventData> {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (EventData datum : this.list) {
+		final StringBuilder builder = new StringBuilder();
+		for (final EventData datum : this.list) {
 			builder.append(datum + "\n");
 		}
 		return builder.toString();

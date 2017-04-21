@@ -11,7 +11,7 @@ import java.util.Comparator;
 public final class InsensitiveComparator implements Comparator<String> {
 
 	@Override
-	public int compare(String o1, String o2) {
+	public int compare(final String o1, final String o2) {
 		return o1.toLowerCase().compareTo(o2.toLowerCase());
 	}
 

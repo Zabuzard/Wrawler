@@ -738,7 +738,7 @@ public final class UserTableDb {
 		this.idToUser.put(Integer.valueOf(-998), "Teufel");
 		this.idToUser.put(Integer.valueOf(-999), "UNKNOWN");
 
-		for (Entry<Integer, String> entry : this.idToUser.entrySet()) {
+		for (final Entry<Integer, String> entry : this.idToUser.entrySet()) {
 			this.userToId.put(entry.getValue(), entry.getKey());
 		}
 	}
@@ -750,8 +750,8 @@ public final class UserTableDb {
 	 *            User to get id of
 	 * @return Id of the user
 	 */
-	public Integer getId(String user) {
-		Integer id = this.userToId.get(user);
+	public Integer getId(final String user) {
+		final Integer id = this.userToId.get(user);
 		if (id == null) {
 			if (user.equals("Ulfberth")) {
 				return Integer.valueOf(472);
@@ -768,8 +768,8 @@ public final class UserTableDb {
 	 *            Id of the user
 	 * @return User that is represented by the given id
 	 */
-	public String getUser(int id) {
-		String user = this.idToUser.get(Integer.valueOf(id));
+	public String getUser(final int id) {
+		final String user = this.idToUser.get(Integer.valueOf(id));
 		if (user == null) {
 			System.err.println("Database table does not know user with id: " + id);
 		}

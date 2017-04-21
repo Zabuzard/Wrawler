@@ -147,7 +147,7 @@ public final class SlotTypeTableDb {
 		this.idToSlotType.put(Integer.valueOf(43), SlotType.RESERVE);
 		this.slotTypeToDescription.put(SlotType.RESERVE, "Reserve");
 
-		for (Entry<Integer, SlotType> entry : this.idToSlotType.entrySet()) {
+		for (final Entry<Integer, SlotType> entry : this.idToSlotType.entrySet()) {
 			this.slotTypeToId.put(entry.getValue(), entry.getKey());
 		}
 	}
@@ -159,8 +159,8 @@ public final class SlotTypeTableDb {
 	 *            Slot type to get id of
 	 * @return Id of the slot type
 	 */
-	public Integer getId(SlotType type) {
-		Integer id = this.slotTypeToId.get(type);
+	public Integer getId(final SlotType type) {
+		final Integer id = this.slotTypeToId.get(type);
 		if (id == null) {
 			System.err.println("Database table does not know id of slot type: " + type);
 		}
@@ -174,8 +174,8 @@ public final class SlotTypeTableDb {
 	 *            Id of the slot type
 	 * @return Slot type that is represented by the given id
 	 */
-	public SlotType getSlotType(int id) {
-		SlotType type = this.idToSlotType.get(Integer.valueOf(id));
+	public SlotType getSlotType(final int id) {
+		final SlotType type = this.idToSlotType.get(Integer.valueOf(id));
 		if (type == null) {
 			System.err.println("Database table does not know slot type with id: " + id);
 		}
@@ -184,10 +184,10 @@ public final class SlotTypeTableDb {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (Entry<Integer, SlotType> entry : this.idToSlotType.entrySet()) {
-			int id = entry.getKey().intValue();
-			String description = this.slotTypeToDescription.get(entry.getValue());
+		final StringBuilder builder = new StringBuilder();
+		for (final Entry<Integer, SlotType> entry : this.idToSlotType.entrySet()) {
+			final int id = entry.getKey().intValue();
+			final String description = this.slotTypeToDescription.get(entry.getValue());
 			String slotTypeText = entry.getValue() + "";
 			if (slotTypeText.equals("COL")) {
 				slotTypeText = "CoL";

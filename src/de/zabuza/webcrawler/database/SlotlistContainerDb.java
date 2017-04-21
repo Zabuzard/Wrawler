@@ -52,8 +52,8 @@ public final class SlotlistContainerDb {
 	 * @param thatSlotlist
 	 *            Slotlist object itself
 	 */
-	public SlotlistContainerDb(int thatUniqueID, String thatSlotlistName, int thatOwner, String thatComment,
-			Slotlist thatSlotlist) {
+	public SlotlistContainerDb(final int thatUniqueID, final String thatSlotlistName, final int thatOwner, final String thatComment,
+			final Slotlist thatSlotlist) {
 		this.uniqueID = thatUniqueID;
 		this.slotlistName = thatSlotlistName;
 		this.owner = thatOwner;
@@ -98,7 +98,7 @@ public final class SlotlistContainerDb {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append(ENCLOSER + this.uniqueID + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.slotlistName + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.owner + ENCLOSER + SEPARATOR);

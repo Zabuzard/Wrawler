@@ -69,8 +69,8 @@ public final class SlotlistTableDb {
 	 *            Comment of the slotlist
 	 * @return Assigned id
 	 */
-	public int add(Slotlist slotlist, String name, int owner, String comment) {
-		SlotlistContainerDb container = new SlotlistContainerDb(this.slotlistId, name, owner, comment, slotlist);
+	public int add(final Slotlist slotlist, final String name, final int owner, final String comment) {
+		final SlotlistContainerDb container = new SlotlistContainerDb(this.slotlistId, name, owner, comment, slotlist);
 		this.idToSlotlist.put(Integer.valueOf(this.slotlistId), container);
 		this.slotlistId++;
 		return this.slotlistId - 1;
@@ -83,8 +83,8 @@ public final class SlotlistTableDb {
 	 *            Id of the slotlist
 	 * @return Slotlist that is represented by the given id
 	 */
-	public Slotlist getSlotlist(int id) {
-		Slotlist slotlist = this.idToSlotlist.get(Integer.valueOf(id)).getSlotlist();
+	public Slotlist getSlotlist(final int id) {
+		final Slotlist slotlist = this.idToSlotlist.get(Integer.valueOf(id)).getSlotlist();
 		if (slotlist == null) {
 			System.err.println("Database table does not know slotlist with id: " + id);
 		}
@@ -93,8 +93,8 @@ public final class SlotlistTableDb {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (Entry<Integer, SlotlistContainerDb> entry : this.idToSlotlist.entrySet()) {
+		final StringBuilder builder = new StringBuilder();
+		for (final Entry<Integer, SlotlistContainerDb> entry : this.idToSlotlist.entrySet()) {
 			builder.append(entry.getValue() + ENTRY_SEPARATOR);
 		}
 		builder.delete(builder.length() - ENTRY_SEPARATOR.length(), builder.length());

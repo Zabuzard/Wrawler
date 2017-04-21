@@ -34,7 +34,7 @@ public class SlotContainerDb {
 	 *            Status to get database id of
 	 * @return Database id of the slot status
 	 */
-	private static int getIdBySlotStatus(SlotStatus status) {
+	private static int getIdBySlotStatus(final SlotStatus status) {
 		switch (status) {
 		case APPEARED:
 			return 1;
@@ -61,7 +61,7 @@ public class SlotContainerDb {
 	 *            Database id to get slot status of
 	 * @return Slot status to get
 	 */
-	private static SlotStatus getSlotStatusById(int id) {
+	private static SlotStatus getSlotStatusById(final int id) {
 		switch (id) {
 		case 1:
 			return SlotStatus.APPEARED;
@@ -129,13 +129,13 @@ public class SlotContainerDb {
 	 * @param thatSlotlistID
 	 *            id of the slotlist the slot belongs to
 	 */
-	public SlotContainerDb(Entry<String, SlotStatus> reservePlayer, int thatUniqueID, int thatSlotlistID) {
+	public SlotContainerDb(final Entry<String, SlotStatus> reservePlayer, final int thatUniqueID, final int thatSlotlistID) {
 		this.uniqueID = thatUniqueID;
 		this.slotlistID = thatSlotlistID;
 		this.slotNumber = RESERVE_NUMBER;
 		this.slotID = SlotTypeTableDb.getInstance().getId(SlotType.RESERVE).intValue();
 		this.customName = "";
-		int userIdExternal = UserTableDb.getInstance().getId(reservePlayer.getKey()).intValue();
+		final int userIdExternal = UserTableDb.getInstance().getId(reservePlayer.getKey()).intValue();
 		if (userIdExternal > 0) {
 			this.assignedUserID = userIdExternal;
 			this.customUser = "";
@@ -157,13 +157,13 @@ public class SlotContainerDb {
 	 * @param thatSlotlistID
 	 *            id of the slotlist the slot belongs to
 	 */
-	public SlotContainerDb(SlotData slotData, int thatUniqueID, int thatSlotlistID) {
+	public SlotContainerDb(final SlotData slotData, final int thatUniqueID, final int thatSlotlistID) {
 		this.uniqueID = thatUniqueID;
 		this.slotlistID = thatSlotlistID;
 		this.slotNumber = slotData.getNumber();
 		this.slotID = SlotTypeTableDb.getInstance().getId(slotData.getSlotType()).intValue();
 		this.customName = slotData.getCustomSlotName();
-		int userIdExternal = UserTableDb.getInstance().getId(slotData.getPlayer()).intValue();
+		final int userIdExternal = UserTableDb.getInstance().getId(slotData.getPlayer()).intValue();
 		if (userIdExternal > 0) {
 			this.assignedUserID = userIdExternal;
 			this.customUser = "";
@@ -181,8 +181,8 @@ public class SlotContainerDb {
 	 * @param databaseFormat
 	 *            Slot container in the database format
 	 */
-	public SlotContainerDb(String databaseFormat) {
-		String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormat);
+	public SlotContainerDb(final String databaseFormat) {
+		final String[] values = CrawlerUtil.parseDatabaseFormatLine(databaseFormat);
 		this.uniqueID = Integer.parseInt(values[0]);
 		this.slotlistID = Integer.parseInt(values[1]);
 		this.slotNumber = Integer.parseInt(values[2]);
@@ -269,14 +269,14 @@ public class SlotContainerDb {
 		} else {
 			thatUserName = UserTableDb.getInstance().getUser(this.assignedUserID);
 		}
-		SlotData slotData = new SlotData(this.slotNumber, SlotTypeTableDb.getInstance().getSlotType(this.slotID),
+		final SlotData slotData = new SlotData(this.slotNumber, SlotTypeTableDb.getInstance().getSlotType(this.slotID),
 				this.customName, thatUserName, getSlotStatusById(this.attendance));
 		return slotData;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append(ENCLOSER + this.uniqueID + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.slotlistID + ENCLOSER + SEPARATOR);
 		builder.append(ENCLOSER + this.slotNumber + ENCLOSER + SEPARATOR);

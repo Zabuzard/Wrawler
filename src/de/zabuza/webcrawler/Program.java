@@ -4,14 +4,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import de.zabuza.webcrawler.enums.SlotType;
 import de.zabuza.webcrawler.external.ExtEventData;
 import de.zabuza.webcrawler.external.ExtPlayerData;
-import de.zabuza.webcrawler.struct.EventData;
 import de.zabuza.webcrawler.struct.EventList;
 import de.zabuza.webcrawler.util.CrawlerUtil;
 
@@ -44,7 +42,7 @@ public final class Program {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		/*
 		 * If true the program will use the web-crawler to create a updated
 		 * list. If false the program will use the serialized version of the
@@ -58,10 +56,10 @@ public final class Program {
 		 * until you need to update the list again. **********************
 		 * CAUTION **********************
 		 */
-		boolean updateList = false;
+		final boolean updateList = false;
 
-		Map<Calendar, ExtEventData> extEventData = Filecrawler.processExternalEventData(FILEPATH_EXT_DATA);
-		Map<String, ExtPlayerData> extPlayerData = Filecrawler.processExternalPlayerData(FILEPATH_EXT_DATA);
+		final Map<Calendar, ExtEventData> extEventData = Filecrawler.processExternalEventData(FILEPATH_EXT_DATA);
+		final Map<String, ExtPlayerData> extPlayerData = Filecrawler.processExternalPlayerData(FILEPATH_EXT_DATA);
 
 		EventList list = null;
 		if (updateList) {
@@ -82,13 +80,13 @@ public final class Program {
 		}
 		System.out.println("Printing done.");
 
-		Metrics metrics = new Metrics(list);
+		final Metrics metrics = new Metrics(list);
 
 		// Counting slot types
-		String playerRegex = "Zabuza";
-		Map<SlotType, Integer> slotTypeCount = metrics.countSlotTypesOf(playerRegex);
+		final String playerRegex = "Zabuza";
+		final Map<SlotType, Integer> slotTypeCount = metrics.countSlotTypesOf(playerRegex);
 		int eventAmount = 0;
-		for (Entry<SlotType, Integer> entry : slotTypeCount.entrySet()) {
+		for (final Entry<SlotType, Integer> entry : slotTypeCount.entrySet()) {
 			eventAmount += entry.getValue().intValue();
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
@@ -96,7 +94,7 @@ public final class Program {
 			System.out.println("EventAmount: " + eventAmount + " (of " + metrics.getEventAmount() + ")");
 		}
 		// Counting lead slot types
-		int leadAmount = metrics.countLeadSlotsOf(playerRegex);
+		final int leadAmount = metrics.countLeadSlotsOf(playerRegex);
 		if (leadAmount != 0) {
 			System.out.println("Amount of lead slots: " + leadAmount);
 		}

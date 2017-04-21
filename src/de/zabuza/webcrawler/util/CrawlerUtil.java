@@ -41,7 +41,7 @@ public final class CrawlerUtil {
 			 * cert.X509Certificate[], java.lang.String)
 			 */
 			@Override
-			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			public void checkClientTrusted(final X509Certificate[] certs, final String authType) {
 				// Do nothing. Just allow them all.
 			}
 
@@ -53,7 +53,7 @@ public final class CrawlerUtil {
 			 * cert.X509Certificate[], java.lang.String)
 			 */
 			@Override
-			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			public void checkServerTrusted(final X509Certificate[] certs, final String authType) {
 				// Do nothing. Just allow them all.
 			}
 
@@ -70,10 +70,10 @@ public final class CrawlerUtil {
 		} };
 
 		try {
-			SSLContext sc = SSLContext.getInstance("SSL");
+			final SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCertificates, new SecureRandom());
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (GeneralSecurityException e) {
+		} catch (final GeneralSecurityException e) {
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -85,19 +85,19 @@ public final class CrawlerUtil {
 	 *            String in format 'dd.mm.yyyy' where months starts at '01'
 	 * @return Date object of the given date
 	 */
-	public static String convertDateToString(Calendar date) {
+	public static String convertDateToString(final Calendar date) {
 		String dateText = "";
-		int day = date.get(Calendar.DAY_OF_MONTH);
+		final int day = date.get(Calendar.DAY_OF_MONTH);
 		if (day < 10) {
 			dateText += "0";
 		}
 		dateText += day + ".";
-		int month = date.get(Calendar.MONTH) + 1;
+		final int month = date.get(Calendar.MONTH) + 1;
 		if (month < 10) {
 			dateText += "0";
 		}
 		dateText += month + ".";
-		int year = date.get(Calendar.YEAR);
+		final int year = date.get(Calendar.YEAR);
 		dateText += year;
 
 		return dateText;
@@ -110,11 +110,11 @@ public final class CrawlerUtil {
 	 *            String in format 'dd.mm.yyyy' where months starts at '01'
 	 * @return Date object of the given date
 	 */
-	public static Calendar convertStringToDate(String date) {
-		int day = Integer.parseInt(date.substring(0, 2));
+	public static Calendar convertStringToDate(final String date) {
+		final int day = Integer.parseInt(date.substring(0, 2));
 		// Month is 0-based
-		int month = Integer.parseInt(date.substring(3, 5)) - 1;
-		int year = Integer.parseInt(date.substring(6));
+		final int month = Integer.parseInt(date.substring(3, 5)) - 1;
+		final int year = Integer.parseInt(date.substring(6));
 
 		return new GregorianCalendar(year, month, day);
 	}
@@ -126,15 +126,15 @@ public final class CrawlerUtil {
 	 *            String in format 'hh:mm:ss'
 	 * @return Date object of the given time
 	 */
-	public static Calendar convertStringToTime(String time) {
+	public static Calendar convertStringToTime(final String time) {
 		if (time == null) {
 			return null;
 		}
-		int hour = Integer.parseInt(time.substring(0, 2));
-		int minute = Integer.parseInt(time.substring(3, 5));
-		int second = Integer.parseInt(time.substring(6, 7));
+		final int hour = Integer.parseInt(time.substring(0, 2));
+		final int minute = Integer.parseInt(time.substring(3, 5));
+		final int second = Integer.parseInt(time.substring(6, 7));
 
-		Calendar calendar = new GregorianCalendar();
+		final Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
 		calendar.set(Calendar.SECOND, second);
@@ -148,20 +148,20 @@ public final class CrawlerUtil {
 	 *            Calendar of the time to convert
 	 * @return Date object of the given time
 	 */
-	public static String convertTimeToString(Calendar time) {
+	public static String convertTimeToString(final Calendar time) {
 		String timeText = "";
 
-		int hour = time.get(Calendar.HOUR_OF_DAY);
+		final int hour = time.get(Calendar.HOUR_OF_DAY);
 		if (hour < 10) {
 			timeText += "0";
 		}
 		timeText += hour + ":";
-		int minute = time.get(Calendar.MINUTE);
+		final int minute = time.get(Calendar.MINUTE);
 		if (minute < 10) {
 			timeText += "0";
 		}
 		timeText += minute + ":";
-		int second = time.get(Calendar.SECOND);
+		final int second = time.get(Calendar.SECOND);
 		if (second < 10) {
 			timeText += "0";
 		}
@@ -177,7 +177,7 @@ public final class CrawlerUtil {
 	 *            Path where event list is serialized
 	 * @return Deserialized event list object
 	 */
-	public static EventList deserialize(String path) {
+	public static EventList deserialize(final String path) {
 		EventList list = null;
 		try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			list = (EventList) ois.readObject();
@@ -198,9 +198,9 @@ public final class CrawlerUtil {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static List<String> getFileContent(String path) throws IOException {
+	public static List<String> getFileContent(final String path) throws IOException {
 		try (final BufferedReader site = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
-			List<String> content = new ArrayList<>();
+			final List<String> content = new ArrayList<>();
 
 			String line = site.readLine();
 			while (line != null) {
@@ -221,10 +221,10 @@ public final class CrawlerUtil {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static List<String> getWebContent(String path) throws IOException {
-		URL url = new URL(path);
+	public static List<String> getWebContent(final String path) throws IOException {
+		final URL url = new URL(path);
 		try (final BufferedReader site = new BufferedReader(new InputStreamReader(url.openStream()))) {
-			List<String> content = new ArrayList<>();
+			final List<String> content = new ArrayList<>();
 
 			String line = site.readLine();
 			while (line != null) {
@@ -243,10 +243,10 @@ public final class CrawlerUtil {
 	 *            Line in the database format
 	 * @return List of values that where contained in the line
 	 */
-	public static String[] parseDatabaseFormatLine(String databaseFormatLine) {
+	public static String[] parseDatabaseFormatLine(final String databaseFormatLine) {
 		String databaseFormatLineToUse = databaseFormatLine;
 		databaseFormatLineToUse = databaseFormatLineToUse.replaceAll(",$", ",\"\"").replaceAll("^,", "\"\",");
-		String[] values = databaseFormatLineToUse.split("\",\"");
+		final String[] values = databaseFormatLineToUse.split("\",\"");
 		values[0] = values[0].substring(1);
 		values[values.length - 1] = values[values.length - 1].substring(0, values[values.length - 1].length() - 1);
 		return values;
@@ -260,10 +260,10 @@ public final class CrawlerUtil {
 	 * @param path
 	 *            path where object should be saved
 	 */
-	public static void serialize(EventList list, String path) {
+	public static void serialize(final EventList list, final String path) {
 		try (final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
 			oos.writeObject(list);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.err.println("Error while serializing event list.");
 			System.err.println(e);
 		}

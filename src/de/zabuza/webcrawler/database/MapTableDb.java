@@ -145,7 +145,7 @@ public final class MapTableDb implements Iterable<Entry<Integer, String>> {
 		this.idToMap.put(Integer.valueOf(42), "Unknown");
 		this.mapToActive.put("Unknown", Integer.valueOf(0));
 
-		for (Entry<Integer, String> entry : this.idToMap.entrySet()) {
+		for (final Entry<Integer, String> entry : this.idToMap.entrySet()) {
 			this.mapToId.put(entry.getValue(), entry.getKey());
 		}
 	}
@@ -157,8 +157,8 @@ public final class MapTableDb implements Iterable<Entry<Integer, String>> {
 	 *            Map to get id of
 	 * @return Id of the map
 	 */
-	public Integer getId(String map) {
-		Integer id = this.mapToId.get(map);
+	public Integer getId(final String map) {
+		final Integer id = this.mapToId.get(map);
 		if (id == null) {
 			System.err.println("Database table does not know id of map: " + map);
 		}
@@ -172,8 +172,8 @@ public final class MapTableDb implements Iterable<Entry<Integer, String>> {
 	 *            Id of the map
 	 * @return Map that is represented by the given id
 	 */
-	public String getMap(int id) {
-		String map = this.idToMap.get(Integer.valueOf(id));
+	public String getMap(final int id) {
+		final String map = this.idToMap.get(Integer.valueOf(id));
 		if (map == null) {
 			System.err.println("Database table does not know map with id: " + id);
 		}
@@ -187,8 +187,8 @@ public final class MapTableDb implements Iterable<Entry<Integer, String>> {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (Entry<Integer, String> entry : this.idToMap.entrySet()) {
+		final StringBuilder builder = new StringBuilder();
+		for (final Entry<Integer, String> entry : this.idToMap.entrySet()) {
 			builder.append(ENCLOSER + entry.getKey() + ENCLOSER + VALUE_SEPARATOR);
 			builder.append(ENCLOSER + entry.getValue() + ENCLOSER + VALUE_SEPARATOR);
 			builder.append(ENCLOSER + this.mapToActive.get(entry.getValue()) + ENCLOSER + ENTRY_SEPARATOR);

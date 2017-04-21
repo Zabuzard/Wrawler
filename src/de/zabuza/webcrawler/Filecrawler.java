@@ -80,12 +80,12 @@ public final class Filecrawler {
 	 * @param extPlayerMap
 	 *            Map that contains external player data
 	 */
-	public static void exportToExternalFile(Map<Calendar, ExtEventData> extEventMap,
-			Map<String, ExtPlayerData> extPlayerMap) {
+	public static void exportToExternalFile(final Map<Calendar, ExtEventData> extEventMap,
+			final Map<String, ExtPlayerData> extPlayerMap) {
 		// Setup slot status data for every player and his events
-		Map<String, Map<Calendar, SlotStatus>> playerEventData = new TreeMap<>(new InsensitiveComparator());
-		for (Entry<Calendar, ExtEventData> entry : extEventMap.entrySet()) {
-			for (String player : entry.getValue().getPlayers()) {
+		final Map<String, Map<Calendar, SlotStatus>> playerEventData = new TreeMap<>(new InsensitiveComparator());
+		for (final Entry<Calendar, ExtEventData> entry : extEventMap.entrySet()) {
+			for (final String player : entry.getValue().getPlayers()) {
 				// Skip player if he has no valid id
 				if (UserTableDb.getInstance().getId(player).intValue() <= 0) {
 					continue;
@@ -99,17 +99,17 @@ public final class Filecrawler {
 		}
 
 		// Build header and event lines
-		List<String> result = new ArrayList<>(playerEventData.size() + OFFSET_PLAYERS);
+		final List<String> result = new ArrayList<>(playerEventData.size() + OFFSET_PLAYERS);
 		result.add(HEADER_BEGIN);
-		StringBuilder secondLineBegin = new StringBuilder();
+		final StringBuilder secondLineBegin = new StringBuilder();
 		for (int i = 0; i < OFFSET_EVENT - 1; i++) {
 			secondLineBegin.append(SPLIT_VALUE);
 		}
 		result.add(secondLineBegin.toString());
 
-		StringBuilder eventTypes = new StringBuilder();
-		StringBuilder eventDates = new StringBuilder();
-		for (Entry<Calendar, ExtEventData> entry : extEventMap.entrySet()) {
+		final StringBuilder eventTypes = new StringBuilder();
+		final StringBuilder eventDates = new StringBuilder();
+		for (final Entry<Calendar, ExtEventData> entry : extEventMap.entrySet()) {
 			eventTypes.append(SPLIT_VALUE).append(entry.getValue().getType());
 			eventDates.append(SPLIT_VALUE).append(CrawlerUtil.convertDateToString(entry.getKey()));
 		}
@@ -119,12 +119,12 @@ public final class Filecrawler {
 		result.set(1, result.get(1) + eventDates.toString());
 
 		// Build player lines
-		List<Calendar> eventDateList = new ArrayList<>(extEventMap.keySet());
+		final List<Calendar> eventDateList = new ArrayList<>(extEventMap.keySet());
 		Collections.sort(eventDateList);
-		for (Entry<String, Map<Calendar, SlotStatus>> entry : playerEventData.entrySet()) {
+		for (final Entry<String, Map<Calendar, SlotStatus>> entry : playerEventData.entrySet()) {
 			// Append pre event data values
-			String player = entry.getKey();
-			StringBuilder playerLine = new StringBuilder();
+			final String player = entry.getKey();
+			final StringBuilder playerLine = new StringBuilder();
 			// TODO Which player is W-Member? They need a '#'
 			playerLine.append(player);
 			if (!extPlayerMap.containsKey(player)) {
@@ -137,7 +137,7 @@ public final class Filecrawler {
 				// .append(SPLIT_VALUE);
 			}
 
-			ExtPlayerData extPlayerData = extPlayerMap.get(player);
+			final ExtPlayerData extPlayerData = extPlayerMap.get(player);
 			playerLine.append(SPLIT_VALUE);
 			if (extPlayerData.getReactivationDate() != null) {
 				playerLine.append(CrawlerUtil.convertDateToString(extPlayerData.getReactivationDate()));
@@ -152,9 +152,9 @@ public final class Filecrawler {
 			}
 			// Append event data values
 			int dateIndex = 0;
-			for (Entry<Calendar, SlotStatus> eventEntry : entry.getValue().entrySet()) {
+			for (final Entry<Calendar, SlotStatus> eventEntry : entry.getValue().entrySet()) {
 				Calendar dateToPrint = eventDateList.get(dateIndex);
-				Calendar dateOfEntry = eventEntry.getKey();
+				final Calendar dateOfEntry = eventEntry.getKey();
 				// Print events player has not participated on
 				while (!dateToPrint.equals(dateOfEntry)) {
 					playerLine.append(SPLIT_VALUE);
@@ -204,7 +204,7 @@ public final class Filecrawler {
 					wr.write("\n");
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.err.println("Unknown error while saving external file export.");
 			e.printStackTrace();
 		}
@@ -219,26 +219,26 @@ public final class Filecrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static Map<Calendar, ExtEventData> processExternalEventData(String path) throws IOException {
-		List<String> content = CrawlerUtil.getFileContent(path);
+	public static Map<Calendar, ExtEventData> processExternalEventData(final String path) throws IOException {
+		final List<String> content = CrawlerUtil.getFileContent(path);
 		// Create list with split content
-		List<String[]> contentSplit = new ArrayList<>(content.size());
+		final List<String[]> contentSplit = new ArrayList<>(content.size());
 		for (int i = 0; i < content.size(); i++) {
 			contentSplit.add(content.get(i).split(SPLIT_VALUE));
 		}
 
 		// Process header
-		String[] typeHeader = contentSplit.get(0);
-		String[] dateHeader = contentSplit.get(1);
+		final String[] typeHeader = contentSplit.get(0);
+		final String[] dateHeader = contentSplit.get(1);
 		if (typeHeader.length != dateHeader.length) {
 			System.err.println("External file error: Headers do not have the same length.");
 		}
 
-		Map<Calendar, ExtEventData> events = new TreeMap<>();
+		final Map<Calendar, ExtEventData> events = new TreeMap<>();
 		// Process all events
 		for (int i = OFFSET_EVENT; i < typeHeader.length; i++) {
 			// Parse type
-			String typeText = typeHeader[i].trim().toUpperCase();
+			final String typeText = typeHeader[i].trim().toUpperCase();
 			EventType type = EventType.NO_TYPE;
 			if (typeText.equals("CO") || typeText.equals("COOP")) {
 				type = EventType.COOP;
@@ -259,14 +259,14 @@ public final class Filecrawler {
 			}
 
 			// Parse date
-			String dateText = dateHeader[i].trim();
-			Calendar date = CrawlerUtil.convertStringToDate(dateText);
+			final String dateText = dateHeader[i].trim();
+			final Calendar date = CrawlerUtil.convertStringToDate(dateText);
 
-			ExtEventData event = new ExtEventData(type, date);
+			final ExtEventData event = new ExtEventData(type, date);
 
 			// Process player status
 			for (int j = OFFSET_PLAYERS; j < content.size(); j++) {
-				String[] playerLine = contentSplit.get(j);
+				final String[] playerLine = contentSplit.get(j);
 				// Skip player if thats an empty line
 				if (playerLine.length == 0) {
 					continue;
@@ -281,7 +281,7 @@ public final class Filecrawler {
 					continue;
 				}
 
-				String slotStatusText = playerLine[i].trim();
+				final String slotStatusText = playerLine[i].trim();
 				SlotStatus status = SlotStatus.UNKNOWN;
 				if (!slotStatusText.equals("")) {
 					if (slotStatusText.equals(SLOT_STATUS_APPEARED)) {
@@ -317,18 +317,18 @@ public final class Filecrawler {
 	 * @throws IOException
 	 *             If an I/O-Exception occurs
 	 */
-	public static Map<String, ExtPlayerData> processExternalPlayerData(String path) throws IOException {
-		List<String> content = CrawlerUtil.getFileContent(path);
+	public static Map<String, ExtPlayerData> processExternalPlayerData(final String path) throws IOException {
+		final List<String> content = CrawlerUtil.getFileContent(path);
 		// Create list with split content
-		List<String[]> contentSplit = new ArrayList<>(content.size());
+		final List<String[]> contentSplit = new ArrayList<>(content.size());
 		for (int i = 0; i < content.size(); i++) {
 			contentSplit.add(content.get(i).split(SPLIT_VALUE));
 		}
-		Map<String, ExtPlayerData> playersData = new TreeMap<>(new InsensitiveComparator());
+		final Map<String, ExtPlayerData> playersData = new TreeMap<>(new InsensitiveComparator());
 
 		// Process player data
 		for (int i = OFFSET_PLAYERS; i < content.size(); i++) {
-			String[] playerLine = contentSplit.get(i);
+			final String[] playerLine = contentSplit.get(i);
 			// Skip player if thats an empty line
 			if (playerLine.length == 0) {
 				continue;
@@ -341,14 +341,14 @@ public final class Filecrawler {
 			}
 
 			// Get player reactivation date
-			String reactivationDateText = playerLine[1].trim();
+			final String reactivationDateText = playerLine[1].trim();
 			Calendar reactivationDate = null;
 			if (!reactivationDateText.equals("")) {
 				reactivationDate = CrawlerUtil.convertStringToDate(reactivationDateText);
 			}
 
 			// Get player registration date
-			String registrationDateText = playerLine[2].trim();
+			final String registrationDateText = playerLine[2].trim();
 			Calendar registrationDate = null;
 			if (!registrationDateText.equals("")) {
 				registrationDate = CrawlerUtil.convertStringToDate(registrationDateText);
@@ -365,9 +365,9 @@ public final class Filecrawler {
 				inactivityNotificationText = playerLine[3].trim();
 			}
 
-			boolean inactivityNotification = !inactivityNotificationText.equals("");
+			final boolean inactivityNotification = !inactivityNotificationText.equals("");
 
-			ExtPlayerData playerDate = new ExtPlayerData(player, registrationDate, reactivationDate,
+			final ExtPlayerData playerDate = new ExtPlayerData(player, registrationDate, reactivationDate,
 					inactivityNotification);
 
 			playersData.put(player, playerDate);

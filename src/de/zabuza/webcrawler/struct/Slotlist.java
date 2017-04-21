@@ -36,7 +36,7 @@ public final class Slotlist implements Serializable {
 	 * @param size
 	 *            Starting capacity of slot-list
 	 */
-	public Slotlist(int size) {
+	public Slotlist(final int size) {
 		this.slots = new ArrayList<>(size);
 		this.reserve = new HashMap<>();
 	}
@@ -49,7 +49,7 @@ public final class Slotlist implements Serializable {
 	 * @param status
 	 *            Status of the slot
 	 */
-	public void addReserve(String player, SlotStatus status) {
+	public void addReserve(final String player, final SlotStatus status) {
 		this.reserve.put(player, status);
 	}
 
@@ -67,7 +67,7 @@ public final class Slotlist implements Serializable {
 	 * @param status
 	 *            Status of the slot
 	 */
-	public void addSlot(int number, SlotType slot, String customSlotName, String player, SlotStatus status) {
+	public void addSlot(final int number, final SlotType slot, final String customSlotName, final String player, final SlotStatus status) {
 		this.slots.add(new SlotData(number, slot, customSlotName, player, status));
 	}
 
@@ -77,7 +77,7 @@ public final class Slotlist implements Serializable {
 	 * @param slotData
 	 *            SlotData object to add
 	 */
-	public void addSlot(SlotData slotData) {
+	public void addSlot(final SlotData slotData) {
 		if (slotData.getSlotType().equals(SlotType.RESERVE)) {
 			addReserve(slotData.getPlayer(), slotData.getStatus());
 		} else {
@@ -110,7 +110,7 @@ public final class Slotlist implements Serializable {
 	 *            Name of the reserve player
 	 * @return Slot status of the reserve player
 	 */
-	public SlotStatus getReserveStatus(String player) {
+	public SlotStatus getReserveStatus(final String player) {
 		return this.reserve.get(player);
 	}
 
@@ -121,7 +121,7 @@ public final class Slotlist implements Serializable {
 	 *            Index of the slot in the slot list
 	 * @return Data container of the slot
 	 */
-	public SlotData getSlotData(int index) {
+	public SlotData getSlotData(final int index) {
 		return this.slots.get(index);
 	}
 

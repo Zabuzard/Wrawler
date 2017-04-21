@@ -48,14 +48,14 @@ public final class SlotTableDb {
 	 * @param slotlistId
 	 *            Id of the slotlist the slots belong to
 	 */
-	public void add(Slotlist slotlist, int slotlistId) {
-		for (SlotData slotData : slotlist.getAllSlots()) {
-			SlotContainerDb container = new SlotContainerDb(slotData, this.slotId, slotlistId);
+	public void add(final Slotlist slotlist, final int slotlistId) {
+		for (final SlotData slotData : slotlist.getAllSlots()) {
+			final SlotContainerDb container = new SlotContainerDb(slotData, this.slotId, slotlistId);
 			this.idToSlot.put(Integer.valueOf(this.slotId), container);
 			this.slotId++;
 		}
-		for (Entry<String, SlotStatus> entry : slotlist.getAllReserve().entrySet()) {
-			SlotContainerDb container = new SlotContainerDb(entry, this.slotId, slotlistId);
+		for (final Entry<String, SlotStatus> entry : slotlist.getAllReserve().entrySet()) {
+			final SlotContainerDb container = new SlotContainerDb(entry, this.slotId, slotlistId);
 			this.idToSlot.put(Integer.valueOf(this.slotId), container);
 			this.slotId++;
 		}
@@ -68,8 +68,8 @@ public final class SlotTableDb {
 	 *            Id of the slot
 	 * @return Slot container that is represented by the given id
 	 */
-	public SlotContainerDb getSlot(int id) {
-		SlotContainerDb slotContainer = this.idToSlot.get(Integer.valueOf(id));
+	public SlotContainerDb getSlot(final int id) {
+		final SlotContainerDb slotContainer = this.idToSlot.get(Integer.valueOf(id));
 		if (slotContainer == null) {
 			System.err.println("Database table does not know slot container with id: " + id);
 		}
@@ -78,8 +78,8 @@ public final class SlotTableDb {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (Entry<Integer, SlotContainerDb> entry : this.idToSlot.entrySet()) {
+		final StringBuilder builder = new StringBuilder();
+		for (final Entry<Integer, SlotContainerDb> entry : this.idToSlot.entrySet()) {
 			builder.append(entry.getValue() + ENTRY_SEPARATOR);
 		}
 		builder.delete(builder.length() - ENTRY_SEPARATOR.length(), builder.length());
